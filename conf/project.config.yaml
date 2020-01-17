@@ -1,0 +1,24 @@
+serverAddr: 127.0.0.1
+serverPort: "8060"
+sync: true
+mode: ""
+userKeyDir: ./conf/user.key
+userPubDir: ./conf/user.pub
+adminKeyDir: ./conf/admin.key
+adminPubDir: ./conf/admin.pub
+db:
+  host: 127.0.0.1
+  port: "65432"
+  driver: postgres
+  databasename: business
+  username: business
+  password: business
+  maxidleconn: 200
+  maxopenconn: 2000
+rdb:
+  host: 127.0.0.1
+  port: "6379"
+  db: 0
+  password: business
+isTLS: false
+tls: null
