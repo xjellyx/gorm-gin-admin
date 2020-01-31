@@ -66,11 +66,11 @@ func InitModel(d InitModelParam) (ret *gorm.DB, err error) {
 	UserKey.HookSessionCheck = SessionCheck
 	AdminKey.HookSessionCheck = SessionCheck
 	// 初始化redis连接
-	// RDB = GetRedisClient()
+	if RDB, err = GetRedisClient(); err != nil {
+		return
+	}
 
-	//u := &UserDetail{
-	LogModel.Infoln(db.Model(&UserDetail{Uid: "b534825a-c745-4cc7-867a-f3e6b0a8477e"}).Association("Addr").Clear())
-	LogModel.Infoln(PubUserDel("b534825a-c745-4cc7-867a-f3e6b0a8477e"))
+
 
 	//
 	ret = db
@@ -83,23 +83,22 @@ func init() {
 }
 
 // GetRedisClient 获取redis连接
-func GetRedisClient() (ret *redis.Client) {
-	var (
-		err error
-	)
+func GetRedisClient() (ret *redis.Client, err error) {
+
 	if RDB != nil && RDB.Ping().Err() == nil {
-		return RDB
+		return RDB, nil
 	}
 
 	// 重新连接
 	RDB = redis.NewClient(&redis.Options{
 		Addr:     conf.ProjectSetting.RDB.Host + ":" + conf.ProjectSetting.RDB.Port,
 		Password: conf.ProjectSetting.RDB.Password,
-		DB:       conf.ProjectSetting.RDB.DB,
 	})
 	// 报错直接恐慌
 	if err = RDB.Ping().Err(); err != nil {
-		panic(err)
+		return
 	}
+
+	ret = RDB
 	return
 }

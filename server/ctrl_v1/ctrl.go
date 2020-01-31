@@ -55,6 +55,7 @@ func InitCtrl() (err error) {
 			c.JSON(http.StatusOK, gin.H{"ping": "pong"})
 		})
 		v1.POST("/register", Ctrl.Register)
+		v1.POST("/login", Ctrl.Login)
 	}
 
 	// 开启服务

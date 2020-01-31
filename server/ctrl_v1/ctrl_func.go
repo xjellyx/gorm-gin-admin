@@ -81,6 +81,7 @@ func (s *ControlServe) Common(c *gin.Context) {
 	header.Set("X-Content-Type-Options", "nosniff")
 }
 
+// Register 注册
 func (s *ControlServe) Register(c *gin.Context) {
 	var (
 		data *model.UserDetail
@@ -95,8 +96,32 @@ func (s *ControlServe) Register(c *gin.Context) {
 	}
 
 	if data, err = model.PubUserAdd(f); err != nil {
+		// 转换数据库错误
+		err = userBase.TransformGORMErr(err)
 		return
 	}
 
 	c.AbortWithStatusJSON(http.StatusOK, data)
+}
+
+//
+func (s *ControlServe) Login(c *gin.Context) {
+	var (
+		data  *model.UserDetail
+		token string
+		f     = new(userBase.LoginForm)
+		err   error
+	)
+	defer PubCheckError(&err, c)
+	if err = c.ShouldBind(f); err != nil {
+		return
+	}
+	if data, token, err = model.Login(f); err != nil {
+		return
+	}
+
+	c.AbortWithStatusJSON(http.StatusOK, gin.H{
+		"data":  data,
+		"token": token,
+	})
 }
