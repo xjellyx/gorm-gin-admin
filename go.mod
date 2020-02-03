@@ -1,16 +1,15 @@
-module github.com/srlemon/userDetail
+module github.com/olefen/userDetail
 
 go 1.13
 
 require (
 	github.com/gin-gonic/gin v1.5.0
-	github.com/go-redis/redis v6.15.6+incompatible
+	github.com/go-redis/redis v6.15.7+incompatible
 	github.com/jinzhu/gorm v1.9.12
 	github.com/lib/pq v1.3.0
+	github.com/olefen/contrib v0.0.0-20200203065334-0ff7fa9a5c5d
+	github.com/olefen/gen-id v1.0.2-0.20200203031800-43814b6c2814
+	github.com/olefen/model.grpc v0.0.0-20200203025830-7447274c2f9a
 	github.com/satori/go.uuid v1.2.0
-	github.com/srlemon/contrib v0.0.0-20200119075101-dadb662787b9
-	github.com/srlemon/gen-id v1.0.2-0.20200119015443-0e963fda5805
-	github.com/srlemon/model.grpc v0.0.0-20200131094249-92c270d40c07
-	golang.org/x/crypto v0.0.0-20200115085410-6d4e4cb37c7d
-	google.golang.org/grpc v1.25.1
+	golang.org/x/crypto v0.0.0-20200128174031-69ecbb4d6d5d
 )

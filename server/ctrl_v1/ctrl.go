@@ -7,8 +7,8 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/srlemon/contrib/log"
-	"github.com/srlemon/userDetail/conf"
+	"github.com/olefen/contrib/log"
+	"github.com/olefen/userDetail/conf"
 )
 
 var (
@@ -56,6 +56,24 @@ func InitCtrl() (err error) {
 		})
 		v1.POST("/register", Ctrl.Register)
 		v1.POST("/login", Ctrl.Login)
+
+		// User
+		{
+			v1_user := v1.Group("/user")
+			v1_user.GET("/getUserDetailSelf", Ctrl.GetUserDetailSelf)
+			v1_user.POST("/updateUserDetail", Ctrl.UpdateUserDetail)
+			v1_user.GET("/getUserIDCard", Ctrl.GetUserIDCard)
+			v1_user.POST("/addUserIDCard", Ctrl.AddUserIDCard)
+			v1_user.POST("/addUserBankCard", Ctrl.AddUserBankCard)
+			v1_user.GET("/getUserBankCardList", Ctrl.GetUserBankCardList)
+			v1_user.DELETE("/deleteUserBankCard/:number", Ctrl.DeleteUserBankCard)
+		}
+
+		// Admin
+		{
+
+		}
+
 	}
 
 	// 开启服务

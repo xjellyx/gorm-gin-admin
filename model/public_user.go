@@ -3,9 +3,9 @@ package model
 import (
 	"github.com/jinzhu/gorm"
 	"github.com/lib/pq"
+	genid "github.com/olefen/gen-id"
+	userBase "github.com/olefen/userDetail"
 	uuid "github.com/satori/go.uuid"
-	genid "github.com/srlemon/gen-id"
-	userBase "github.com/srlemon/userDetail"
 	"golang.org/x/crypto/bcrypt"
 	"math/rand"
 	"time"
@@ -116,6 +116,9 @@ func PubUserGet(uid string) (ret *UserDetail, err error) {
 		}
 		return
 	}
+	Database.Model(ret).Where("uid  = ?", uid).Association("IDCard").Find(&ret.IDCard)
+	Database.Model(ret).Where("uid  = ?", uid).Association("BankCards").Find(&ret.BankCards)
+	Database.Model(ret).Where("uid  = ?", uid).Association("Addr").Find(&ret.Addr)
 
 	return
 }
@@ -130,6 +133,9 @@ func PubUserGetByEmail(email string) (ret *UserDetail, err error) {
 	if err = Database.Model(data).Where("email = ?", email).Find(data).Error; err != nil {
 		return
 	}
+	Database.Model(ret).Where("email  = ?", email).Association("IDCard").Find(&data.IDCard)
+	Database.Model(ret).Where("email  = ?", email).Association("BankCards").Find(&data.BankCards)
+	Database.Model(ret).Where("email  = ?", email).Association("Addr").Find(&data.Addr)
 
 	ret = data
 	return
@@ -145,6 +151,9 @@ func PubUserGetByUsername(username string) (ret *UserDetail, err error) {
 		}
 		return
 	}
+	Database.Model(ret).Where("username  = ?", username).Association("IDCard").Find(&ret.IDCard)
+	Database.Model(ret).Where("username  = ?", username).Association("BankCards").Find(&ret.BankCards)
+	Database.Model(ret).Where("username  = ?", username).Association("Addr").Find(&ret.Addr)
 	return
 }
 
@@ -161,6 +170,9 @@ func PubUserGetByPhone(locNum, phone string) (ret *UserDetail, err error) {
 		}
 		return
 	}
+	Database.Model(ret).Where("phone = ? and loc_num = ?", phone, locNum).Association("IDCard").Find(&ret.IDCard)
+	Database.Model(ret).Where("phone = ? and loc_num = ?", phone, locNum).Association("BankCards").Find(&ret.BankCards)
+	Database.Model(ret).Where("phone = ? and loc_num = ?", phone, locNum).Association("Addr").Find(&ret.Addr)
 	return
 }
 

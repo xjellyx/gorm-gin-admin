@@ -2,8 +2,9 @@ package ctrl
 
 import (
 	"github.com/gin-gonic/gin"
-	userBase "github.com/srlemon/userDetail"
-	"github.com/srlemon/userDetail/model"
+	"github.com/olefen/contrib/session"
+	userBase "github.com/olefen/userDetail"
+	"github.com/olefen/userDetail/model"
 	"net/http"
 	"strings"
 )
@@ -40,25 +41,25 @@ var (
 	}, ",")
 )
 
-func (s *ControlServe) CORS() gin.HandlerFunc {
-	return func(c *gin.Context) {
-		origin := c.GetHeader("Origin")
-		c.Writer.Header().Set("Access-Control-Allow-Origin", origin)
-		c.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
-		c.Writer.Header().Set("Access-Control-Allow-Headers", allowHeaders)
-		c.Writer.Header().Set("Access-Control-Allow-Methods", allowMethods)
+func (c *ControlServe) CORS() gin.HandlerFunc {
+	return func(ctx *gin.Context) {
+		origin := ctx.GetHeader("Origin")
+		ctx.Writer.Header().Set("Access-Control-Allow-Origin", origin)
+		ctx.Writer.Header().Set("Access-Control-Allow-Credentials", "true")
+		ctx.Writer.Header().Set("Access-Control-Allow-Headers", allowHeaders)
+		ctx.Writer.Header().Set("Access-Control-Allow-Methods", allowMethods)
 
-		if c.Request.Method == http.MethodOptions {
-			c.AbortWithStatus(204)
+		if ctx.Request.Method == http.MethodOptions {
+			ctx.AbortWithStatus(204)
 			return
 		}
 
-		c.Next()
+		ctx.Next()
 	}
 }
 
-func (s *ControlServe) Common(c *gin.Context) {
-	header := c.Writer.Header()
+func (c *ControlServe) Common(ctx *gin.Context) {
+	header := ctx.Writer.Header()
 	// alone dns prefect
 	header.Set("X-DNS-Prefetch-Control", "on")
 	// IE No Open
@@ -82,16 +83,16 @@ func (s *ControlServe) Common(c *gin.Context) {
 }
 
 // Register 注册
-func (s *ControlServe) Register(c *gin.Context) {
+func (c *ControlServe) Register(ctx *gin.Context) {
 	var (
 		data *model.UserDetail
 		err  error
 	)
-	defer PubCheckError(&err, c)
+	defer PubCheckError(&err, ctx)
 	var (
 		f = &userBase.FormRegister{}
 	)
-	if err = c.ShouldBind(f); err != nil {
+	if err = ctx.ShouldBind(f); err != nil {
 		return
 	}
 
@@ -101,27 +102,188 @@ func (s *ControlServe) Register(c *gin.Context) {
 		return
 	}
 
-	c.AbortWithStatusJSON(http.StatusOK, data)
+	ctx.AbortWithStatusJSON(http.StatusOK, data)
 }
 
 //
-func (s *ControlServe) Login(c *gin.Context) {
+func (c *ControlServe) Login(ctx *gin.Context) {
 	var (
 		data  *model.UserDetail
 		token string
 		f     = new(userBase.LoginForm)
 		err   error
 	)
-	defer PubCheckError(&err, c)
-	if err = c.ShouldBind(f); err != nil {
+	defer PubCheckError(&err, ctx)
+	if err = ctx.ShouldBind(f); err != nil {
 		return
 	}
 	if data, token, err = model.Login(f); err != nil {
 		return
 	}
 
-	c.AbortWithStatusJSON(http.StatusOK, gin.H{
+	ctx.AbortWithStatusJSON(http.StatusOK, gin.H{
 		"data":  data,
 		"token": token,
 	})
+}
+
+// GetUserDetailSelf 用户获取自己的信息
+func (c *ControlServe) GetUserDetailSelf(ctx *gin.Context) {
+	var (
+		data *model.UserDetail
+		sn   *session.Session
+		err  error
+	)
+	defer PubCheckError(&err, ctx)
+	if sn, err = model.TokenDecodeSession(ctx.Request, false); err != nil {
+		return
+	}
+
+	if data, err = model.PubUserGet(sn.UID); err != nil {
+		return
+	}
+
+	ctx.AbortWithStatusJSON(http.StatusOK, gin.H{
+		"data": data,
+	})
+
+}
+
+// UpdateUserDetail 用户更新自己的信息
+func (c *ControlServe) UpdateUserDetail(ctx *gin.Context) {
+	var (
+		err  error
+		form = new(userBase.UpdateUserProfile)
+		data *model.UserDetail
+		sn   *session.Session
+	)
+	defer PubCheckError(&err, ctx)
+	if sn, err = model.TokenDecodeSession(ctx.Request, false); err != nil {
+		return
+	}
+	if err = ctx.ShouldBindJSON(form); err != nil {
+		return
+	}
+	if data, err = model.PubUserUpdate(sn.UID, form); err != nil {
+		return
+	}
+
+	ctx.AbortWithStatusJSON(200, gin.H{
+		"data": data,
+	})
+}
+
+// AddUserIDCard 实名验证
+func (c *ControlServe) AddUserIDCard(ctx *gin.Context) {
+	var (
+		err  error
+		sn   *session.Session
+		form = new(userBase.FormIDCard)
+		data *model.IDCard
+	)
+	defer PubCheckError(&err, ctx)
+	if sn, err = model.TokenDecodeSession(ctx.Request, false); err != nil {
+		return
+	}
+
+	if err = ctx.ShouldBindJSON(form); err != nil {
+		return
+	}
+	if data, err = model.PubIDCardAdd(sn.UID, form); err != nil {
+		return
+	}
+
+	ctx.AbortWithStatusJSON(200, gin.H{
+		"data": data,
+	})
+}
+
+// GetUserIDCard 获取用户身份证信息
+func (c *ControlServe) GetUserIDCard(ctx *gin.Context) {
+	var (
+		err  error
+		sn   *session.Session
+		data *model.IDCard
+	)
+	defer PubCheckError(&err, ctx)
+	if sn, err = model.TokenDecodeSession(ctx.Request, false); err != nil {
+		return
+	}
+	if data, err = model.PubGetIDCard(sn.UID); err != nil {
+		return
+	}
+
+	ctx.AbortWithStatusJSON(200, gin.H{
+		"data": data,
+	})
+}
+
+// AddUserBankCard 获取一张银行卡信息
+func (c *ControlServe) AddUserBankCard(ctx *gin.Context) {
+	var (
+		err  error
+		form = new(userBase.FormBankCard)
+		data *model.BankCard
+		s    *session.Session
+	)
+	defer PubCheckError(&err, ctx)
+	if err = ctx.ShouldBindJSON(form); err != nil {
+		return
+	}
+	if s, err = model.TokenDecodeSession(ctx.Request, false); err != nil {
+		return
+	}
+	if data, err = model.PubBankCardAdd(s.UID, form); err != nil {
+		return
+	}
+
+	ctx.AbortWithStatusJSON(200, gin.H{
+		"data": data,
+	})
+
+}
+
+// GetUserBankCardList 获取用户银行卡信息
+func (c *ControlServe) GetUserBankCardList(ctx *gin.Context) {
+	var (
+		err error
+
+		data []model.BankCard
+		s    *session.Session
+	)
+	defer PubCheckError(&err, ctx)
+
+	if s, err = model.TokenDecodeSession(ctx.Request, false); err != nil {
+		return
+	}
+	if data, err = model.PubBankCardGetList(s.UID); err != nil {
+		return
+	}
+
+	ctx.AbortWithStatusJSON(200, gin.H{
+		"data": data,
+	})
+
+}
+
+// DeleteUserBankCard 删除银行卡信息
+func (c *ControlServe) DeleteUserBankCard(ctx *gin.Context) {
+	var (
+		err    error
+		number string
+		s      *session.Session
+	)
+	defer PubCheckError(&err, ctx)
+	if s, err = model.TokenDecodeSession(ctx.Request, false); err != nil {
+		return
+	}
+	number = ctx.GetString("number")
+	if err = model.PubBankCardDel(s.UID, number); err != nil {
+		return
+	}
+
+	ctx.AbortWithStatusJSON(200, gin.H{
+		"data": "success",
+	})
+
 }

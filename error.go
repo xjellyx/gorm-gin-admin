@@ -2,14 +2,15 @@ package base
 
 import (
 	"fmt"
-	"github.com/srlemon/contrib"
+	"github.com/olefen/contrib"
 	"strings"
 )
 
 const prefix = "userDetail"
 
 const (
-	GORMPGUniqueErr = `pq: duplicate key value violates unique constraint`
+	GORMPGUniqueErr  = `pq: duplicate key value violates unique constraint`
+	GORMPGPrimaryErr = ``
 )
 
 // TransformGORMErr 转换数据库错误
@@ -30,6 +31,6 @@ var (
 	ErrNotRealNameVerified = contrib.NewError(4, "user not verified real name", prefix)
 	ErrCapOfBankCard       = contrib.NewError(5, "cap of user bank card ", prefix)
 	ErrUserEmailExist      = contrib.NewError(6, "user email exist", prefix)
-	ErrUserNotVerified     = contrib.NewError(8, "user not verified", prefix)
+	ErrUserVerified        = contrib.NewError(8, "user already verified", prefix)
 	ErrUserAccountFroze    = contrib.NewError(7, "user account froze", prefix)
 )

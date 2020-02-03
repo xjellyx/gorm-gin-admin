@@ -1,6 +1,6 @@
 package model
 
-import base "github.com/srlemon/userDetail"
+import base "github.com/olefen/userDetail"
 
 // IDCard
 type IDCard struct {
@@ -48,6 +48,11 @@ func PubIDCardAdd(uid string, f *base.FormIDCard) (ret *IDCard, err error) {
 		data     *IDCard
 	)
 	if dataUser, err = PubUserGet(uid); err != nil {
+		return
+	}
+	// 已经进行实名验证
+	if dataUser.Verified {
+		err = base.ErrUserVerified
 		return
 	}
 	data = NewIDCard(&IDCard{

@@ -1,8 +1,8 @@
 package conf
 
 import (
-	"github.com/srlemon/contrib/config"
-	"github.com/srlemon/userDetail/utils"
+	"github.com/olefen/contrib/config"
+	"github.com/olefen/userDetail/utils"
 )
 
 // ProjectConfig

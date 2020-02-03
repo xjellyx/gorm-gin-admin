@@ -5,9 +5,9 @@ import (
 	"github.com/go-redis/redis"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
-	log "github.com/srlemon/contrib/log"
-	"github.com/srlemon/contrib/session"
-	"github.com/srlemon/userDetail/conf"
+	log "github.com/olefen/contrib/log"
+	"github.com/olefen/contrib/session"
+	"github.com/olefen/userDetail/conf"
 )
 
 var (
@@ -51,6 +51,7 @@ func InitModel(d InitModelParam) (ret *gorm.DB, err error) {
 			new(UserDetail),
 			new(BankCard),
 			new(AddressDetail),
+			new(IDCard),
 		)
 		LogModel.Infoln("[同步数据完成]")
 	}
@@ -69,8 +70,6 @@ func InitModel(d InitModelParam) (ret *gorm.DB, err error) {
 	if RDB, err = GetRedisClient(); err != nil {
 		return
 	}
-
-
 
 	//
 	ret = db

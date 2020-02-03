@@ -2,11 +2,11 @@ package model
 
 import (
 	"github.com/go-redis/redis"
-	"github.com/srlemon/contrib"
-	"github.com/srlemon/contrib/log"
-	"github.com/srlemon/contrib/session"
-	pb "github.com/srlemon/model.grpc"
-	base "github.com/srlemon/userDetail"
+	"github.com/olefen/contrib"
+	"github.com/olefen/contrib/log"
+	"github.com/olefen/contrib/session"
+	pb "github.com/olefen/model.grpc"
+	base "github.com/olefen/userDetail"
 	"golang.org/x/crypto/bcrypt"
 	"time"
 )
@@ -200,4 +200,14 @@ func GetUserToken(f *pb.ArgLogin) (ret string, err error) {
 	//
 	ret = token
 	return
+}
+
+// TokenDecodeSession
+func TokenDecodeSession(token interface{}, isAdmin bool) (ret *session.Session, err error) {
+	if isAdmin {
+		return AdminKey.SessionDecodeAuto(token)
+	} else {
+		return UserKey.SessionDecodeAuto(token)
+	}
+
 }

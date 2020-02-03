@@ -1,7 +1,7 @@
 package model
 
 import (
-	base "github.com/srlemon/userDetail"
+	base "github.com/olefen/userDetail"
 )
 
 // BankCard 银行卡信息
@@ -69,15 +69,10 @@ func PubBankCardAdd(uid string, f *base.FormBankCard) (ret *BankCard, err error)
 }
 
 // PubBankCardGet 获取银行卡信息
-func PubBankCardGet(uid string, number string) (ret *BankCard, err error) {
+func PubBankCardGet(number string) (ret *BankCard, err error) {
 	ret = new(BankCard)
 	ret.Number = number
 	if err = Database.Model(ret).First(ret).Error; err != nil {
-		return
-	}
-	// 不是自己的信息
-	if ret.Uid != uid {
-		err = base.ErrActionNotAllow
 		return
 	}
 	return
@@ -86,7 +81,12 @@ func PubBankCardGet(uid string, number string) (ret *BankCard, err error) {
 // PubBankCardDel 删除银行卡信息,硬删除
 func PubBankCardDel(uid string, number string) (err error) {
 	data := new(BankCard)
-	if data, err = PubBankCardGet(uid, number); err != nil {
+	if data, err = PubBankCardGet(number); err != nil {
+		return
+	}
+	// 不是自己的信息
+	if data.Uid != uid {
+		err = base.ErrActionNotAllow
 		return
 	}
 	if err = Database.Unscoped().Delete(data).Error; err != nil {
