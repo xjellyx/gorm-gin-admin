@@ -6,6 +6,7 @@ import (
 	userBase "github.com/olefen/userDetail"
 	"github.com/olefen/userDetail/model"
 	"net/http"
+	"strconv"
 	"strings"
 )
 
@@ -277,7 +278,7 @@ func (c *ControlServe) DeleteUserBankCard(ctx *gin.Context) {
 	if s, err = model.TokenDecodeSession(ctx.Request, false); err != nil {
 		return
 	}
-	number = ctx.GetString("number")
+	number = ctx.Param("number")
 	if err = model.PubBankCardDel(s.UID, number); err != nil {
 		return
 	}
@@ -361,15 +362,24 @@ func (c *ControlServe) UpdateUserAddress(ctx *gin.Context) {
 func (c *ControlServe) DeleteUserAddress(ctx *gin.Context) {
 	var (
 		s   *session.Session
-		id  int64
+		id  string
+		_id int64
 		err error
 	)
 	defer PubCheckError(&err, ctx)
-	id = ctx.GetInt64("id")
+	id = ctx.Param("id")
+	if _id, err = strconv.ParseInt(id, 10, 64); err != nil {
+		return
+	}
+
 	if s, err = model.TokenDecodeSession(ctx.Request, false); err != nil {
 		return
 	}
-	if err = model.PubAddressDelete(s.UID, id); err != nil {
+	if err = model.PubAddressDelete(s.UID, _id); err != nil {
 		return
 	}
+
+	ctx.AbortWithStatusJSON(200, gin.H{
+		"data": "success",
+	})
 }
