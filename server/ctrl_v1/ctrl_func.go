@@ -287,3 +287,89 @@ func (c *ControlServe) DeleteUserBankCard(ctx *gin.Context) {
 	})
 
 }
+
+// AddUserAddress 添加地址
+func (c *ControlServe) AddUserAddress(ctx *gin.Context) {
+	var (
+		err  error
+		s    *session.Session
+		form = new(userBase.FormAddr)
+		data *model.AddressDetail
+	)
+	defer PubCheckError(&err, ctx)
+	if err = ctx.ShouldBindJSON(form); err != nil {
+		return
+	}
+	if s, err = model.TokenDecodeSession(ctx.Request, false); err != nil {
+		return
+	}
+	if data, err = model.PubAddressAdd(s.UID, form); err != nil {
+		return
+	}
+	ctx.AbortWithStatusJSON(200, gin.H{
+		"data": data,
+	})
+
+}
+
+// GetUserAddressList 用户获取自己的地址
+func (c *ControlServe) GetUserAddressList(ctx *gin.Context) {
+	var (
+		err  error
+		data []*model.AddressDetail
+		s    *session.Session
+	)
+	defer PubCheckError(&err, ctx)
+	if s, err = model.TokenDecodeSession(ctx.Request, false); err != nil {
+		return
+	}
+	if data, err = model.PubAddressGetList(s.UID); err != nil {
+		return
+	}
+
+	ctx.AbortWithStatusJSON(200, gin.H{
+		"data": data,
+	})
+}
+
+// UpdateUserAddress 用户更新自己的地址
+func (c *ControlServe) UpdateUserAddress(ctx *gin.Context) {
+	var (
+		err  error
+		s    *session.Session
+		data *model.AddressDetail
+		form *userBase.FormAddr
+	)
+	defer PubCheckError(&err, ctx)
+	form = new(userBase.FormAddr)
+	if err = ctx.ShouldBindJSON(form); err != nil {
+		return
+	}
+	if s, err = model.TokenDecodeSession(ctx.Request, false); err != nil {
+		return
+	}
+	if data, err = model.PubAddressUpdate(s.UID, form); err != nil {
+		return
+	}
+
+	ctx.AbortWithStatusJSON(200, gin.H{
+		"data": data,
+	})
+}
+
+// DeleteUserAddress 用户删除地址
+func (c *ControlServe) DeleteUserAddress(ctx *gin.Context) {
+	var (
+		s   *session.Session
+		id  int64
+		err error
+	)
+	defer PubCheckError(&err, ctx)
+	id = ctx.GetInt64("id")
+	if s, err = model.TokenDecodeSession(ctx.Request, false); err != nil {
+		return
+	}
+	if err = model.PubAddressDelete(s.UID, id); err != nil {
+		return
+	}
+}

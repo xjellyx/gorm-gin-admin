@@ -126,7 +126,7 @@ func PubUserGet(uid string) (ret *UserDetail, err error) {
 // PubUserGetByEmail
 func PubUserGetByEmail(email string) (ret *UserDetail, err error) {
 	if len(email) == 0 {
-		err = userBase.ErrFormParamInValid
+		err = userBase.ErrFormParamInvalid
 		return
 	}
 	data := new(UserDetail)

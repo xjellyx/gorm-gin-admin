@@ -11,15 +11,15 @@ type FormRegister struct {
 
 func (f *FormRegister) Valid() (err error) {
 	if f == nil {
-		err = ErrFormParamInValid
+		err = ErrFormParamInvalid
 		return
 	}
 	if len(f.Phone) == 0 {
-		err = ErrFormParamInValid.SetVars("phone")
+		err = ErrFormParamInvalid.SetVars("phone")
 		return
 	}
 	if len(f.Password) == 0 {
-		err = ErrFormParamInValid.SetVars("password")
+		err = ErrFormParamInvalid.SetVars("password")
 		return
 	}
 
@@ -36,7 +36,7 @@ type LoginForm struct {
 
 func (f *LoginForm) Valid() (err error) {
 	if f == nil {
-		err = ErrFormParamInValid
+		err = ErrFormParamInvalid
 		return
 	}
 	return
@@ -54,7 +54,7 @@ type UpdateUserProfile struct {
 
 func (f *UpdateUserProfile) Valid() (ret map[string]interface{}, err error) {
 	if f == nil {
-		err = ErrFormParamInValid
+		err = ErrFormParamInvalid
 		return
 	}
 	ret = map[string]interface{}{}
@@ -63,7 +63,7 @@ func (f *UpdateUserProfile) Valid() (ret map[string]interface{}, err error) {
 			f.LocNum = new(string)
 			*f.LocNum = "86"
 		}
-		err = ErrFormParamInValid
+		err = ErrFormParamInvalid
 		return
 	} else if f.Phone != nil && f.LocNum != nil {
 		ret["phone"] = *f.Phone
@@ -71,19 +71,19 @@ func (f *UpdateUserProfile) Valid() (ret map[string]interface{}, err error) {
 	}
 
 	if f.Username != nil && len(*f.Username) == 0 {
-		err = ErrFormParamInValid
+		err = ErrFormParamInvalid
 		return
 	} else if f.Username != nil {
 		ret["username"] = *f.Username
 	}
 	if f.Nickname != nil && len(*f.Nickname) == 0 {
-		err = ErrFormParamInValid
+		err = ErrFormParamInvalid
 		return
 	} else if f.Nickname != nil {
 		ret["nick_name"] = *f.Nickname
 	}
 	if f.HeadIcon != nil && len(*f.HeadIcon) == 0 {
-		err = ErrFormParamInValid
+		err = ErrFormParamInvalid
 		return
 	} else if f.HeadIcon != nil {
 		ret["head_icon"] = *f.HeadIcon
@@ -106,7 +106,7 @@ type FormBankCard struct {
 // Valid
 func (f *FormBankCard) Valid() (err error) {
 	if f == nil {
-		err = ErrFormParamInValid
+		err = ErrFormParamInvalid
 		return
 	}
 	return
@@ -126,36 +126,71 @@ type FormIDCard struct {
 
 func (f *FormIDCard) Valid() (err error) {
 	if f == nil {
-		err = ErrFormParamInValid
+		err = ErrFormParamInvalid
 		return
 	}
 	if len(f.IDCard) == 0 {
-		err = ErrFormParamInValid
+		err = ErrFormParamInvalid
 		return
 	}
 	if len(f.IssueOrg) == 0 {
-		err = ErrFormParamInValid
+		err = ErrFormParamInvalid
 		return
 	}
 	if len(f.IDCardAddr) == 0 {
-		err = ErrFormParamInValid
+		err = ErrFormParamInvalid
 		return
 	}
 	if len(f.ValidPeriod) == 0 {
-		err = ErrFormParamInValid
+		err = ErrFormParamInvalid
 		return
 	}
 	if len(f.Birthday) == 0 {
-		err = ErrFormParamInValid
+		err = ErrFormParamInvalid
 		return
 	}
 	if len(f.Name) == 0 {
-		err = ErrFormParamInValid
+		err = ErrFormParamInvalid
 		return
 	}
 	if len(f.Nation) == 0 {
-		err = ErrFormParamInValid
+		err = ErrFormParamInvalid
 		return
+	}
+	return
+}
+
+type FormAddr struct {
+	Country  string  `json:"country" form:"country" binding:"required"`
+	Province string  `json:"province" form:"province" binding:"required"`
+	City     string  `json:"city" form:"city" binding:"required"`
+	District *string `json:"district" form:"district"` // 普通用户个人资料填写的地址所在区域
+	Address  *string `json:"address" form:"address"`   // 普通用户个人资料填写的详细地址
+	ID       *int64  `json:"id"`
+}
+
+func (f *FormAddr) Valid() (err error) {
+	if f == nil {
+		err = ErrFormParamInvalid
+		return
+	}
+	if len(f.Country) == 0 {
+		err = ErrFormParamInvalid
+		return
+	}
+	if len(f.Province) == 0 {
+		err = ErrFormParamInvalid
+		return
+	}
+	if len(f.City) == 0 {
+		err = ErrFormParamInvalid
+		return
+	}
+	if f.Address == nil {
+		f.Address = new(string)
+	}
+	if f.District == nil {
+		f.District = new(string)
 	}
 	return
 }

@@ -61,12 +61,18 @@ func InitCtrl() (err error) {
 		{
 			v1_user := v1.Group("/user")
 			v1_user.GET("/getUserDetailSelf", Ctrl.GetUserDetailSelf)
-			v1_user.POST("/updateUserDetail", Ctrl.UpdateUserDetail)
+			v1_user.GET("/getUserBankCardList", Ctrl.GetUserBankCardList)
 			v1_user.GET("/getUserIDCard", Ctrl.GetUserIDCard)
+			v1_user.GET("/getUserAddressList", Ctrl.GetUserAddressList)
+
+			v1_user.POST("/updateUserDetail", Ctrl.UpdateUserDetail)
 			v1_user.POST("/addUserIDCard", Ctrl.AddUserIDCard)
 			v1_user.POST("/addUserBankCard", Ctrl.AddUserBankCard)
-			v1_user.GET("/getUserBankCardList", Ctrl.GetUserBankCardList)
+			v1_user.POST("/addUserAddress", Ctrl.AddUserAddress)
+			v1_user.POST("/updateUserAddress", Ctrl.UpdateUserAddress)
+
 			v1_user.DELETE("/deleteUserBankCard/:number", Ctrl.DeleteUserBankCard)
+			v1_user.DELETE("/deleteUserAddress/:id", Ctrl.DeleteUserAddress)
 		}
 
 		// Admin
