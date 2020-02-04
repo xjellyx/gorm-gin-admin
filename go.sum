@@ -74,6 +74,8 @@ github.com/olefen/model.grpc v0.0.0-20200203020030-ab3707898def h1:OD/sIO66T+Q+e
 github.com/olefen/model.grpc v0.0.0-20200203020030-ab3707898def/go.mod h1:jksPIu+m1cjCjxY4AD3mrTdbOl08LhiiKzAEnc+cDCE=
 github.com/olefen/model.grpc v0.0.0-20200203025830-7447274c2f9a h1:wFSsXhiQN4l7HdvjpW+rSJ2R0j4h1zHqfv5+kDV3nGc=
 github.com/olefen/model.grpc v0.0.0-20200203025830-7447274c2f9a/go.mod h1:afA5bVZYzkOnvXZ8QmYnxdBzK8RcZJuaPYV1tTBf6Ps=
+github.com/olefen/model.grpc v0.0.0-20200204093113-0d26c9a1bb52 h1:kZ2KTxS7oBasj43+8Vekmg8L5hmtcSyRlUc4mvLnHgE=
+github.com/olefen/model.grpc v0.0.0-20200204093113-0d26c9a1bb52/go.mod h1:afA5bVZYzkOnvXZ8QmYnxdBzK8RcZJuaPYV1tTBf6Ps=
 github.com/pkg/errors v0.8.1 h1:iURUrRGxPUNPdy5/HRSm+Yj6okJ6UtLINN0Q9M4+h3I=
 github.com/pkg/errors v0.8.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
