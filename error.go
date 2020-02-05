@@ -2,7 +2,7 @@ package base
 
 import (
 	"fmt"
-	"github.com/olefen/contrib"
+	"github.com/olongfen/contrib"
 	"strings"
 )
 

@@ -1,6 +1,6 @@
 package model
 
-import base "github.com/olefen/userDetail"
+import base "github.com/olongfen/userDetail"
 
 // IDCard
 type IDCard struct {

@@ -2,10 +2,10 @@ package main
 
 import (
 	"github.com/jinzhu/gorm"
-	"github.com/olefen/contrib/log"
-	"github.com/olefen/userDetail/conf"
-	"github.com/olefen/userDetail/model"
-	ctrl "github.com/olefen/userDetail/server/ctrl_v1"
+	"github.com/olongfen/contrib/log"
+	"github.com/olongfen/userDetail/conf"
+	"github.com/olongfen/userDetail/model"
+	ctrl "github.com/olongfen/userDetail/server/ctrl_v1"
 	"io/ioutil"
 	"sync"
 )

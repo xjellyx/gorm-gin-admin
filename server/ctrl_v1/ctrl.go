@@ -7,8 +7,8 @@ import (
 	"time"
 
 	"github.com/gin-gonic/gin"
-	"github.com/olefen/contrib/log"
-	"github.com/olefen/userDetail/conf"
+	"github.com/olongfen/contrib/log"
+	"github.com/olongfen/userDetail/conf"
 )
 
 var (

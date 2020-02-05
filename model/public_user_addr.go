@@ -1,6 +1,6 @@
 package model
 
-import userBase "github.com/olefen/userDetail"
+import userBase "github.com/olongfen/userDetail"
 
 // AddressDetail 地址信息
 type AddressDetail struct {

@@ -2,8 +2,8 @@ package userRpc
 
 import (
 	"context"
-	pb "github.com/olefen/model.grpc"
-	"github.com/olefen/userDetail/model"
+	pb "github.com/olongfen/model.grpc"
+	"github.com/olongfen/userDetail/model"
 	"google.golang.org/grpc"
 )
 

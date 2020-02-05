@@ -2,9 +2,9 @@ package ctrl
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/olefen/contrib/session"
-	userBase "github.com/olefen/userDetail"
-	"github.com/olefen/userDetail/model"
+	"github.com/olongfen/contrib/session"
+	userBase "github.com/olongfen/userDetail"
+	"github.com/olongfen/userDetail/model"
 	"net/http"
 	"strconv"
 	"strings"

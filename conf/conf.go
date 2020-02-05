@@ -1,8 +1,8 @@
 package conf
 
 import (
-	"github.com/olefen/contrib/config"
-	"github.com/olefen/userDetail/utils"
+	"github.com/olongfen/contrib/config"
+	"github.com/olongfen/userDetail/utils"
 )
 
 // ProjectConfig

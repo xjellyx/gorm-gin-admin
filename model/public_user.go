@@ -3,8 +3,8 @@ package model
 import (
 	"github.com/jinzhu/gorm"
 	"github.com/lib/pq"
-	genid "github.com/olefen/gen-id"
-	userBase "github.com/olefen/userDetail"
+	genid "github.com/olongfen/gen-id"
+	userBase "github.com/olongfen/userDetail"
 	uuid "github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
 	"math/rand"

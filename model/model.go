@@ -5,9 +5,9 @@ import (
 	"github.com/go-redis/redis"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/postgres"
-	log "github.com/olefen/contrib/log"
-	"github.com/olefen/contrib/session"
-	"github.com/olefen/userDetail/conf"
+	log "github.com/olongfen/contrib/log"
+	"github.com/olongfen/contrib/session"
+	"github.com/olongfen/userDetail/conf"
 )
 
 var (

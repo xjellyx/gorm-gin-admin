@@ -2,11 +2,11 @@ package model
 
 import (
 	"github.com/go-redis/redis"
-	"github.com/olefen/contrib"
-	"github.com/olefen/contrib/log"
-	"github.com/olefen/contrib/session"
-	pb "github.com/olefen/model.grpc"
-	base "github.com/olefen/userDetail"
+	"github.com/olongfen/contrib"
+	"github.com/olongfen/contrib/log"
+	"github.com/olongfen/contrib/session"
+	pb "github.com/olongfen/model.grpc"
+	base "github.com/olongfen/userDetail"
 	"golang.org/x/crypto/bcrypt"
 	"time"
 )

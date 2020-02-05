@@ -1,7 +1,7 @@
 package model
 
 import (
-	base "github.com/olefen/userDetail"
+	base "github.com/olongfen/userDetail"
 )
 
 // BankCard 银行卡信息
