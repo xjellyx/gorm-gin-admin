@@ -1,5 +1,7 @@
 serverAddr: 127.0.0.1
 serverPort: "8060"
+rpcHost: 127.0.0.1
+rpcPort: "9060"
 sync: true
 mode: ""
 userKeyDir: ./conf/user.key

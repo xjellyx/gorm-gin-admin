@@ -12,4 +12,5 @@ require (
 	github.com/olongfen/model.grpc v0.0.0-20200205020547-b36df4fd0c97
 	github.com/satori/go.uuid v1.2.0
 	golang.org/x/crypto v0.0.0-20191205180655-e7c4368fe9dd
+	google.golang.org/grpc v1.25.1
 )

@@ -3,10 +3,14 @@ package main
 import (
 	"github.com/jinzhu/gorm"
 	"github.com/olongfen/contrib/log"
+	pb "github.com/olongfen/model.grpc"
 	"github.com/olongfen/userDetail/conf"
 	"github.com/olongfen/userDetail/model"
+	userRpc "github.com/olongfen/userDetail/rpc"
 	ctrl "github.com/olongfen/userDetail/server/ctrl_v1"
+	"google.golang.org/grpc"
 	"io/ioutil"
+	"net"
 	"sync"
 )
 
@@ -76,25 +80,28 @@ func main() {
 	//		Timeout:               1 * time.Second,  // Wait 1 second for the ping ack before assuming the connection is dead
 	//	}
 	//)
-	// wg.Add(1)
-	//go func() {
-	//	defer wg.Done()
-	//	if lis, err = net.Listen("tcp", conf.RpcHost+":"+conf.RpcPort); err != nil {
-	//		panic(err)
-	//	}
-	//	sv, _err := userRpc.NewRpc("")
-	//	if _err != nil {
-	//		panic(_err)
-	//	}
-	//	defer sv.Close()
-	//	s := grpc.NewServer()
-	//	pb.RegisterUserBaseServer(s, sv)
-	//	model.LogModel.Infof(`hall rpc serve will be run in %s`, conf.RpcHost+":"+conf.RpcPort)
-	//	if err = s.Serve(lis); err != nil {
-	//		panic(err)
-	//	}
-	//
-	//}()
+	wg.Add(1)
+	go func() {
+		var (
+			lis net.Listener
+		)
+		defer wg.Done()
+		if lis, err = net.Listen("tcp", conf.ProjectSetting.RpcHost+":"+conf.ProjectSetting.RpcPort); err != nil {
+			panic(err)
+		}
+		sv, _err := userRpc.NewRpc(conf.ProjectSetting.RpcHost + ":" + conf.ProjectSetting.RpcPort)
+		if _err != nil {
+			panic(_err)
+		}
+		defer sv.Close()
+		s := grpc.NewServer()
+		pb.RegisterUserBaseServer(s, sv)
+		model.LogModel.Infof(`hall rpc serve will be run in %s`, conf.ProjectSetting.RpcHost+":"+conf.ProjectSetting.RpcPort)
+		if err = s.Serve(lis); err != nil {
+			panic(err)
+		}
+
+	}()
 
 	wg.Wait()
 }

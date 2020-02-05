@@ -10,6 +10,8 @@ type ProjectConfig struct {
 	config.Config `yaml:"-"`
 	ServerAddr    string    `yaml:"serverAddr"`
 	ServerPort    string    `yaml:"serverPort"`
+	RpcHost       string    `yaml:"rpcHost"`
+	RpcPort       string    `yaml:"rpcPort"`
 	Sync          bool      `yaml:"sync"`        // true: 数据库同步
 	Mode          string    `yaml:"mode"`        // mode: 方式
 	UserKeyDir    string    `yaml:"userKeyDir"`  // 私钥地址
@@ -56,6 +58,8 @@ var (
 	ProjectSetting = &ProjectConfig{
 		ServerAddr: utils.PubGetEnvString("SERVER_ADDR", "127.0.0.1"),
 		ServerPort: utils.PubGetEnvString("SERVER_PORT", "8060"),
+		RpcHost:    utils.PubGetEnvString("RPC_HOST", "127.0.0.1"),
+		RpcPort:    utils.PubGetEnvString("RPC_PORT", "9060"),
 		Sync:       false,
 		Mode:       "production",
 		IsTLS:      false,
