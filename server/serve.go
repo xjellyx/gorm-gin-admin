@@ -2,13 +2,15 @@ package main
 
 import (
 	"github.com/jinzhu/gorm"
+	"google.golang.org/grpc"
+
 	"github.com/olongfen/contrib/log"
 	pb "github.com/olongfen/model.grpc"
 	"github.com/olongfen/userDetail/conf"
 	"github.com/olongfen/userDetail/model"
 	userRpc "github.com/olongfen/userDetail/rpc"
 	ctrl "github.com/olongfen/userDetail/server/ctrl_v1"
-	"google.golang.org/grpc"
+
 	"io/ioutil"
 	"net"
 	"sync"

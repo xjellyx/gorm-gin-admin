@@ -2,6 +2,8 @@ package userRpc
 
 import (
 	"context"
+	"github.com/golang/protobuf/ptypes"
+	"github.com/olongfen/contrib"
 	pb "github.com/olongfen/model.grpc"
 	"github.com/olongfen/userDetail/model"
 	"google.golang.org/grpc"
@@ -14,8 +16,51 @@ type ServeRpc struct {
 	client pb.UserBaseClient
 }
 
-func transportUserDetailToPb(u *model.UserDetail, pb *pb.UserDetailResp) {
-	pb.Uid = u.Uid
+func transportUserDetailToPb(u *model.UserDetail, val *pb.UserDetailResp) {
+	val.Uid = u.Uid
+	val.Status = int32(u.Status)
+	val.Verified = u.Verified
+	val.IsChangeUsername = u.IsChangeUsername
+	val.Nickname = u.Nickname
+	val.Username = u.Username
+	val.RealName = u.RealName
+	val.Sign = u.Sign
+	val.HeadIcon = u.HeadIcon
+	val.LocNum = u.LocNum
+	val.Phone = u.Phone
+	val.IsAdmin = u.IsAdmin
+	val.Email = u.Email
+	val.Level = u.Level
+	val.TimeData = new(pb.TimeData)
+	val.TimeData.CreatedAt, _ = ptypes.TimestampProto(u.CreatedAt)
+	val.TimeData.UpdatedAt, _ = ptypes.TimestampProto(u.UpdatedAt)
+	for _, v := range u.BankCards {
+		_b := new(pb.BankCard)
+		transportBankCard(v, _b)
+		val.Cards = append(val.Cards, _b)
+	}
+
+	for _, v := range u.Addr {
+		_b := new(pb.AddressDetail)
+		transportAddr(v, _b)
+		val.Addr = append(val.Addr, _b)
+	}
+
+}
+
+func transportBankCard(u *model.BankCard, v *pb.BankCard) {
+	v.Number = u.Number
+	v.Name = u.Name
+	v.BankStart = u.BankStart
+	v.Bank = u.Bank
+}
+
+func transportAddr(u *model.AddressDetail, v *pb.AddressDetail) {
+	v.Address = u.Address
+	v.Province = u.Province
+	v.Country = u.Country
+	v.City = u.City
+	v.District = u.District
 }
 
 func (s *ServeRpc) GetUserToken(ctx context.Context, arg *pb.ArgLogin) (ret *pb.TokenGetRes, err error) {
@@ -52,6 +97,9 @@ func (s *ServeRpc) GetUserDetail(ctx context.Context, arg *pb.UserDetailReq) (re
 		if data, err = model.PubUserGetByUsername(arg.GetUsername()); err != nil {
 			return
 		}
+	} else {
+		err = contrib.ErrParamInvalid
+		return
 	}
 
 	ret = new(pb.UserDetailResp)
