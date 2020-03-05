@@ -119,6 +119,34 @@ func (s *ServeRpc) CheckToken(ctx context.Context, arg *pb.CheckTokenReq) (ret *
 	return
 }
 
+func (s *ServeRpc) UpdateUserDetail(ctx context.Context, req *pb.UpdateUserDetailReq) (ret *pb.UserDetailResp, err error) {
+	return nil, nil
+}
+func (s *ServeRpc) GetUserIDCard(ctx context.Context, req *pb.GetUserIDCardReq) (ret *pb.UserIDCardResp, err error) {
+	return
+}
+func (s *ServeRpc) AddUserBankCard(ctx context.Context, req *pb.AddBankCardReq) (ret *pb.BankCardResp, err error) {
+	return
+}
+func (s *ServeRpc) GetUserBankCardList(ctx context.Context, req *pb.GetUserBankCardReq) (ret *pb.GetUserBankCardResp, err error) {
+	return
+}
+func (s *ServeRpc) DeleteUserBankCard(ctx context.Context, req *pb.DelUserBankCardReq) (ret *pb.PubNoneResp, err error) {
+	return
+}
+func (s *ServeRpc) AddUserAddress(ctx context.Context, req *pb.AddUserAddrReq) (ret *pb.UserAddrResp, err error) {
+	return
+}
+func (s *ServeRpc) GetUserAddressList(ctx context.Context, req *pb.GetUserAddressReq) (ret *pb.GetUserAddressResp, err error) {
+	return
+}
+func (s *ServeRpc) UpdateUserAddress(ctx context.Context, req *pb.UpdateUserAddrReq) (ret *pb.UserAddrResp, err error) {
+	return
+}
+func (s *ServeRpc) DeleteUserAddress(ctx context.Context, req *pb.DelUserAddrReq) (ret *pb.PubNoneResp, err error) {
+	return
+}
+
 func NewRpc(addr string) (ret *ServeRpc, err error) {
 	var (
 		cc *grpc.ClientConn
