@@ -219,7 +219,7 @@ func (c *ControlServe) GetUserIDCard(ctx *gin.Context) {
 	})
 }
 
-// AddUserBankCard 获取一张银行卡信息
+// AddUserBankCard 添加一张银行卡信息
 func (c *ControlServe) AddUserBankCard(ctx *gin.Context) {
 	var (
 		err  error
