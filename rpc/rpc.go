@@ -43,6 +43,7 @@ func transportUserDetailToPb(u *model.UserDetail, val *pb.UserDetailResp) {
 	for _, v := range u.Addr {
 		_b := new(pb.AddressDetail)
 		transportAddr(v, _b)
+
 		val.Addr = append(val.Addr, _b)
 	}
 
@@ -66,14 +67,16 @@ func transportAddr(u *model.AddressDetail, v *pb.AddressDetail) {
 func (s *ServeRpc) GetUserToken(ctx context.Context, arg *pb.ArgLogin) (ret *pb.TokenGetRes, err error) {
 	var (
 		token string
+		uid   string
 	)
-	if token, err = model.GetUserToken(arg); err != nil {
+	if token, uid, err = model.GetUserToken(arg); err != nil {
 		return
 	}
 
 	//
 	ret = new(pb.TokenGetRes)
 	ret.Token = token
+	ret.Uid = uid
 	return
 }
 

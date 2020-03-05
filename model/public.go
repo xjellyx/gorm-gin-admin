@@ -123,7 +123,7 @@ func Login(f *base.LoginForm) (ret *UserDetail, token string, err error) {
 }
 
 // GetUserToken 获取用户token
-func GetUserToken(f *pb.ArgLogin) (ret string, err error) {
+func GetUserToken(f *pb.ArgLogin) (ret string, uid string, err error) {
 	if f == nil {
 		err = base.ErrFormParamInvalid
 		return
@@ -199,6 +199,7 @@ func GetUserToken(f *pb.ArgLogin) (ret string, err error) {
 
 	//
 	ret = token
+	uid = data.Uid
 	return
 }
 
