@@ -49,14 +49,20 @@ func SessionCheck(s *session.Session) (err error) {
 }
 
 // TokenCheck
-func TokenCheck(token string) (err error) {
+func TokenCheck(token string, isAdmin bool) (err error) {
 	var (
 		s          *session.Session
 		rdb        *redis.Client
 		cacheToken string
 	)
-	if s, err = UserKey.SessionDecodeAuto(token); err != nil {
-		return
+	if isAdmin {
+		if s, err = AdminKey.SessionDecodeAuto(token); err != nil {
+			return
+		}
+	} else {
+		if s, err = UserKey.SessionDecodeAuto(token); err != nil {
+			return
+		}
 	}
 	if rdb, err = GetRedisClient(); err != nil {
 		return

@@ -110,6 +110,15 @@ func (s *ServeRpc) GetUserDetail(ctx context.Context, arg *pb.UserDetailReq) (re
 	return
 }
 
+func (s *ServeRpc) CheckToken(ctx context.Context, arg *pb.CheckTokenReq) (ret *pb.CheckTokenRes, err error) {
+	if err = model.TokenCheck(arg.Token, arg.IsAdmin); err != nil {
+		return
+	}
+
+	ret = new(pb.CheckTokenRes)
+	return
+}
+
 func NewRpc(addr string) (ret *ServeRpc, err error) {
 	var (
 		cc *grpc.ClientConn
