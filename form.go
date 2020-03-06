@@ -194,3 +194,21 @@ func (f *FormAddr) Valid() (err error) {
 	}
 	return
 }
+
+// FormUserOnline
+type FormUserOnline struct {
+	LoginIp     string `json:"loginIp"`   // 用户登入ip
+	LoginTime   int64  `json:"loginTime"` // 用户登入时间
+	IsOnline    *bool  `json:"isOnline"`  // 是否在线
+	OfflineTime int64  `json:"offlineTime"`
+	Device      string `json:"device"`
+}
+
+func (f *FormUserOnline) Valid() (err error) {
+	if f == nil {
+		err = ErrFormParamInvalid
+		return
+	}
+
+	return
+}

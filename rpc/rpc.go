@@ -312,6 +312,14 @@ func (s *ServeRpc) DeleteUserAddress(ctx context.Context, req *pb.DelUserAddrReq
 	return
 }
 
+func (s *ServeRpc) UserOffline(ctx context.Context, req *pb.UserOfflineReq) (ret *pb.PubNoneResp, err error) {
+	if err = model.UserOfflineDo(req.Uid); err != nil {
+		return
+	}
+	ret = new(pb.PubNoneResp)
+	return
+}
+
 func NewRpc(addr string) (ret *ServeRpc, err error) {
 	var (
 		cc *grpc.ClientConn

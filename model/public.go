@@ -2,6 +2,7 @@ package model
 
 import (
 	"github.com/go-redis/redis"
+	"github.com/jinzhu/gorm"
 	"github.com/olongfen/contrib"
 	"github.com/olongfen/contrib/log"
 	"github.com/olongfen/contrib/session"
@@ -54,6 +55,7 @@ func TokenCheck(token string, isAdmin bool) (err error) {
 		s          *session.Session
 		rdb        *redis.Client
 		cacheToken string
+		dataOnline *UserOnline
 	)
 	if isAdmin {
 		if s, err = AdminKey.SessionDecodeAuto(token); err != nil {
@@ -67,10 +69,22 @@ func TokenCheck(token string, isAdmin bool) (err error) {
 	if rdb, err = GetRedisClient(); err != nil {
 		return
 	}
-	if cacheToken, err = rdb.Get(s.UID).Result(); err != nil {
+	defer rdb.Close()
+
+	if cacheToken, err = rdb.Get("cache_token" + s.UID).Result(); err != nil {
 		return
 	}
 
+	if dataOnline, err = PubUserOnlineGet(s.UID); err != nil {
+		return
+	}
+	// 不是在线状态，退出，不给用户进行下一步的操作
+	if !dataOnline.IsOnline {
+		rdb.Del("cache_token" + s.UID)
+		err = base.ErrUserNotOnline
+		return
+	}
+	// TODO 用户ip地址改变警告
 	// 不是缓存的token,是非法token
 	if cacheToken != token {
 		err = contrib.ErrTokenInvalid
@@ -119,9 +133,10 @@ func Login(f *base.LoginForm) (ret *UserDetail, token string, err error) {
 		err = _err
 		return
 	} else {
-		if err = red.Set(data.Uid, token, session.SessionExpMaxSecure).Err(); err != nil {
+		if err = red.Set("cache_token"+data.Uid, token, session.SessionExpMaxSecure).Err(); err != nil {
 			return
 		}
+		red.Close()
 	}
 
 	ret = data
@@ -198,7 +213,30 @@ func GetUserToken(f *pb.ArgLogin) (ret string, uid string, err error) {
 		err = _err
 		return
 	} else {
-		if err = red.Set(data.Uid, token, session.SessionExpMaxSecure).Err(); err != nil {
+		if err = red.Set("cache_token"+data.Uid, token, session.SessionExpMaxSecure).Err(); err != nil {
+			return
+		}
+		red.Close()
+	}
+
+	// 创建或者更新用户在线表
+	var (
+		dataOnline = new(UserOnline)
+	)
+	dataOnline.IsOnline = true
+	dataOnline.LoginIp = f.Ip
+	dataOnline.Device = f.Device
+	dataOnline.LoginTime = time.Now()
+	if err = Database.Model(&UserOnline{}).First(dataOnline, "uid = ?", uid).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			dataOnline.Uid = uid
+			if err = Database.Model(&UserOnline{}).Create(dataOnline).Error; err != nil {
+				return
+			}
+
+		}
+	} else {
+		if err = Database.Model(&UserOnline{}).Where("uid=?", uid).Updates(dataOnline).Error; err != nil {
 			return
 		}
 	}
@@ -217,4 +255,56 @@ func TokenDecodeSession(token interface{}, isAdmin bool) (ret *session.Session, 
 		return UserKey.SessionDecodeAuto(token)
 	}
 
+}
+
+func UserOfflineDo(uid string) (err error) {
+	var (
+		data *UserOnline
+		b    = false
+	)
+	if data, err = PubUserOnlineGet(uid); err != nil {
+		return
+	}
+	if data, err = PubUserOnlineUpdate(data.Uid, &base.FormUserOnline{
+		IsOnline:    &b,
+		OfflineTime: time.Now().Unix(),
+	}); err != nil {
+		return
+	}
+	// 删除缓存token
+	if red, _err := GetRedisClient(); _err != nil {
+		err = _err
+		return
+	} else {
+		if err = red.Del("cache_token" + data.Uid).Err(); err != nil {
+			return
+		}
+		red.Close()
+
+	}
+	return
+}
+
+func GetOnlineUser(uid string) (ret int64, err error) {
+	var (
+		data   []*UserOnline
+		rdb    *redis.Client
+		uidArr []string
+		count  int64
+	)
+	if err = Database.Table("user_online").Where("is_online = ?", true).Find(&data).Error; err != nil {
+		return
+	}
+	rdb, err = GetRedisClient()
+	if err != nil {
+		return
+	}
+	defer rdb.Close()
+	for _, v := range data {
+		uidArr = append(uidArr, "cache_token"+v.Uid)
+	}
+	count, _ = rdb.Exists(uidArr...).Result()
+
+	ret = count
+	return
 }

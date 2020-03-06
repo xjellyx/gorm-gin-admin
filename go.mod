@@ -10,7 +10,8 @@ require (
 	github.com/lib/pq v1.3.0
 	github.com/olongfen/contrib v0.0.0-20200205092328-595e1e990f7b
 	github.com/olongfen/gen-id v1.0.2-0.20200205020411-aa724763f90c
-	github.com/olongfen/model.grpc v0.0.0-20200306023338-55c8b6620c6c
+	github.com/olongfen/model.grpc v0.0.0-20200306063417-e323cb575413
+	github.com/robfig/cron/v3 v3.0.0 // indirect
 	github.com/satori/go.uuid v1.2.0
 	golang.org/x/crypto v0.0.0-20191205180655-e7c4368fe9dd
 	google.golang.org/grpc v1.27.1

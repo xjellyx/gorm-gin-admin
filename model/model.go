@@ -52,6 +52,7 @@ func InitModel(d InitModelParam) (ret *gorm.DB, err error) {
 			new(BankCard),
 			new(AddressDetail),
 			new(IDCard),
+			new(UserOnline),
 		)
 		LogModel.Infoln("[同步数据完成]")
 	}
@@ -70,7 +71,7 @@ func InitModel(d InitModelParam) (ret *gorm.DB, err error) {
 	if RDB, err = GetRedisClient(); err != nil {
 		return
 	}
-
+	initCorn()
 	//
 	ret = db
 	return

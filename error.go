@@ -34,4 +34,5 @@ var (
 	ErrUserVerified        = contrib.NewError(8, "user already verified", prefix)
 	ErrUserAccountFroze    = contrib.NewError(7, "user account froze", prefix)
 	ErrCapOfAddress        = contrib.NewError(9, "cap of user address", prefix)
+	ErrUserNotOnline       = contrib.NewError(10, "user not online", prefix)
 )
