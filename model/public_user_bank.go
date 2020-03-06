@@ -97,7 +97,7 @@ func PubBankCardDel(uid string, number string) (err error) {
 }
 
 // PubBankCardGetList 获取自己的银行卡列表
-func PubBankCardGetList(uid string) (ret []BankCard, err error) {
+func PubBankCardGetList(uid string) (ret []*BankCard, err error) {
 	data := &UserDetail{Uid: uid}
 	if err = Database.Model(data).Association("BankCards").Find(&ret).Error; err != nil {
 		return

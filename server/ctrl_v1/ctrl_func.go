@@ -249,7 +249,7 @@ func (c *ControlServe) GetUserBankCardList(ctx *gin.Context) {
 	var (
 		err error
 
-		data []model.BankCard
+		data []*model.BankCard
 		s    *session.Session
 	)
 	defer PubCheckError(&err, ctx)
