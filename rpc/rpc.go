@@ -80,6 +80,7 @@ func (s *ServeRpc) GetUserToken(ctx context.Context, arg *pb.ArgLogin) (ret *pb.
 		token string
 		uid   string
 	)
+
 	if token, uid, err = model.GetUserToken(arg); err != nil {
 		return
 	}

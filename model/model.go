@@ -71,7 +71,7 @@ func InitModel(d InitModelParam) (ret *gorm.DB, err error) {
 	if RDB, err = GetRedisClient(); err != nil {
 		return
 	}
-	initCorn()
+	go initCorn()
 	//
 	ret = db
 	return

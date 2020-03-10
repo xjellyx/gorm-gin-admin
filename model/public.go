@@ -227,9 +227,9 @@ func GetUserToken(f *pb.ArgLogin) (ret string, uid string, err error) {
 	dataOnline.LoginIp = f.Ip
 	dataOnline.Device = f.Device
 	dataOnline.LoginTime = time.Now()
-	if err = Database.Model(&UserOnline{}).First(dataOnline, "uid = ?", uid).Error; err != nil {
+	if err = Database.Model(&UserOnline{}).First(dataOnline, "uid = ?", data.Uid).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
-			dataOnline.Uid = uid
+			dataOnline.Uid = data.Uid
 			if err = Database.Model(&UserOnline{}).Create(dataOnline).Error; err != nil {
 				return
 			}

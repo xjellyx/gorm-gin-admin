@@ -60,7 +60,6 @@ func main() {
 		panic(err)
 	}
 	defer db.Close()
-
 	// 开启接口服务
 	wg.Add(1)
 	go func() {
