@@ -321,6 +321,23 @@ func (s *ServeRpc) UserOffline(ctx context.Context, req *pb.UserOfflineReq) (ret
 	return
 }
 
+func (s *ServeRpc) AddUserDetail(ctx context.Context, req *pb.ArgRegistry) (ret *pb.UserDetailResp, err error) {
+	var (
+		data *model.UserDetail
+	)
+	if data, err = model.PubUserAdd(&userBase.FormRegister{
+		Phone:    req.Phone,
+		Password: req.Password,
+		Code:     req.Code,
+	}); err != nil {
+		return
+	}
+
+	ret = new(pb.UserDetailResp)
+	transportUserDetailToPb(data, ret)
+	return
+}
+
 func NewRpc(addr string) (ret *ServeRpc, err error) {
 	var (
 		cc *grpc.ClientConn

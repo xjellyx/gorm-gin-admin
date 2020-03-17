@@ -90,6 +90,8 @@ github.com/olongfen/model.grpc v0.0.0-20200306023338-55c8b6620c6c h1:XpWqAHLwXsc
 github.com/olongfen/model.grpc v0.0.0-20200306023338-55c8b6620c6c/go.mod h1:F07l8c6PT5m/xQNzQvwxR7BKvvp36zmfQULgcq0liHc=
 github.com/olongfen/model.grpc v0.0.0-20200306063417-e323cb575413 h1:8OQur7cyPqP4xPSqWI72Vc5/Adkk5wN7UwiFRFCzk/Q=
 github.com/olongfen/model.grpc v0.0.0-20200306063417-e323cb575413/go.mod h1:F07l8c6PT5m/xQNzQvwxR7BKvvp36zmfQULgcq0liHc=
+github.com/olongfen/model.grpc v0.0.0-20200317063205-6f0f4e4b3caf h1:wLpw3UcvkDmIDnpJ/CgJnOHP9g5BxiJ2Wm4nkr6UBIs=
+github.com/olongfen/model.grpc v0.0.0-20200317063205-6f0f4e4b3caf/go.mod h1:F07l8c6PT5m/xQNzQvwxR7BKvvp36zmfQULgcq0liHc=
 github.com/pkg/errors v0.8.1 h1:iURUrRGxPUNPdy5/HRSm+Yj6okJ6UtLINN0Q9M4+h3I=
 github.com/pkg/errors v0.8.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
