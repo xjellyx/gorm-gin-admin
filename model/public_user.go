@@ -305,6 +305,8 @@ func PubUserUpdate(uid string, f *userBase.UpdateUserProfile) (ret *UserDetail, 
 	if _, ok = m["username"]; ok && data.IsChangeUsername {
 		err = userBase.ErrActionNotAllow.SetDetail("action not allow, username is changed")
 		return
+	} else {
+		m["is_change_username"] = true
 	}
 	if err = Database.Model(&UserDetail{}).Where("uid = ?", uid).Updates(m).Error; err != nil {
 		return
