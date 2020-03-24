@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  user_detail:
+    image: registry.cn-hangzhou.aliyuncs.com/olongfen/user_detail:v1
+    ports:
+    - 8811:8060
+    - 9911:9060
+    volumes:
+    - ./conf:/project/conf

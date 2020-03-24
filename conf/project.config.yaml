@@ -1,6 +1,6 @@
-serverAddr: 127.0.0.1
+serverAddr: 0.0.0.0
 serverPort: "8060"
-rpcHost: 127.0.0.1
+rpcHost: 0.0.0.0
 rpcPort: "9060"
 sync: true
 mode: ""
@@ -9,8 +9,8 @@ userPubDir: ./conf/user.pub
 adminKeyDir: ./conf/admin.key
 adminPubDir: ./conf/admin.pub
 db:
-  host: 127.0.0.1
-  port: "65432"
+  host: 192.168.31.181
+  port: "30432"
   driver: postgres
   databasename: business
   username: business
@@ -18,8 +18,8 @@ db:
   maxidleconn: 200
   maxopenconn: 2000
 rdb:
-  host: 127.0.0.1
-  port: "6379"
+  host: 192.168.31.183
+  port: "30379"
   db: 0
   password: business
 isTLS: false

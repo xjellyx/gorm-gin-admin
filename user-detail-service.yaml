@@ -1,0 +1,25 @@
+apiVersion: v1
+kind: Service
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yml
+    kompose.version: 1.17.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    app: user-detail
+  name: user-detail-service
+spec:
+  type: NodePort
+  ports:
+    - name: port1 # 映射pod容器端口
+      port: 8060
+      nodePort: 31001
+      targetPort: 8060
+    - name: port2
+      port: 9060
+      nodePort: 32001
+      targetPort: 9060
+  selector:
+    app: user-detail
+status:
+  loadBalancer: {}

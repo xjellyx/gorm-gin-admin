@@ -87,8 +87,8 @@ var (
 )
 
 // InitConfig 初始化配置文件
-func InitConfig() (err error) {
-	if err = config.LoadConfiguration("./conf/project.config.yaml", ProjectSetting, ProjectSetting); err != nil {
+func InitConfig(confDir string) (err error) {
+	if err = config.LoadConfiguration(confDir+"/conf/project.config.yaml", ProjectSetting, ProjectSetting); err != nil {
 		return
 	}
 	if ProjectSetting.IsTLS {

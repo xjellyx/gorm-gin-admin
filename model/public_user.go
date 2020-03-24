@@ -42,8 +42,8 @@ type UserDetail struct {
 	Phone            string         `json:"phone"gorm:"size:11;unique_index:loc_num_phone"`
 	HeadIcon         string         `json:"headIcon"gorm:"size:256"`
 	Email            string         `json:"email"gorm:"size:64;index"`
-	LoginPassword    string         `json:"loginPassword" gorm:"size:128;column:loginPassword"`
-	PayPassword      string         `json:"payPassword"gorm:"size:128"`
+	LoginPassword    string         `json:"-" gorm:"size:128;column:loginPassword"`
+	PayPassword      string         `json:"-"gorm:"size:128"`
 	Sign             string         `json:"sign" gorm:"size:64"`                     // 签名
 	Role             pq.StringArray `json:"role" gorm:"not null;type:varchar(36)[]"` // 角色, 用户可以拥有多个角色
 	Level            int32          `json:"level" gorm:"default:1"`                  // 等级
@@ -237,6 +237,54 @@ func PubUserDel(uid string) (err error) {
 		return
 	}
 
+	return
+}
+
+func PubUserLoginPwdUpdate(uid string, oldPwd string, newPwd string) (ret *UserDetail, err error) {
+	var (
+		data *UserDetail
+		d    []byte
+	)
+	if data, err = PubUserGet(uid); err != nil {
+		return
+	}
+	if err = bcrypt.CompareHashAndPassword([]byte(data.LoginPassword), []byte(oldPwd)); err != nil {
+		return
+	}
+	if d, err = bcrypt.GenerateFromPassword([]byte(newPwd), bcrypt.DefaultCost); err != nil {
+		return
+	}
+	data.LoginPassword = string(d)
+
+	if err = Database.Table(data.TableName()).Updates(data).Error; err != nil {
+		return
+	}
+
+	ret = data
+	return
+}
+
+func PubUserPayPwdUpdate(uid string, oldPwd string, newPwd string) (ret *UserDetail, err error) {
+	var (
+		data *UserDetail
+		d    []byte
+	)
+	if data, err = PubUserGet(uid); err != nil {
+		return
+	}
+	if err = bcrypt.CompareHashAndPassword([]byte(data.PayPassword), []byte(oldPwd)); err != nil {
+		return
+	}
+	if d, err = bcrypt.GenerateFromPassword([]byte(newPwd), bcrypt.DefaultCost); err != nil {
+		return
+	}
+	data.PayPassword = string(d)
+
+	if err = Database.Table(data.TableName()).Updates(data).Error; err != nil {
+		return
+	}
+
+	ret = data
 	return
 }
 

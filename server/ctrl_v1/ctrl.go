@@ -52,7 +52,7 @@ func InitCtrl() (err error) {
 
 		// 测试连接
 		v1.GET("", func(c *gin.Context) {
-			c.JSON(http.StatusOK, gin.H{"ping": "pong"})
+			c.JSON(http.StatusOK, gin.H{"ping": "pong - hello"})
 		})
 		v1.POST("/register", Ctrl.Register)
 		v1.POST("/login", Ctrl.Login)

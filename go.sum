@@ -60,6 +60,8 @@ github.com/olongfen/contrib v0.0.0-20200205020052-c331b11234b4 h1:jUY5EHw6U566qV
 github.com/olongfen/contrib v0.0.0-20200205020052-c331b11234b4/go.mod h1:EIC6CjcLxwk/GVcaEGYt5aO/0hD/wO3wbeDLD+P+mIE=
 github.com/olongfen/contrib v0.0.0-20200205092328-595e1e990f7b h1:qEMQOQkITMrCHxh4XZ8LgPwEunZM5Lg+0cby05OYzio=
 github.com/olongfen/contrib v0.0.0-20200205092328-595e1e990f7b/go.mod h1:2W5Xto9goGVSXjhxmNDa4Ep7U7zJorRPPCPBzpgS3zI=
+github.com/olongfen/contrib v0.0.0-20200306055042-0b7eb9ce59ea h1:0u2MTH6K4bOPz2TEJVXygRoxCJq57vxVPXUrairoagE=
+github.com/olongfen/contrib v0.0.0-20200306055042-0b7eb9ce59ea/go.mod h1:2W5Xto9goGVSXjhxmNDa4Ep7U7zJorRPPCPBzpgS3zI=
 github.com/olongfen/gen-id v1.0.2-0.20200205020411-aa724763f90c h1:tn1x4gRakTpnY97zuliQ81pHqclQXolnpPar02LWE4Q=
 github.com/olongfen/gen-id v1.0.2-0.20200205020411-aa724763f90c/go.mod h1:C/CUI5OzvtkRtITIOzDw8UkiVcpBamaYlSP7kLq/yoU=
 github.com/olongfen/model.grpc v0.0.0-20200205020547-b36df4fd0c97 h1:6GUWAg7siWCipKq27k7qaPLQxNnGNftK7TBn90JKSEU=

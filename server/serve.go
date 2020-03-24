@@ -2,7 +2,9 @@ package main
 
 import (
 	"github.com/jinzhu/gorm"
+	"github.com/olongfen/contrib"
 	"google.golang.org/grpc"
+	"os"
 
 	"github.com/olongfen/contrib/log"
 	pb "github.com/olongfen/model.grpc"
@@ -23,9 +25,10 @@ func main() {
 		userKey, userPub, adminKey, adminPub []byte
 		wg                                   = &sync.WaitGroup{}
 	)
-
+	dir, _ := os.Getwd()
+	dir = contrib.PubGetEnvString("CONF_DIR", dir)
 	// 先初始化配置文件
-	if err = conf.InitConfig(); err != nil {
+	if err = conf.InitConfig(dir); err != nil {
 		panic(err)
 	}
 

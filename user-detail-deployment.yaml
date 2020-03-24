@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  annotations:
+    kompose.cmd: kompose convert -f docker-compose.yml
+    kompose.version: 1.17.0 (HEAD)
+  creationTimestamp: null
+  labels:
+    app: user-detail
+  name: user-detail
+spec:
+  replicas: 2
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: user-detail
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: user-detail
+    spec:
+      containers:
+
+      - image: registry.cn-hangzhou.aliyuncs.com/olongfen/user_detail:v1
+        imagePullPolicy: Always
+        name: user-detail
+        ports:
+          - containerPort: 8060
+            name: port1 # 命名,在service那边需要映射到
+          - containerPort: 9060
+            name: port2
+        resources: {}
+        volumeMounts:
+        - mountPath: /project/conf
+          name: user-detail-claim
+      restartPolicy: Always
+      imagePullSecrets:
+        - name: olongfen
+      volumes:
+      - name: user-detail-claim
+        persistentVolumeClaim:
+          claimName: user-detail-claim
+status: {}
