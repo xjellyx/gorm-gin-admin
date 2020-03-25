@@ -3,7 +3,7 @@ serverPort: "8060"
 rpcHost: 0.0.0.0
 rpcPort: "9060"
 sync: true
-mode: ""
+isProduct: false
 userKeyDir: ./conf/user.key
 userPubDir: ./conf/user.pub
 adminKeyDir: ./conf/admin.key

@@ -26,7 +26,7 @@ func InitCtrl() (err error) {
 	Ctrl = &ControlServe{}
 	// 初始化路由
 	Ctrl.Engine = gin.Default()
-	if conf.ProjectSetting.Mode == conf.ModeProduction {
+	if conf.ProjectSetting.IsProduct {
 		Ctrl.Log = log.NewLogFile("./log/log_ctrl")
 		gin.SetMode(gin.ReleaseMode)
 		Ctrl.Engine.Use(gin.Logger())
@@ -52,7 +52,7 @@ func InitCtrl() (err error) {
 
 		// 测试连接
 		v1.GET("", func(c *gin.Context) {
-			c.JSON(http.StatusOK, gin.H{"ping": "pong - hello"})
+			c.JSON(http.StatusOK, gin.H{"ping": "pong >>>>>>> update"})
 		})
 		v1.POST("/register", Ctrl.Register)
 		v1.POST("/login", Ctrl.Login)

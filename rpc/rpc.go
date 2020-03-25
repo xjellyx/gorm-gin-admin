@@ -31,7 +31,6 @@ func transportUserDetailToPb(u *model.UserDetail, val *pb.UserDetailResp) {
 	val.Phone = u.Phone
 	val.IsAdmin = u.IsAdmin
 	val.Email = u.Email
-	val.Level = u.Level
 	val.TimeData = new(pb.TimeData)
 	val.TimeData.CreatedAt, _ = ptypes.TimestampProto(u.CreatedAt)
 	val.TimeData.UpdatedAt, _ = ptypes.TimestampProto(u.UpdatedAt)
@@ -325,11 +324,13 @@ func (s *ServeRpc) AddUserDetail(ctx context.Context, req *pb.ArgRegistry) (ret 
 	var (
 		data *model.UserDetail
 	)
+	model.LogModel.Infoln("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
 	if data, err = model.PubUserAdd(&userBase.FormRegister{
 		Phone:    req.Phone,
 		Password: req.Password,
 		Code:     req.Code,
 	}); err != nil {
+		model.LogModel.Infoln("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq", err)
 		return
 	}
 

@@ -22,7 +22,7 @@ var (
 type InitModelParam struct {
 	Db       conf.Database
 	Sync     bool
-	Mode     string
+	Mode     bool
 	UserKey  []byte
 	UserPub  []byte
 	AdminKey []byte
@@ -40,7 +40,7 @@ func InitModel(d InitModelParam) (ret *gorm.DB, err error) {
 	if db, err = gorm.Open(d.Db.Driver, dataSourceName); err != nil {
 		return
 	}
-	db.LogMode(d.Mode != "production")
+	db.LogMode(d.Mode)
 	db.DB().SetMaxIdleConns(d.Db.MaxIdleConn) // 设置最大闲置个数
 	db.DB().SetMaxOpenConns(d.Db.MaxOpenConn) // 最大打开的连接数
 	db.SingularTable(true)                    // 表生成结尾不带s

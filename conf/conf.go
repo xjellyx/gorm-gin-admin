@@ -13,7 +13,7 @@ type ProjectConfig struct {
 	RpcHost       string    `yaml:"rpcHost"`
 	RpcPort       string    `yaml:"rpcPort"`
 	Sync          bool      `yaml:"sync"`        // true: 数据库同步
-	Mode          string    `yaml:"mode"`        // mode: 方式
+	IsProduct     bool      `yaml:"isProduct"`   //
 	UserKeyDir    string    `yaml:"userKeyDir"`  // 私钥地址
 	UserPubDir    string    `yaml:"userPubDir"`  // 公钥地址
 	AdminKeyDir   string    `yaml:"adminKeyDir"` // 私钥地址
@@ -50,10 +50,6 @@ type Database struct {
 	MaxOpenConn  int
 }
 
-const (
-	ModeProduction = "production"
-)
-
 var (
 	ProjectSetting = &ProjectConfig{
 		ServerAddr: utils.PubGetEnvString("SERVER_ADDR", "127.0.0.1"),
@@ -61,7 +57,7 @@ var (
 		RpcHost:    utils.PubGetEnvString("RPC_HOST", "127.0.0.1"),
 		RpcPort:    utils.PubGetEnvString("RPC_PORT", "9060"),
 		Sync:       false,
-		Mode:       "production",
+		IsProduct:  false,
 		IsTLS:      false,
 		Db: &Database{
 			Driver:       utils.PubGetEnvString("DB_DRIVER", "postgres"),

@@ -24,7 +24,7 @@ spec:
       containers:
 
       - image: registry.cn-hangzhou.aliyuncs.com/olongfen/user_detail:v1
-        imagePullPolicy: Always
+        imagePullPolicy: IfNotPresent
         name: user-detail
         ports:
           - containerPort: 8060

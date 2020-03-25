@@ -54,7 +54,7 @@ func main() {
 	if db, err = model.InitModel(model.InitModelParam{
 		Db:       *conf.ProjectSetting.Db,
 		Sync:     conf.ProjectSetting.Sync,
-		Mode:     conf.ProjectSetting.Mode,
+		Mode:     conf.ProjectSetting.IsProduct,
 		UserPub:  userPub,
 		UserKey:  userKey,
 		AdminPub: adminPub,
@@ -112,7 +112,7 @@ func main() {
 
 // initLog
 func initLog() (err error) {
-	if conf.ProjectSetting.Mode == "production" {
+	if conf.ProjectSetting.IsProduct {
 		model.LogModel = log.NewLogFile("./log/log_model")
 	} else {
 		if model.LogModel, err = log.NewLog(nil); err != nil {

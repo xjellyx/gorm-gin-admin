@@ -46,7 +46,6 @@ type UserDetail struct {
 	PayPassword      string         `json:"-"gorm:"size:128"`
 	Sign             string         `json:"sign" gorm:"size:64"`                     // 签名
 	Role             pq.StringArray `json:"role" gorm:"not null;type:varchar(36)[]"` // 角色, 用户可以拥有多个角色
-	Level            int32          `json:"level" gorm:"default:1"`                  // 等级
 	Secret           string         `json:"secret" gorm:"not null;type:varchar(32)"` // 用户自己的密钥
 	// Religion         string         `json:"religion" gorm:"index;size:24"`           // 宗教
 	TimeData
