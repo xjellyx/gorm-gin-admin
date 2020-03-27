@@ -9,8 +9,8 @@ userPubDir: ./conf/user.pub
 adminKeyDir: ./conf/admin.key
 adminPubDir: ./conf/admin.pub
 db:
-  host: 192.168.31.181
-  port: "30432"
+  host: 192.168.31.180
+  port: "65433"
   driver: postgres
   databasename: business
   username: business
@@ -18,9 +18,9 @@ db:
   maxidleconn: 200
   maxopenconn: 2000
 rdb:
-  host: 192.168.31.183
-  port: "30379"
+  host: 192.168.31.180
+  port: "6379"
   db: 0
-  password: business
+  password: ""
 isTLS: false
 tls: null

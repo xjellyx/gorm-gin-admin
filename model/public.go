@@ -95,7 +95,7 @@ func TokenCheck(token string, isAdmin bool) (err error) {
 }
 
 // Login 用户登入
-func Login(f *base.LoginForm) (ret *UserDetail, token string, err error) {
+func Login(f *base.LoginForm) (token string, err error) {
 	if err = f.Valid(); err != nil {
 		return
 	}
@@ -128,6 +128,33 @@ func Login(f *base.LoginForm) (ret *UserDetail, token string, err error) {
 		return
 	}
 
+	var (
+		dataOnline *UserOnline
+	)
+	if dataOnline, err = PubUserOnlineGet(data.Uid); err != nil {
+		if err == gorm.ErrRecordNotFound {
+			dataOnline = new(UserOnline)
+			dataOnline.Uid = s.UID
+			if f.DeviceId != nil {
+				dataOnline.Device = *f.DeviceId
+			}
+			dataOnline.IsOnline = true
+			dataOnline.LoginIp = f.IP
+			dataOnline.LoginTime = time.Now()
+			if err = Database.Table(dataOnline.TableName()).Create(dataOnline).Error; err != nil {
+				return
+			}
+		}
+		return
+	}
+
+	isOnline := true
+	if dataOnline, err = PubUserOnlineUpdate(s.UID, &base.FormUserOnline{
+		LoginTime: dataOnline.LoginTime.Unix(),
+		IsOnline:  &isOnline,
+	}); err != nil {
+		return
+	}
 	// 缓存token
 	if red, _err := GetRedisClient(); _err != nil {
 		err = _err
@@ -139,7 +166,13 @@ func Login(f *base.LoginForm) (ret *UserDetail, token string, err error) {
 		red.Close()
 	}
 
-	ret = data
+	return
+}
+
+func Logout(uid string) (err error) {
+	if err = UserOfflineDo(uid); err != nil {
+		return
+	}
 	return
 }
 

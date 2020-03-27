@@ -73,7 +73,7 @@ var (
 			Host:     utils.PubGetEnvString("RDB_HOST", "127.0.0.1"),
 			Port:     utils.PubGetEnvString("RDB_PORT", "6379"),
 			DB:       0,
-			Password: utils.PubGetEnvString("RDB_PASSWORD", "business"),
+			Password: utils.PubGetEnvString("RDB_PASSWORD", ""),
 		},
 		UserKeyDir:  "./conf/user.key",
 		UserPubDir:  "./conf/user.pub",

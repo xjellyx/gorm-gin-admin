@@ -109,7 +109,6 @@ func (c *ControlServe) Register(ctx *gin.Context) {
 //
 func (c *ControlServe) Login(ctx *gin.Context) {
 	var (
-		data  *model.UserDetail
 		token string
 		f     = new(userBase.LoginForm)
 		err   error
@@ -118,13 +117,35 @@ func (c *ControlServe) Login(ctx *gin.Context) {
 	if err = ctx.ShouldBind(f); err != nil {
 		return
 	}
-	if data, token, err = model.Login(f); err != nil {
+	f.IP = ctx.ClientIP()
+	if token, err = model.Login(f); err != nil {
 		return
 	}
 
 	ctx.AbortWithStatusJSON(http.StatusOK, gin.H{
-		"data":  data,
-		"token": token,
+		"data": token,
+	})
+}
+
+//  params: token isAdmin
+func (c *ControlServe) Logout(ctx *gin.Context) {
+
+	var (
+		sn  *session.Session
+		err error
+	)
+	defer PubCheckError(&err, ctx)
+	if sn, err = model.TokenDecodeSession(ctx.Request, false); err != nil {
+		if sn, err = model.TokenDecodeSession(ctx.Request, true); err != nil {
+			return
+		}
+	}
+
+	if err = model.Logout(sn.UID); err != nil {
+		return
+	}
+	ctx.AbortWithStatusJSON(http.StatusOK, gin.H{
+		"data": "success",
 	})
 }
 

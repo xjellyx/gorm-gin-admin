@@ -30,7 +30,7 @@ func (f *FormRegister) Valid() (err error) {
 type LoginForm struct {
 	Username string  `json:"username" form:"username" binding:"required"`
 	Password string  `json:"password" form:"password" binding:"required"`
-	IP       string  `json:"ip" form:"ip" binding:"required"`
+	IP       string  `json:"ip" form:"ip"`
 	DeviceId *string `json:"deviceId" form:"deviceId"`
 }
 

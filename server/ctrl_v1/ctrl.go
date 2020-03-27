@@ -54,12 +54,13 @@ func InitCtrl() (err error) {
 		v1.GET("", func(c *gin.Context) {
 			c.JSON(http.StatusOK, gin.H{"ping": "pong >>>>>>> update"})
 		})
-		v1.POST("/register", Ctrl.Register)
-		v1.POST("/login", Ctrl.Login)
 
 		// User
 		{
 			v1_user := v1.Group("/user")
+			v1_user.POST("/register", Ctrl.Register)
+			v1_user.POST("/login", Ctrl.Login)
+			v1_user.GET("/logout", Ctrl.Logout)
 			v1_user.GET("/getUserDetailSelf", Ctrl.GetUserDetailSelf)
 			v1_user.GET("/getUserBankCardList", Ctrl.GetUserBankCardList)
 			v1_user.GET("/getUserIDCard", Ctrl.GetUserIDCard)
