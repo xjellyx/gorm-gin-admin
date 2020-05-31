@@ -3,7 +3,7 @@ module github.com/olongfen/userDetail
 go 1.13
 
 require (
-	github.com/dchest/captcha v0.0.0-20170622155422-6a29415a8364 // indirect
+	github.com/dchest/captcha v0.0.0-20170622155422-6a29415a8364
 	github.com/gin-gonic/gin v1.5.0
 	github.com/go-redis/redis v6.15.7+incompatible
 	github.com/golang/protobuf v1.4.2

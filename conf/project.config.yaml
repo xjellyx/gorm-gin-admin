@@ -24,3 +24,4 @@ rdb:
   password: "123456"
 isTLS: false
 tls: null
+isCaptcha: false

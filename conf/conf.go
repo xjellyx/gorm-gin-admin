@@ -22,6 +22,7 @@ type ProjectConfig struct {
 	RDB           *RedisDB  `yaml:"rdb"`
 	IsTLS         bool      `yaml:"isTLS"` // true: 开启https
 	TLS           *TLS      `yaml:"tls"`
+	IsCaptcha   bool  		`yaml:"isCaptcha"`
 }
 
 // RedisDB 缓存的连接参数

@@ -1,9 +1,11 @@
 package ctrl
 
 import (
+	"github.com/dchest/captcha"
 	"github.com/gin-gonic/gin"
 	"github.com/olongfen/contrib/session"
 	userBase "github.com/olongfen/userDetail"
+	"github.com/olongfen/userDetail/conf"
 	"github.com/olongfen/userDetail/model"
 	"net/http"
 	"strconv"
@@ -85,6 +87,14 @@ func (c *ControlServe) Common(ctx *gin.Context) {
 
 // Register 注册
 func (c *ControlServe) Register(ctx *gin.Context) {
+	if conf.ProjectSetting.IsCaptcha{
+		digits := ctx.Query("digits")
+		id := ctx.Query("id")
+		if !verifyString(id,digits){
+			ctx.AbortWithStatusJSON(200,gin.H{"msg":"verify captcha failed"})
+			return
+		}
+	}
 	var (
 		data *model.UserDetail
 		err  error
@@ -106,8 +116,24 @@ func (c *ControlServe) Register(ctx *gin.Context) {
 	ctx.AbortWithStatusJSON(http.StatusOK, data)
 }
 
+func verifyString(id,digits string) bool  {
+
+	if !captcha.VerifyString(id, digits) {
+		return false
+	}
+	return true
+}
+
 //
 func (c *ControlServe) Login(ctx *gin.Context) {
+	if conf.ProjectSetting.IsCaptcha{
+		digits := ctx.Query("digits")
+		id := ctx.Query("id")
+		if !verifyString(id,digits){
+			ctx.AbortWithStatusJSON(200,gin.H{"msg":"verify captcha failed"})
+			return
+		}
+	}
 	var (
 		token string
 		f     = new(userBase.LoginForm)

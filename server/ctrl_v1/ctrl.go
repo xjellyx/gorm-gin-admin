@@ -44,7 +44,8 @@ func InitCtrl() (err error) {
 			"error": fmt.Sprintf("%v ", http.StatusNotFound) + http.StatusText(http.StatusNotFound),
 		})
 	})
-
+	// 获取验证码
+	Ctrl.Engine.GET("/captcha",Ctrl.Captcha)
 	// TODO 路由
 	{
 		v1 := Ctrl.Engine.Group("/v1")
@@ -82,7 +83,6 @@ func InitCtrl() (err error) {
 		}
 
 	}
-
 	// 开启服务
 	s := &http.Server{
 		Addr:           conf.ProjectSetting.ServerAddr + ":" + conf.ProjectSetting.ServerPort,

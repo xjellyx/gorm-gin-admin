@@ -336,7 +336,3 @@ func GetOnlineUser(uid string) (ret int64, err error) {
 	ret = count
 	return
 }
-
-func Get()  {
-	
-}
