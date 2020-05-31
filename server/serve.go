@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/jinzhu/gorm"
 	"github.com/olongfen/contrib"
+	ctrl "github.com/olongfen/userDetail/server/ctrl_v1"
 	"google.golang.org/grpc"
 	"os"
 
@@ -11,8 +12,6 @@ import (
 	"github.com/olongfen/userDetail/conf"
 	"github.com/olongfen/userDetail/model"
 	userRpc "github.com/olongfen/userDetail/rpc"
-	ctrl "github.com/olongfen/userDetail/server/ctrl_v1"
-
 	"io/ioutil"
 	"net"
 	"sync"

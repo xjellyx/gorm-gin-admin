@@ -12,12 +12,7 @@ import (
 	"time"
 )
 
-// TimeData 时间信息
-type TimeData struct {
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	DeletedAt *time.Time `sql:"index"`
-}
+
 
 // SessionCheck
 func SessionCheck(s *session.Session) (err error) {
@@ -340,4 +335,8 @@ func GetOnlineUser(uid string) (ret int64, err error) {
 
 	ret = count
 	return
+}
+
+func Get()  {
+	
 }

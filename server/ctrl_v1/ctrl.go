@@ -91,8 +91,7 @@ func InitCtrl() (err error) {
 		WriteTimeout:   60 * time.Second,
 		MaxHeaderBytes: 1 << 20, // 10M
 	}
-	Ctrl.Log.Infof("server listen on: %s\n ", s.Addr)
-
+	Ctrl.Log.Println("server listen on: ", s.Addr)
 	if conf.ProjectSetting.IsTLS { // 开启tls
 		TLSConfig := &tls.Config{
 			MinVersion:               tls.VersionTLS11,
@@ -121,6 +120,5 @@ func InitCtrl() (err error) {
 			return
 		}
 	}
-
 	return
 }

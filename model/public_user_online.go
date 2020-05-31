@@ -1,19 +1,20 @@
 package model
 
 import (
+	"github.com/jinzhu/gorm"
 	base "github.com/olongfen/userDetail"
 	"time"
 )
 
 // UserOnline 用户在线表
 type UserOnline struct {
-	Uid         string    `json:"uid" gorm:"primary_key;size:36;index"` // uid
+	gorm.Model
+	Uid         string    `json:"uid" gorm:"unique_index;size:36"` // uid
 	IsOnline    bool      `json:"isOnline" gorm:"index"`                // true: 在线
 	LoginTime   time.Time `json:"loginTime" gorm:"index"`
 	OfflineTime time.Time `json:"offlineTime" gorm:"index"`
 	LoginIp     string    `json:"loginIp" gorm:"index"`
 	Device      string    `json:"device" gorm:"index"`
-	TimeData
 }
 
 func (u *UserOnline) TableName() string {

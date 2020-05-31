@@ -16,6 +16,7 @@ var (
 	RDB      *redis.Client
 	Database *gorm.DB
 	LogModel *log.Logger
+  	//Captcha
 )
 
 // InitModelParam 初始化模型参数

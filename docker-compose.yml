@@ -1,10 +1,31 @@
 version: "3"
-
+#"data-root": "E:\docker",
 services:
-  user_detail:
-    image: registry.cn-hangzhou.aliyuncs.com/olongfen/user_detail:v1
+  pgsql:
+    image: postgres
+    restart: always
+    container_name: pgsql
     ports:
-    - 8811:8060
-    - 9911:9060
-    volumes:
-    - ./conf:/project/conf
+      - "65433:5432"
+    environment:
+      - POSTGRES_PASSWORD=business
+      - POSTGRES_DB=business
+      - POSTGRES_USER=business
+      - TZ=Asia/Shanghai
+
+
+  phadmin:
+    image: dpage/pgadmin4
+    restart: always
+    ports:
+      - "8001:80"
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=123456@qq.com
+      - PGADMIN_DEFAULT_PASSWORD=123456
+  redis:
+    image: redis
+    container_name: redis
+    restart: always
+    command: redis-server --requirepass 123456
+    ports:
+      - "6379:6379"

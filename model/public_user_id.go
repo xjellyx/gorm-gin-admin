@@ -1,10 +1,14 @@
 package model
 
-import base "github.com/olongfen/userDetail"
+import (
+	"github.com/jinzhu/gorm"
+	base "github.com/olongfen/userDetail"
+)
 
 // IDCard
 type IDCard struct {
-	IDCard      string `json:"idCard" gorm:"primary_key;size:18;index" ` // 身份证号
+	gorm.Model
+	IDCard      string `json:"idCard" gorm:"unique_index;size:18" ` // 身份证号
 	IssueOrg    string `json:"issueOrg" gorm:"not null"`                 // 身份证发证机关
 	Uid         string `json:"uid"gorm:"index;size:36;unique_index"`
 	Birthday    string `json:"birthday" gorm:"not null;size:32"` // 出生日期

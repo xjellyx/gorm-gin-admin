@@ -30,7 +30,8 @@ func (u *UserDetail) TableName() string {
 
 // UserDetail
 type UserDetail struct {
-	Uid              string         `json:"uid" gorm:"primary_key;size:36;index"`
+	gorm.Model
+	Uid  string `json:"uid" gorm:"size:36;unique_index"`
 	IsAdmin          bool           `json:"isAdmin" gorm:"default:false;index"`
 	Nickname         string         `json:"nickname" gorm:"size:24;index"`
 	Username         string         `json:"username" gorm:"size:16;unique_index"` // 最长16位,只支持数字字母大小写
@@ -48,7 +49,6 @@ type UserDetail struct {
 	Role             pq.StringArray `json:"role" gorm:"not null;type:varchar(36)[]"` // 角色, 用户可以拥有多个角色
 	Secret           string         `json:"secret" gorm:"not null;type:varchar(32)"` // 用户自己的密钥
 	// Religion         string         `json:"religion" gorm:"index;size:24"`           // 宗教
-	TimeData
 	// 外键关联
 	BankCards []*BankCard      `json:"bankCards" gorm:"foreignkey:Uid;"` // association_autoupdate:false"
 	Addr      []*AddressDetail `json:"addr" gorm:"foreignkey:Uid;"`      // association_autoupdate:false"
