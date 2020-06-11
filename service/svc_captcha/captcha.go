@@ -1,29 +1,11 @@
-package ctrl
+package svc_captcha
 
 import (
 	"bytes"
 	"github.com/dchest/captcha"
-	"github.com/gin-gonic/gin"
 	"net/http"
 	"time"
 )
-
-func (c *ControlServe)Captcha(ctx *gin.Context) {
-	var d = struct {
-		Ext        string `json:"ext" form:"ext" binding:"required"`
-		Lang       string `json:"lang" form:"lang" binding:"required"`
-		IsDownload bool   `json:"isDownload" form:"isDownload"`
-	}{}
-	if err := ctx.BindQuery(&d); err != nil {
-		ctx.AbortWithStatusJSON(http.StatusBadRequest, gin.H{
-			"err": err.Error(),
-		})
-		return
-	}
-	l := captcha.DefaultLen
-	id := captcha.NewLen(l)
-	 Serve(ctx.Writer, ctx.Request, id, d.Ext, d.Lang, d.IsDownload, captcha.StdWidth, captcha.StdHeight)
-}
 
 func Serve(w http.ResponseWriter, r *http.Request, id, ext, lang string, download bool, width, height int) error {
 	w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
@@ -48,4 +30,3 @@ func Serve(w http.ResponseWriter, r *http.Request, id, ext, lang string, downloa
 	http.ServeContent(w, r, id+ext, time.Time{}, bytes.NewReader(content.Bytes()))
 	return nil
 }
-

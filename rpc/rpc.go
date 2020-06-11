@@ -4,9 +4,9 @@ import (
 	"context"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/olongfen/contrib"
-	pb "github.com/olongfen/model.grpc"
-	userBase "github.com/olongfen/userDetail"
-	"github.com/olongfen/userDetail/model"
+	pb "github.com/olongfen/models.grpc"
+	"github.com/olongfen/userDetail/models"
+	"github.com/olongfen/userDetail/utils"
 	"google.golang.org/grpc"
 )
 
@@ -17,7 +17,7 @@ type ServeRpc struct {
 	client pb.UserBaseClient
 }
 
-func transportUserDetailToPb(u *model.UserDetail, val *pb.UserDetailResp) {
+func transportUserDetailToPb(u *models.UserDetail, val *pb.UserDetailResp) {
 	val.Uid = u.Uid
 	val.Status = int32(u.Status)
 	val.Verified = u.Verified
@@ -49,14 +49,14 @@ func transportUserDetailToPb(u *model.UserDetail, val *pb.UserDetailResp) {
 
 }
 
-func transportBankCard(u *model.BankCard, v *pb.BankCard) {
+func transportBankCard(u *models.BankCard, v *pb.BankCard) {
 	v.Number = u.Number
 	v.Name = u.Name
 	v.BankStart = u.BankStart
 	v.Bank = u.Bank
 }
 
-func transportAddr(u *model.AddressDetail, v *pb.AddressDetail) {
+func transportAddr(u *models.AddressDetail, v *pb.AddressDetail) {
 	v.Address = u.Address
 	v.Province = u.Province
 	v.Country = u.Country
@@ -64,7 +64,7 @@ func transportAddr(u *model.AddressDetail, v *pb.AddressDetail) {
 	v.District = u.District
 }
 
-func transportIDCard(u *model.IDCard, v *pb.UserIDCardResp) {
+func transportIDCard(u *models.IDCard, v *pb.UserIDCardResp) {
 	v.Name = u.Name
 	v.Sex = int32(u.Sex)
 	v.Nation = u.Nation
@@ -80,7 +80,7 @@ func (s *ServeRpc) GetUserToken(ctx context.Context, arg *pb.ArgLogin) (ret *pb.
 		uid   string
 	)
 
-	if token, uid, err = model.GetUserToken(arg); err != nil {
+	if token, uid, err = models.GetUserToken(arg); err != nil {
 		return
 	}
 
@@ -93,22 +93,22 @@ func (s *ServeRpc) GetUserToken(ctx context.Context, arg *pb.ArgLogin) (ret *pb.
 
 func (s *ServeRpc) GetUserDetail(ctx context.Context, arg *pb.UserDetailReq) (ret *pb.UserDetailResp, err error) {
 	var (
-		data *model.UserDetail
+		data *models.UserDetail
 	)
 	if len(arg.GetUid()) > 0 {
-		if data, err = model.PubUserGet(arg.GetUid()); err != nil {
+		if data, err = models.PubUserGet(arg.GetUid()); err != nil {
 			return
 		}
 	} else if len(arg.GetPhone()) > 0 {
-		if data, err = model.PubUserGetByPhone(arg.GetLocNum(), arg.GetPhone()); err != nil {
+		if data, err = models.PubUserGetByPhone(arg.GetLocNum(), arg.GetPhone()); err != nil {
 			return
 		}
 	} else if len(arg.GetEmail()) > 0 {
-		if data, err = model.PubUserGetByEmail(arg.GetEmail()); err != nil {
+		if data, err = models.PubUserGetByEmail(arg.GetEmail()); err != nil {
 			return
 		}
 	} else if len(arg.GetUsername()) > 0 {
-		if data, err = model.PubUserGetByUsername(arg.GetUsername()); err != nil {
+		if data, err = models.PubUserGetByUsername(arg.GetUsername()); err != nil {
 			return
 		}
 	} else {
@@ -122,7 +122,7 @@ func (s *ServeRpc) GetUserDetail(ctx context.Context, arg *pb.UserDetailReq) (re
 }
 
 func (s *ServeRpc) CheckToken(ctx context.Context, arg *pb.CheckTokenReq) (ret *pb.CheckTokenRes, err error) {
-	if err = model.TokenCheck(arg.Token, arg.IsAdmin); err != nil {
+	if err = models.TokenCheck(arg.Token, arg.IsAdmin); err != nil {
 		return
 	}
 
@@ -132,8 +132,8 @@ func (s *ServeRpc) CheckToken(ctx context.Context, arg *pb.CheckTokenReq) (ret *
 
 func (s *ServeRpc) UpdateUserDetail(ctx context.Context, req *pb.UpdateUserDetailReq) (ret *pb.UserDetailResp, err error) {
 	var (
-		data *model.UserDetail
-		form = &userBase.UpdateUserProfile{
+		data *models.UserDetail
+		form = &utils.UpdateUserProfile{
 			Nickname: nil,
 			Username: nil,
 			LocNum:   nil,
@@ -166,7 +166,7 @@ func (s *ServeRpc) UpdateUserDetail(ctx context.Context, req *pb.UpdateUserDetai
 		d := req.GetSign()
 		form.Sign = &d
 	}
-	if data, err = model.PubUserUpdate(req.Uid, form); err != nil {
+	if data, err = models.PubUserUpdate(req.Uid, form); err != nil {
 		return
 	}
 
@@ -178,9 +178,9 @@ func (s *ServeRpc) UpdateUserDetail(ctx context.Context, req *pb.UpdateUserDetai
 
 func (s *ServeRpc) GetUserIDCard(ctx context.Context, req *pb.GetUserIDCardReq) (ret *pb.UserIDCardResp, err error) {
 	var (
-		data *model.IDCard
+		data *models.IDCard
 	)
-	if data, err = model.PubGetIDCard(req.Uid); err != nil {
+	if data, err = models.PubGetIDCard(req.Uid); err != nil {
 		return
 	}
 	ret = new(pb.UserIDCardResp)
@@ -190,9 +190,9 @@ func (s *ServeRpc) GetUserIDCard(ctx context.Context, req *pb.GetUserIDCardReq) 
 
 func (s *ServeRpc) AddUserBankCard(ctx context.Context, req *pb.AddBankCardReq) (ret *pb.BankCard, err error) {
 	var (
-		data *model.BankCard
+		data *models.BankCard
 	)
-	if data, err = model.PubBankCardAdd(req.Uid, &userBase.FormBankCard{
+	if data, err = models.PubBankCardAdd(req.Uid, &utils.FormBankCard{
 		Number:    req.Number,
 		Name:      req.Name,
 		Bank:      req.Bank,
@@ -208,9 +208,9 @@ func (s *ServeRpc) AddUserBankCard(ctx context.Context, req *pb.AddBankCardReq) 
 
 func (s *ServeRpc) GetUserBankCardList(ctx context.Context, req *pb.GetUserBankCardReq) (ret *pb.GetUserBankCardResp, err error) {
 	var (
-		data []*model.BankCard
+		data []*models.BankCard
 	)
-	if data, err = model.PubBankCardGetList(req.Uid); err != nil {
+	if data, err = models.PubBankCardGetList(req.Uid); err != nil {
 		return
 	}
 
@@ -225,7 +225,7 @@ func (s *ServeRpc) GetUserBankCardList(ctx context.Context, req *pb.GetUserBankC
 
 func (s *ServeRpc) DeleteUserBankCard(ctx context.Context, req *pb.DelUserBankCardReq) (ret *pb.PubNoneResp, err error) {
 
-	if err = model.PubBankCardDel(req.Uid, req.Number); err != nil {
+	if err = models.PubBankCardDel(req.Uid, req.Number); err != nil {
 		return
 	}
 
@@ -235,8 +235,8 @@ func (s *ServeRpc) DeleteUserBankCard(ctx context.Context, req *pb.DelUserBankCa
 
 func (s *ServeRpc) AddUserAddress(ctx context.Context, req *pb.AddUserAddrReq) (ret *pb.AddressDetail, err error) {
 	var (
-		data *model.AddressDetail
-		form = &userBase.FormAddr{
+		data *models.AddressDetail
+		form = &utils.FormAddr{
 			Country:  req.Country,
 			Province: req.Province,
 			City:     req.City,
@@ -252,7 +252,7 @@ func (s *ServeRpc) AddUserAddress(ctx context.Context, req *pb.AddUserAddrReq) (
 		d := req.GetAddress()
 		form.Address = &d
 	}
-	if data, err = model.PubAddressAdd(req.Uid, form); err != nil {
+	if data, err = models.PubAddressAdd(req.Uid, form); err != nil {
 		return
 	}
 
@@ -263,9 +263,9 @@ func (s *ServeRpc) AddUserAddress(ctx context.Context, req *pb.AddUserAddrReq) (
 
 func (s *ServeRpc) GetUserAddressList(ctx context.Context, req *pb.GetUserAddressReq) (ret *pb.GetUserAddressResp, err error) {
 	var (
-		data []*model.AddressDetail
+		data []*models.AddressDetail
 	)
-	if data, err = model.PubAddressGetList(req.Uid); err != nil {
+	if data, err = models.PubAddressGetList(req.Uid); err != nil {
 		return
 	}
 
@@ -280,8 +280,8 @@ func (s *ServeRpc) GetUserAddressList(ctx context.Context, req *pb.GetUserAddres
 
 func (s *ServeRpc) UpdateUserAddress(ctx context.Context, req *pb.UpdateUserAddrReq) (ret *pb.AddressDetail, err error) {
 	var (
-		data *model.AddressDetail
-		form = &userBase.FormAddr{
+		data *models.AddressDetail
+		form = &utils.FormAddr{
 			Country:  req.Country,
 			Province: req.Province,
 			City:     req.City,
@@ -296,7 +296,7 @@ func (s *ServeRpc) UpdateUserAddress(ctx context.Context, req *pb.UpdateUserAddr
 		d := req.GetAddress()
 		form.Address = &d
 	}
-	if data, err = model.PubAddressUpdate(req.Uid, form); err != nil {
+	if data, err = models.PubAddressUpdate(req.Uid, form); err != nil {
 		return
 	}
 
@@ -305,7 +305,7 @@ func (s *ServeRpc) UpdateUserAddress(ctx context.Context, req *pb.UpdateUserAddr
 	return
 }
 func (s *ServeRpc) DeleteUserAddress(ctx context.Context, req *pb.DelUserAddrReq) (ret *pb.PubNoneResp, err error) {
-	if err = model.PubAddressDelete(req.Uid, req.Id); err != nil {
+	if err = models.PubAddressDelete(req.Uid, req.Id); err != nil {
 		return
 	}
 	ret = new(pb.PubNoneResp)
@@ -313,7 +313,7 @@ func (s *ServeRpc) DeleteUserAddress(ctx context.Context, req *pb.DelUserAddrReq
 }
 
 func (s *ServeRpc) UserOffline(ctx context.Context, req *pb.UserOfflineReq) (ret *pb.PubNoneResp, err error) {
-	if err = model.UserOfflineDo(req.Uid); err != nil {
+	if err = models.UserOfflineDo(req.Uid); err != nil {
 		return
 	}
 	ret = new(pb.PubNoneResp)
@@ -322,15 +322,15 @@ func (s *ServeRpc) UserOffline(ctx context.Context, req *pb.UserOfflineReq) (ret
 
 func (s *ServeRpc) AddUserDetail(ctx context.Context, req *pb.ArgRegistry) (ret *pb.UserDetailResp, err error) {
 	var (
-		data *model.UserDetail
+		data *models.UserDetail
 	)
-	model.LogModel.Infoln("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
-	if data, err = model.PubUserAdd(&userBase.FormRegister{
+	models.logModel.Infoln("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+	if data, err = models.PubUserAdd(&utils.FormRegister{
 		Phone:    req.Phone,
 		Password: req.Password,
 		Code:     req.Code,
 	}); err != nil {
-		model.LogModel.Infoln("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq", err)
+		models.logModel.Infoln("qqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqqq", err)
 		return
 	}
 

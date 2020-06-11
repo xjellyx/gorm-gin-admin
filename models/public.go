@@ -1,21 +1,11 @@
-package model
+package models
 
-import (
-	"github.com/go-redis/redis"
-	"github.com/jinzhu/gorm"
-	"github.com/olongfen/contrib"
-	"github.com/olongfen/contrib/log"
-	"github.com/olongfen/contrib/session"
-	pb "github.com/olongfen/model.grpc"
-	base "github.com/olongfen/userDetail"
-	"golang.org/x/crypto/bcrypt"
-	"time"
-)
+
 
 
 
 // SessionCheck
-func SessionCheck(s *session.Session) (err error) {
+/*func SessionCheck(s *session.Session) (err error) {
 	var (
 		data *UserDetail
 	)
@@ -53,11 +43,11 @@ func TokenCheck(token string, isAdmin bool) (err error) {
 		dataOnline *UserOnline
 	)
 	if isAdmin {
-		if s, err = AdminKey.SessionDecodeAuto(token); err != nil {
+		if s, err = adminKey.SessionDecodeAuto(token); err != nil {
 			return
 		}
 	} else {
-		if s, err = UserKey.SessionDecodeAuto(token); err != nil {
+		if s, err = userKey.SessionDecodeAuto(token); err != nil {
 			return
 		}
 	}
@@ -76,7 +66,7 @@ func TokenCheck(token string, isAdmin bool) (err error) {
 	// 不是在线状态，退出，不给用户进行下一步的操作
 	if !dataOnline.IsOnline {
 		rdb.Del("cache_token" + s.UID)
-		err = base.ErrUserNotOnline
+		err = utils.ErrUserNotOnline
 		return
 	}
 	// TODO 用户ip地址改变警告
@@ -90,7 +80,7 @@ func TokenCheck(token string, isAdmin bool) (err error) {
 }
 
 // Login 用户登入
-func Login(f *base.LoginForm) (token string, err error) {
+func Login(f *utils.LoginForm) (token string, err error) {
 	if err = f.Valid(); err != nil {
 		return
 	}
@@ -116,7 +106,7 @@ func Login(f *base.LoginForm) (token string, err error) {
 	s.CreateTime = n.Unix()
 	s.ExpireTime = n.Add(session.SessionExpMaxSecure).Unix()
 	s.Level = session.SessionLevelSecure
-	if token, err = UserKey.SessionEncodeAuto(s); err != nil {
+	if token, err = userKey.SessionEncodeAuto(s); err != nil {
 		return
 	}
 	if err = Database.Model(&UserDetail{}).Where("uid = ?", data.Uid).Update("status", UserStatusNormal).Error; err != nil {
@@ -144,7 +134,7 @@ func Login(f *base.LoginForm) (token string, err error) {
 	}
 
 	isOnline := true
-	if dataOnline, err = PubUserOnlineUpdate(s.UID, &base.FormUserOnline{
+	if dataOnline, err = PubUserOnlineUpdate(s.UID, &utils.FormUserOnline{
 		LoginTime: dataOnline.LoginTime.Unix(),
 		IsOnline:  &isOnline,
 	}); err != nil {
@@ -174,7 +164,7 @@ func Logout(uid string) (err error) {
 // GetUserToken 获取用户token
 func GetUserToken(f *pb.ArgLogin) (ret string, uid string, err error) {
 	if f == nil {
-		err = base.ErrFormParamInvalid
+		err = utils.ErrFormParamInvalid
 		return
 	}
 	var (
@@ -207,7 +197,7 @@ func GetUserToken(f *pb.ArgLogin) (ret string, uid string, err error) {
 
 	// 验证账号状态,被冻结返回
 	if data.Status == UserStatusFreeze {
-		err = base.ErrUserAccountFroze
+		err = utils.ErrUserAccountFroze
 		return
 	}
 
@@ -222,11 +212,11 @@ func GetUserToken(f *pb.ArgLogin) (ret string, uid string, err error) {
 
 	//
 	if data.IsAdmin {
-		if token, err = AdminKey.SessionEncodeAuto(s); err != nil {
+		if token, err = adminKey.SessionEncodeAuto(s); err != nil {
 			return
 		}
 	} else {
-		if token, err = UserKey.SessionEncodeAuto(s); err != nil {
+		if token, err = userKey.SessionEncodeAuto(s); err != nil {
 			return
 		}
 	}
@@ -278,9 +268,9 @@ func GetUserToken(f *pb.ArgLogin) (ret string, uid string, err error) {
 // TokenDecodeSession
 func TokenDecodeSession(token interface{}, isAdmin bool) (ret *session.Session, err error) {
 	if isAdmin {
-		return AdminKey.SessionDecodeAuto(token)
+		return adminKey.SessionDecodeAuto(token)
 	} else {
-		return UserKey.SessionDecodeAuto(token)
+		return userKey.SessionDecodeAuto(token)
 	}
 
 }
@@ -293,7 +283,7 @@ func UserOfflineDo(uid string) (err error) {
 	if data, err = PubUserOnlineGet(uid); err != nil {
 		return
 	}
-	if data, err = PubUserOnlineUpdate(data.Uid, &base.FormUserOnline{
+	if data, err = PubUserOnlineUpdate(data.Uid, &utils.FormUserOnline{
 		IsOnline:    &b,
 		OfflineTime: time.Now().Unix(),
 	}); err != nil {
@@ -335,4 +325,4 @@ func GetOnlineUser(uid string) (ret int64, err error) {
 
 	ret = count
 	return
-}
+}*/

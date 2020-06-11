@@ -1,28 +1,30 @@
-package conf
+package setting
 
 import (
 	"github.com/olongfen/contrib/config"
 	"github.com/olongfen/userDetail/utils"
+	"time"
 )
 
 // ProjectConfig
 type ProjectConfig struct {
 	config.Config `yaml:"-"`
-	ServerAddr    string    `yaml:"serverAddr"`
-	ServerPort    string    `yaml:"serverPort"`
-	RpcHost       string    `yaml:"rpcHost"`
-	RpcPort       string    `yaml:"rpcPort"`
-	Sync          bool      `yaml:"sync"`        // true: 数据库同步
-	IsProduct     bool      `yaml:"isProduct"`   //
-	UserKeyDir    string    `yaml:"userKeyDir"`  // 私钥地址
-	UserPubDir    string    `yaml:"userPubDir"`  // 公钥地址
-	AdminKeyDir   string    `yaml:"adminKeyDir"` // 私钥地址
-	AdminPubDir   string    `yaml:"adminPubDir"` // 公钥地址
-	Db            *Database `yaml:"db"`
-	RDB           *RedisDB  `yaml:"rdb"`
-	IsTLS         bool      `yaml:"isTLS"` // true: 开启https
-	TLS           *TLS      `yaml:"tls"`
-	IsCaptcha   bool  		`yaml:"isCaptcha"`
+	ServerAddr    string
+	ServerPort    string
+	RpcHost       string
+	RpcPort       string
+	Sync          bool      // true: 数据库同步
+	IsProduct     bool      //
+	UserKeyDir    string    // 私钥地址
+	UserPubDir    string    // 公钥地址
+	AdminKeyDir   string    // 私钥地址
+	AdminPubDir   string    // 公钥地址
+	Db            *Database
+	RDB           *RedisDB
+	IsTLS         bool       // true: 开启https
+	TLS           *TLS
+	IsCaptcha   bool
+	LogDir     string
 }
 
 // RedisDB 缓存的连接参数
@@ -80,12 +82,13 @@ var (
 		UserPubDir:  "./conf/user.pub",
 		AdminKeyDir: "./conf/admin.key",
 		AdminPubDir: "./conf/admin.pub",
+		LogDir: "./log",
 	}
 )
 
 // InitConfig 初始化配置文件
 func InitConfig(confDir string) (err error) {
-	if err = config.LoadConfiguration(confDir+"/conf/project.config.yaml", ProjectSetting, ProjectSetting); err != nil {
+	if err = config.LoadConfigAndSave(confDir+"/conf/project.config.yaml", ProjectSetting, ProjectSetting,time.Second*10); err != nil {
 		return
 	}
 	if ProjectSetting.IsTLS {

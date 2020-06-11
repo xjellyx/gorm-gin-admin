@@ -1,16 +1,16 @@
 package main
 
-import (
-	"github.com/jinzhu/gorm"
+/*import (
+	"gorm.io/gorm"
 	"github.com/olongfen/contrib"
+	"github.com/olongfen/userDetail/pkg/setting"
 	ctrl "github.com/olongfen/userDetail/server/ctrl_v1"
 	"google.golang.org/grpc"
 	"os"
 
 	"github.com/olongfen/contrib/log"
-	pb "github.com/olongfen/model.grpc"
-	"github.com/olongfen/userDetail/conf"
-	"github.com/olongfen/userDetail/model"
+	pb "github.com/olongfen/models.grpc"
+	"github.com/olongfen/userDetail/models"
 	userRpc "github.com/olongfen/userDetail/rpc"
 	"io/ioutil"
 	"net"
@@ -27,7 +27,7 @@ func main() {
 	dir, _ := os.Getwd()
 	dir = contrib.PubGetEnvString("CONF_DIR", dir)
 	// 先初始化配置文件
-	if err = conf.InitConfig(dir); err != nil {
+	if err = setting.InitConfig(dir); err != nil {
 		panic(err)
 	}
 
@@ -37,23 +37,23 @@ func main() {
 	}
 
 	// 获取密钥配置
-	if userKey, err = ioutil.ReadFile(conf.ProjectSetting.UserKeyDir); err != nil {
+	if userKey, err = ioutil.ReadFile(setting.ProjectSetting.UserKeyDir); err != nil {
 		panic(err)
 	}
-	if userPub, err = ioutil.ReadFile(conf.ProjectSetting.UserPubDir); err != nil {
+	if userPub, err = ioutil.ReadFile(setting.ProjectSetting.UserPubDir); err != nil {
 		panic(err)
 	}
-	if adminKey, err = ioutil.ReadFile(conf.ProjectSetting.AdminKeyDir); err != nil {
+	if adminKey, err = ioutil.ReadFile(setting.ProjectSetting.AdminKeyDir); err != nil {
 		panic(err)
 	}
-	if adminPub, err = ioutil.ReadFile(conf.ProjectSetting.AdminPubDir); err != nil {
+	if adminPub, err = ioutil.ReadFile(setting.ProjectSetting.AdminPubDir); err != nil {
 		panic(err)
 	}
 	// 初始化模型
-	if db, err = model.InitModel(model.InitModelParam{
-		Db:       *conf.ProjectSetting.Db,
-		Sync:     conf.ProjectSetting.Sync,
-		Mode:     conf.ProjectSetting.IsProduct,
+	if db, err = models.InitModel(models.InitModelParam{
+		Db:       *setting.ProjectSetting.Db,
+		Sync:     setting.ProjectSetting.Sync,
+		Mode:     setting.ProjectSetting.IsProduct,
 		UserPub:  userPub,
 		UserKey:  userKey,
 		AdminPub: adminPub,
@@ -89,17 +89,17 @@ func main() {
 			lis net.Listener
 		)
 		defer wg.Done()
-		if lis, err = net.Listen("tcp", conf.ProjectSetting.RpcHost+":"+conf.ProjectSetting.RpcPort); err != nil {
+		if lis, err = net.Listen("tcp", setting.ProjectSetting.RpcHost+":"+setting.ProjectSetting.RpcPort); err != nil {
 			panic(err)
 		}
-		sv, _err := userRpc.NewRpc(conf.ProjectSetting.RpcHost + ":" + conf.ProjectSetting.RpcPort)
+		sv, _err := userRpc.NewRpc(setting.ProjectSetting.RpcHost + ":" + setting.ProjectSetting.RpcPort)
 		if _err != nil {
 			panic(_err)
 		}
 		defer sv.Close()
 		s := grpc.NewServer()
 		pb.RegisterUserBaseServer(s, sv)
-		model.LogModel.Infof(`hall rpc serve will be run in %s`, conf.ProjectSetting.RpcHost+":"+conf.ProjectSetting.RpcPort)
+		models.logModel.Infof(`hall rpc serve will be run in %s`, setting.ProjectSetting.RpcHost+":"+setting.ProjectSetting.RpcPort)
 		if err = s.Serve(lis); err != nil {
 			panic(err)
 		}
@@ -111,12 +111,13 @@ func main() {
 
 // initLog
 func initLog() (err error) {
-	if conf.ProjectSetting.IsProduct {
-		model.LogModel = log.NewLogFile("./log/log_model")
+	if setting.ProjectSetting.IsProduct {
+		models.logModel = log.NewLogFile("./log/log_model")
 	} else {
-		if model.LogModel, err = log.NewLog(nil); err != nil {
+		if models.logModel, err = log.NewLog(nil); err != nil {
 			return
 		}
 	}
 	return
 }
+*/

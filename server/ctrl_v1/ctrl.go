@@ -1,21 +1,10 @@
 package ctrl
 
-import (
-	"crypto/tls"
-	"fmt"
-	"net/http"
-	"time"
+//var (
+//	Ctrl *ControlServe
+//)
 
-	"github.com/gin-gonic/gin"
-	"github.com/olongfen/contrib/log"
-	"github.com/olongfen/userDetail/conf"
-)
-
-var (
-	Ctrl *ControlServe
-)
-
-// ControlServe 服务控制器
+/*// ControlServe 服务控制器
 type ControlServe struct {
 	Log    *log.Logger
 	Engine *gin.Engine
@@ -26,7 +15,7 @@ func InitCtrl() (err error) {
 	Ctrl = &ControlServe{}
 	// 初始化路由
 	Ctrl.Engine = gin.Default()
-	if conf.ProjectSetting.IsProduct {
+	if setting.ProjectSetting.IsProduct {
 		Ctrl.Log = log.NewLogFile("./log/log_ctrl")
 		gin.SetMode(gin.ReleaseMode)
 		Ctrl.Engine.Use(gin.Logger())
@@ -45,7 +34,7 @@ func InitCtrl() (err error) {
 		})
 	})
 	// 获取验证码
-	Ctrl.Engine.GET("/captcha",Ctrl.Captcha)
+	Ctrl.Engine.GET("/svc_captcha",Ctrl.Captcha)
 	// TODO 路由
 	{
 		v1 := Ctrl.Engine.Group("/v1")
@@ -85,14 +74,14 @@ func InitCtrl() (err error) {
 	}
 	// 开启服务
 	s := &http.Server{
-		Addr:           conf.ProjectSetting.ServerAddr + ":" + conf.ProjectSetting.ServerPort,
+		Addr:           setting.ProjectSetting.ServerAddr + ":" + setting.ProjectSetting.ServerPort,
 		Handler:        Ctrl.Engine,
 		ReadTimeout:    60 * time.Second,
 		WriteTimeout:   60 * time.Second,
 		MaxHeaderBytes: 1 << 20, // 10M
 	}
 	Ctrl.Log.Println("server listen on: ", s.Addr)
-	if conf.ProjectSetting.IsTLS { // 开启tls
+	if setting.ProjectSetting.IsTLS { // 开启tls
 		TLSConfig := &tls.Config{
 			MinVersion:               tls.VersionTLS11,
 			CurvePreferences:         []tls.CurveID{tls.CurveP521, tls.CurveP384, tls.CurveP256},
@@ -110,7 +99,7 @@ func InitCtrl() (err error) {
 		s.TLSConfig = TLSConfig
 		s.TLSNextProto = TLSProto
 
-		if err = s.ListenAndServeTLS(conf.ProjectSetting.TLS.Cert, conf.ProjectSetting.TLS.Key); err != nil {
+		if err = s.ListenAndServeTLS(setting.ProjectSetting.TLS.Cert, setting.ProjectSetting.TLS.Key); err != nil {
 			Ctrl.Log.Errorln(err)
 			return
 		}
@@ -122,3 +111,4 @@ func InitCtrl() (err error) {
 	}
 	return
 }
+*/
