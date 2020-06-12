@@ -3,6 +3,7 @@ package setting
 import (
 	"github.com/olongfen/contrib/config"
 	"github.com/olongfen/userDetail/utils"
+	"github.com/sirupsen/logrus"
 	"time"
 )
 
@@ -87,9 +88,12 @@ var (
 )
 
 // InitConfig 初始化配置文件
-func InitConfig(confDir string) (err error) {
-	if err = config.LoadConfigAndSave(confDir+"/conf/project.config.yaml", ProjectSetting, ProjectSetting,time.Second*10); err != nil {
-		return
+func InitConfig() {
+	var(
+		err error
+	)
+	if err = config.LoadConfigAndSave("./conf/project.config.yaml", ProjectSetting, ProjectSetting,time.Second*10); err != nil {
+		logrus.Fatal(err)
 	}
 	if ProjectSetting.IsTLS {
 		ProjectSetting.TLS = &TLS{
@@ -98,7 +102,7 @@ func InitConfig(confDir string) (err error) {
 		}
 	}
 	if err = ProjectSetting.Save(nil); err != nil {
-		return
+		logrus.Fatal(err)
 	}
-	return
+
 }

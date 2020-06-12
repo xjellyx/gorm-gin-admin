@@ -8,7 +8,7 @@ RUN export CONF_DIR=$(pwd)
 
 ADD ./conf/ /project/conf
 
-ADD ./serve /project
+ADD ./main /project
 
 EXPOSE 8060
 EXPOSE 9060

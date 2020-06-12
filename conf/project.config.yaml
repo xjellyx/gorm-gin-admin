@@ -1,16 +1,16 @@
-serverAddr: 0.0.0.0
-serverPort: "8060"
-rpcHost: 0.0.0.0
-rpcPort: "9060"
+serveraddr: 127.0.0.1
+serverport: "8060"
+rpchost: 0.0.0.0
+rpcport: "9060"
 sync: true
-isProduct: false
-userKeyDir: ./conf/user.key
-userPubDir: ./conf/user.pub
-adminKeyDir: ./conf/admin.key
-adminPubDir: ./conf/admin.pub
+isproduct: false
+userkeydir: ./conf/user.key
+userpubdir: ./conf/user.pub
+adminkeydir: ./conf/admin.key
+adminpubdir: ./conf/admin.pub
 db:
   host: 0.0.0.0
-  port: "65433"
+  port: "5432"
   driver: postgres
   databasename: business
   username: business
@@ -22,6 +22,7 @@ rdb:
   port: "6379"
   db: 0
   password: "123456"
-isTLS: false
+istls: false
 tls: null
-isCaptcha: false
+iscaptcha: false
+logdir: ./log

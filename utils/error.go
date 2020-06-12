@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-const prefix = "userDetail"
+const prefix = "user_base"
 
 const (
 	GORMPGUniqueErr  = `pq: duplicate key value violates unique constraint`

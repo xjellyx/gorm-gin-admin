@@ -3,10 +3,9 @@ package api_v1
 import (
 	"github.com/dchest/captcha"
 	"github.com/gin-gonic/gin"
-	"github.com/olongfen/userDetail/service/svc_captcha"
+	"github.com/olongfen/userDetail/service/srv_captcha"
 	"net/http"
 )
-
 
 // Captcha
 func Captcha(ctx *gin.Context) {
@@ -23,8 +22,5 @@ func Captcha(ctx *gin.Context) {
 	}
 	l := captcha.DefaultLen
 	id := captcha.NewLen(l)
-	 svc_captcha.Serve(ctx.Writer, ctx.Request, id, d.Ext, d.Lang, d.IsDownload, captcha.StdWidth, captcha.StdHeight)
+	srv_captcha.Serve(ctx.Writer, ctx.Request, id, d.Ext, d.Lang, d.IsDownload, captcha.StdWidth, captcha.StdHeight)
 }
-
-
-
