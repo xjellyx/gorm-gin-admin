@@ -3,9 +3,11 @@ package routers
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/olongfen/userDetail/ctl/routers/api_v1"
-	"github.com/olongfen/userDetail/middleware/cors"
-	"github.com/olongfen/userDetail/pkg/setting"
+	"github.com/olongfen/user_base/ctl/routers/api_v1"
+	"github.com/olongfen/user_base/middleware/cors"
+	"github.com/olongfen/user_base/pkg/setting"
+	ginSwagger "github.com/swaggo/gin-swagger"
+	"github.com/swaggo/gin-swagger/swaggerFiles"
 	"net/http"
 )
 
@@ -32,6 +34,7 @@ func InitRouter() (ret *gin.Engine) {
 	})
 	// 获取验证码
 	engine.GET("/srv_captcha", api_v1.Captcha)
+	engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	// TODO 路由
 	{
 		v1 := engine.Group("/v1")
@@ -44,8 +47,8 @@ func InitRouter() (ret *gin.Engine) {
 
 		// User
 		{
-			//v1_user := v1.Group("/user")
-			//v1_user.POST("/register", Ctrl.Register)
+			v1_user := v1.Group("/user")
+			v1_user.POST("/register", api_v1.UserRegister)
 			//v1_user.POST("/login", Ctrl.Login)
 			//v1_user.GET("/logout", Ctrl.Logout)
 			//v1_user.GET("/getUserDetailSelf", Ctrl.GetUserDetailSelf)

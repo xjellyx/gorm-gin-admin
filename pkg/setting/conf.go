@@ -2,7 +2,7 @@ package setting
 
 import (
 	"github.com/olongfen/contrib/config"
-	"github.com/olongfen/userDetail/utils"
+	"github.com/olongfen/user_base/utils"
 	"github.com/sirupsen/logrus"
 	"time"
 )
@@ -14,18 +14,18 @@ type ProjectConfig struct {
 	ServerPort    string
 	RpcHost       string
 	RpcPort       string
-	Sync          bool      // true: 数据库同步
-	IsProduct     bool      //
-	UserKeyDir    string    // 私钥地址
-	UserPubDir    string    // 公钥地址
-	AdminKeyDir   string    // 私钥地址
-	AdminPubDir   string    // 公钥地址
+	Sync          bool   // true: 数据库同步
+	IsProduct     bool   //
+	UserKeyDir    string // 私钥地址
+	UserPubDir    string // 公钥地址
+	AdminKeyDir   string // 私钥地址
+	AdminPubDir   string // 公钥地址
 	Db            *Database
 	RDB           *RedisDB
-	IsTLS         bool       // true: 开启https
+	IsTLS         bool // true: 开启https
 	TLS           *TLS
-	IsCaptcha   bool
-	LogDir     string
+	IsCaptcha     bool
+	LogDir        string
 }
 
 // RedisDB 缓存的连接参数
@@ -83,16 +83,16 @@ var (
 		UserPubDir:  "./conf/user.pub",
 		AdminKeyDir: "./conf/admin.key",
 		AdminPubDir: "./conf/admin.pub",
-		LogDir: "./log",
+		LogDir:      "./log",
 	}
 )
 
 // InitConfig 初始化配置文件
 func InitConfig() {
-	var(
+	var (
 		err error
 	)
-	if err = config.LoadConfigAndSave("./conf/project.config.yaml", ProjectSetting, ProjectSetting,time.Second*10); err != nil {
+	if err = config.LoadConfigAndSave("./conf/project.config.yaml", ProjectSetting, ProjectSetting, time.Second*10); err != nil {
 		logrus.Fatal(err)
 	}
 	if ProjectSetting.IsTLS {

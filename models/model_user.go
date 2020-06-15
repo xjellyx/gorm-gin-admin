@@ -5,14 +5,14 @@ import "gorm.io/gorm"
 // UserBase 用户信息
 type UserBase struct {
 	gorm.Model
-	Uid         string
-	Username    string
-	Phone       string
-	LoginPasswd string
-	PayPasswd   string
-	Email       string
-	NickName    string
-	Status      int
+	Uid         string `json:"uid"`
+	Username    string `json:"username"`
+	Phone       string `json:"phone"`
+	LoginPasswd string `json:"login_passwd"`
+	PayPasswd   string `json:"pay_passwd"`
+	Email       string `json:"email"`
+	NickName    string `json:"nick_name"`
+	Status      int    `json:"status"`
 }
 
 // InsertUserData 插入一条数据

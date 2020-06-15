@@ -5,8 +5,8 @@ import (
 	"github.com/golang/protobuf/ptypes"
 	"github.com/olongfen/contrib"
 	pb "github.com/olongfen/models.grpc"
-	"github.com/olongfen/userDetail/models"
-	"github.com/olongfen/userDetail/utils"
+	"github.com/olongfen/user_base/models"
+	"github.com/olongfen/user_base/utils"
 	"google.golang.org/grpc"
 )
 

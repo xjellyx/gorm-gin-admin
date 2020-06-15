@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/olongfen/contrib/log"
 	"github.com/olongfen/contrib/session"
-	"github.com/olongfen/userDetail/pkg/setting"
+	"github.com/olongfen/user_base/pkg/setting"
 	uuid "github.com/satori/go.uuid"
 	"github.com/sirupsen/logrus"
 	"gorm.io/driver/postgres"

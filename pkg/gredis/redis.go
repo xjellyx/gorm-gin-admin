@@ -2,7 +2,7 @@ package gredis
 
 import (
 	"github.com/go-redis/redis"
-	"github.com/olongfen/userDetail/pkg/setting"
+	"github.com/olongfen/user_base/pkg/setting"
 	"github.com/sirupsen/logrus"
 )
 

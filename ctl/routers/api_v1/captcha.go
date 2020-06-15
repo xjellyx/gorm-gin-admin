@@ -3,7 +3,7 @@ package api_v1
 import (
 	"github.com/dchest/captcha"
 	"github.com/gin-gonic/gin"
-	"github.com/olongfen/userDetail/service/srv_captcha"
+	"github.com/olongfen/user_base/service/srv_captcha"
 	"net/http"
 )
 
