@@ -1,4 +1,4 @@
-module github.com/olongfen/userDetail
+module github.com/olongfen/user_base
 
 go 1.13
 
