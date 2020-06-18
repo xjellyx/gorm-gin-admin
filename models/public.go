@@ -43,11 +43,11 @@ func SessionCheck(s *session.Session) (err error) {
 //		dataOnline *UserOnline
 //	)
 //	if isAdmin {
-//		if s, err = adminKey.SessionDecodeAuto(token); err != nil {
+//		if s, err = AdminKey.SessionDecodeAuto(token); err != nil {
 //			return
 //		}
 //	} else {
-//		if s, err = userKey.SessionDecodeAuto(token); err != nil {
+//		if s, err = UserKey.SessionDecodeAuto(token); err != nil {
 //			return
 //		}
 //	}
@@ -106,7 +106,7 @@ func SessionCheck(s *session.Session) (err error) {
 //	s.CreateTime = n.Unix()
 //	s.ExpireTime = n.Add(session.SessionExpMaxSecure).Unix()
 //	s.Level = session.SessionLevelSecure
-//	if token, err = userKey.SessionEncodeAuto(s); err != nil {
+//	if token, err = UserKey.SessionEncodeAuto(s); err != nil {
 //		return
 //	}
 //	if err = Database.Model(&UserDetail{}).Where("uid = ?", data.Uid).Update("status", UserStatusNormal).Error; err != nil {
@@ -212,11 +212,11 @@ func SessionCheck(s *session.Session) (err error) {
 //
 //	//
 //	if data.IsAdmin {
-//		if token, err = adminKey.SessionEncodeAuto(s); err != nil {
+//		if token, err = AdminKey.SessionEncodeAuto(s); err != nil {
 //			return
 //		}
 //	} else {
-//		if token, err = userKey.SessionEncodeAuto(s); err != nil {
+//		if token, err = UserKey.SessionEncodeAuto(s); err != nil {
 //			return
 //		}
 //	}
@@ -268,9 +268,9 @@ func SessionCheck(s *session.Session) (err error) {
 //// TokenDecodeSession
 //func TokenDecodeSession(token interface{}, isAdmin bool) (ret *session.Session, err error) {
 //	if isAdmin {
-//		return adminKey.SessionDecodeAuto(token)
+//		return AdminKey.SessionDecodeAuto(token)
 //	} else {
-//		return userKey.SessionDecodeAuto(token)
+//		return UserKey.SessionDecodeAuto(token)
 //	}
 //
 //}

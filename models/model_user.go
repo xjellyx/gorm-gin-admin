@@ -8,10 +8,12 @@ type UserBase struct {
 	Uid         string `json:"uid"`
 	Username    string `json:"username"`
 	Phone       string `json:"phone"`
-	LoginPasswd string `json:"login_passwd"`
-	PayPasswd   string `json:"pay_passwd"`
+	LoginPasswd string `json:"-"`
+	PayPasswd   string `json:"-"`
 	Email       string `json:"email"`
-	NickName    string `json:"nick_name"`
+	Nickname    string `json:"nickname"`
+	HeadIcon    string `json:"headIcon"`
+	Sign        string `json:"sign"`
 	Status      int    `json:"status"`
 }
 
@@ -20,19 +22,28 @@ func (u *UserBase) InsertUserData() (err error) {
 	return db.Create(u).Error
 }
 
+func (u *UserBase) UpdateUserInterface(data interface{}) error {
+	return db.Model(u).Where("uid = ?", u.Uid).Updates(data).Error
+}
+
 // UpdateUser 更新数据
 func (u *UserBase) UpdateUser() error {
-	return db.Updates(u).Error
+	return db.Model(u).Where("uid = ?", u.Uid).Updates(u).Error
 }
 
 // UpdateUserOneColumn 更新一个字段
 func (u *UserBase) UpdateUserOneColumn(column string, val interface{}) error {
-	return db.Model(u).Update(column, val).Error
+	return db.Model(u).Where("uid = ?", u.Uid).Update(column, val).Error
 }
 
 // GetUserById 通过id获取数据
 func (u *UserBase) GetUserById(id int64) error {
 	return db.First(u, "id = ?", id).Error
+}
+
+// GetUserByUId 通过id获取数据
+func (u *UserBase) GetUserByUId(uid string) error {
+	return db.First(u, "uid = ?", uid).Error
 }
 
 // GetUserByUsername 通过username获取用户信息

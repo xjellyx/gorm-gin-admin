@@ -4,7 +4,7 @@ import (
 	"crypto/tls"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/olongfen/user_base/ctl/routers"
+	"github.com/olongfen/user_base/ctl"
 	_ "github.com/olongfen/user_base/docs"
 	"github.com/olongfen/user_base/models"
 	"github.com/olongfen/user_base/pkg/gredis"
@@ -30,7 +30,7 @@ func init() {
 	// 初始化redis
 	gredis.InitRedisInstance()
 	// 初始化路由
-	engine = routers.InitRouter()
+	engine = ctl.InitRouter()
 }
 
 func main() {
@@ -72,6 +72,11 @@ func main() {
 			}
 		}
 	}()
+
+	//srv_user.AddUser(&utils.AddUserForm{
+	//	Phone:    "4543534534",
+	//	Password: "123456",
+	//})
 
 	var state int32 = 1
 	sc := make(chan os.Signal, 1)

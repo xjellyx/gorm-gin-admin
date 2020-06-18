@@ -10,6 +10,33 @@ info:
   contact: {}
   license: {}
 paths:
+  /api/v1/login:
+    post:
+      parameters:
+      - description: 用户名
+        in: body
+        name: username
+        required: true
+        schema:
+          type: string
+      - description: 密码
+        in: body
+        name: password
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 用户登录
   /api/v1/register:
     post:
       parameters:
@@ -42,4 +69,39 @@ paths:
           schema:
             $ref: '#/definitions/app.Response'
       summary: 用户注册
+  /api/v1/userUpdate:
+    post:
+      parameters:
+      - description: 昵称
+        in: body
+        name: nickname
+        schema:
+          type: string
+      - description: 用户名,之可以修改一次
+        in: body
+        name: username
+        schema:
+          type: string
+      - description: 手机号码
+        in: body
+        name: Phone
+        schema:
+          type: string
+      - description: 签名
+        in: body
+        name: sign
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 更新用户信息
 swagger: "2.0"

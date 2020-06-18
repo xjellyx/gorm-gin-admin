@@ -30,8 +30,8 @@ func (f *FormRegister) Valid() (err error) {
 type LoginForm struct {
 	Username string  `json:"username" form:"username" binding:"required"`
 	Password string  `json:"password" form:"password" binding:"required"`
-	IP       string  `json:"ip" form:"ip"`
 	DeviceId *string `json:"deviceId" form:"deviceId"`
+	IP       string
 }
 
 func (f *LoginForm) Valid() (err error) {
@@ -42,32 +42,26 @@ func (f *LoginForm) Valid() (err error) {
 	return
 }
 
-// UpdateUserProfile
-type UpdateUserProfile struct {
+// FormEditUser
+type FormEditUser struct {
 	Nickname *string `json:"nickname" form:"nickname"`
 	Username *string `json:"username" form:"username"`
-	LocNum   *string `json:"locNum" form:"locNum"`
-	Phone    *string `json:"phone" form:"phone"`
-	HeadIcon *string `json:"headIcon" form:"headIcon"`
-	Sign     *string `json:"sign" form:"sign"`
+	// 	LocNum   *string `json:"locNum" form:"locNum"`
+	Phone *string `json:"phone" form:"phone"`
+	Sign  *string `json:"sign" form:"sign"`
 }
 
-func (f *UpdateUserProfile) Valid() (ret map[string]interface{}, err error) {
+func (f *FormEditUser) Valid() (ret map[string]interface{}, err error) {
 	if f == nil {
 		err = ErrFormParamInvalid
 		return
 	}
 	ret = map[string]interface{}{}
 	if f.Phone != nil && len(*f.Phone) == 0 {
-		if f.LocNum == nil {
-			f.LocNum = new(string)
-			*f.LocNum = "86"
-		}
 		err = ErrFormParamInvalid
 		return
-	} else if f.Phone != nil && f.LocNum != nil {
+	} else if f.Phone != nil && len(*f.Phone) != 0 {
 		ret["phone"] = *f.Phone
-		ret["loc_num"] = *f.LocNum
 	}
 
 	if f.Username != nil && len(*f.Username) == 0 {
@@ -81,12 +75,6 @@ func (f *UpdateUserProfile) Valid() (ret map[string]interface{}, err error) {
 		return
 	} else if f.Nickname != nil {
 		ret["nick_name"] = *f.Nickname
-	}
-	if f.HeadIcon != nil && len(*f.HeadIcon) == 0 {
-		err = ErrFormParamInvalid
-		return
-	} else if f.HeadIcon != nil {
-		ret["head_icon"] = *f.HeadIcon
 	}
 
 	if f.Sign != nil {
@@ -211,4 +199,11 @@ func (f *FormUserOnline) Valid() (err error) {
 	}
 
 	return
+}
+
+// AddUserForm
+type AddUserForm struct {
+	Phone    string `form:"phone" binding:"required"`
+	Password string `form:"password" binding:"required"`
+	Code     string `form:"code"`
 }

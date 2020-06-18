@@ -1,15 +1,17 @@
--- DROP TABLE IF EXISTS user_bases;
+DROP TABLE IF EXISTS user_bases;
 create table if not exists user_bases
 (
 id bigserial  not  null primary key ,
 uid varchar(36) default '' unique  ,
-username varchar(32) default ''  ,
+username varchar(32) default '' unique ,
 login_passwd varchar(64) default '' ,
 pay_passwd varchar(64) default '',
 phone varchar(11) default '' unique ,
-nick_name varchar(16) default '' ,
+nickname varchar(16) default '' ,
 email varchar(32) default '' ,
-status int ,
+head_icon varchar default '',
+sign  varchar(256) default '',
+status int,
 created_at timestamp  ,
 updated_at timestamp  ,
 deleted_at timestamp

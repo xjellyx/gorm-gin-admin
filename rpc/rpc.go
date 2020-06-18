@@ -133,7 +133,7 @@ func (s *ServeRpc) CheckToken(ctx context.Context, arg *pb.CheckTokenReq) (ret *
 func (s *ServeRpc) UpdateUserDetail(ctx context.Context, req *pb.UpdateUserDetailReq) (ret *pb.UserDetailResp, err error) {
 	var (
 		data *models.UserDetail
-		form = &utils.UpdateUserProfile{
+		form = &utils.FormEditUser{
 			Nickname: nil,
 			Username: nil,
 			LocNum:   nil,

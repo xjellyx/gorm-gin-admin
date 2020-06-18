@@ -2,15 +2,15 @@ FROM  golang:latest
 
 MAINTAINER olongfen
 
-WORKDIR /project
+WORKDIR /app
 
 RUN export CONF_DIR=$(pwd)
 
-ADD ./conf/ /project/conf
+ADD ./conf/ /app/conf
 
-ADD ./main /project
+ADD ./main /app
 
 EXPOSE 8060
 EXPOSE 9060
 
-ENTRYPOINT ["./serve"]
+ENTRYPOINT ["./main"]

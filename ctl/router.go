@@ -1,10 +1,11 @@
-package routers
+package ctl
 
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/olongfen/user_base/ctl/routers/api_v1"
+	"github.com/olongfen/user_base/ctl/api_v1"
 	"github.com/olongfen/user_base/middleware/cors"
+	"github.com/olongfen/user_base/middleware/mdw_sessions"
 	"github.com/olongfen/user_base/pkg/setting"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
@@ -44,11 +45,14 @@ func InitRouter() (ret *gin.Engine) {
 		v1.GET("", func(c *gin.Context) {
 			c.JSON(http.StatusOK, gin.H{"ping": "pong >>>>>>> update"})
 		})
-
 		// User
+		v1.POST("/register", api_v1.UserRegister)
 		{
 			v1_user := v1.Group("/user")
-			v1_user.POST("/register", api_v1.UserRegister)
+			v1_user.POST("/login", api_v1.Login)
+			v1_user.Use(mdw_sessions.CheckUserAuth(false))
+			v1_user.POST("/updateUser", api_v1.UserUpdate)
+			v1_user.GET("/getUserProfile", api_v1.GetUserProfile)
 			//v1_user.POST("/login", Ctrl.Login)
 			//v1_user.GET("/logout", Ctrl.Logout)
 			//v1_user.GET("/getUserDetailSelf", Ctrl.GetUserDetailSelf)
@@ -68,7 +72,8 @@ func InitRouter() (ret *gin.Engine) {
 
 		// Admin
 		{
-
+			v1_admin := v1.Group("/admin")
+			v1_admin.Use(mdw_sessions.CheckUserAuth(true))
 		}
 
 	}
