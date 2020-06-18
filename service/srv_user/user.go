@@ -33,7 +33,7 @@ func AddUser(form *utils.AddUserForm) (ret *models.UserBase, err error) {
 func EditUser(uid string, form *utils.FormEditUser) (ret *models.UserBase, err error) {
 	var (
 		dataMap map[string]interface{}
-		data    = &models.UserBase{Uid: uid}
+		data    = &models.UserBase{}
 	)
 	if dataMap, err = form.Valid(); err != nil {
 		return
@@ -46,7 +46,7 @@ func EditUser(uid string, form *utils.FormEditUser) (ret *models.UserBase, err e
 			return
 		}
 	}
-	if err = data.UpdateUser(); err != nil {
+	if err = data.UpdateUser(uid); err != nil {
 		return nil, err
 	}
 

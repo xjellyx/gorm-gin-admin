@@ -22,18 +22,18 @@ func (u *UserBase) InsertUserData() (err error) {
 	return db.Create(u).Error
 }
 
-func (u *UserBase) UpdateUserInterface(data interface{}) error {
-	return db.Model(u).Where("uid = ?", u.Uid).Updates(data).Error
+func (u *UserBase) UpdateUserInterface(uid string, data interface{}) error {
+	return db.Model(u).Where("uid = ?", uid).Updates(data).Error
 }
 
 // UpdateUser 更新数据
-func (u *UserBase) UpdateUser() error {
-	return db.Model(u).Where("uid = ?", u.Uid).Updates(u).Error
+func (u *UserBase) UpdateUser(uid string) error {
+	return db.Model(u).Where("uid = ?", uid).Updates(u).Error
 }
 
 // UpdateUserOneColumn 更新一个字段
-func (u *UserBase) UpdateUserOneColumn(column string, val interface{}) error {
-	return db.Model(u).Where("uid = ?", u.Uid).Update(column, val).Error
+func (u *UserBase) UpdateUserOneColumn(uid string, column string, val interface{}) error {
+	return db.Model(u).Where("uid = ?", uid).Update(column, val).Error
 }
 
 // GetUserById 通过id获取数据

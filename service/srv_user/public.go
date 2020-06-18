@@ -44,7 +44,7 @@ func UserLogin(f *utils.LoginForm, isAdmin bool) (token string, err error) {
 			return
 		}
 	}
-	if err = data.UpdateUserOneColumn("status", 1); err != nil {
+	if err = data.UpdateUserOneColumn(s.UID, "status", 1); err != nil {
 		return
 	}
 	//var (
