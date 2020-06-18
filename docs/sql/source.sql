@@ -3,11 +3,11 @@ create table if not exists user_bases
 (
 id bigserial  not  null primary key ,
 uid varchar(36) default '' unique  ,
-username varchar(32) default '' unique ,
+username varchar(16) default '' unique ,
 login_passwd varchar(64) default '' ,
 pay_passwd varchar(64) default '',
 phone varchar(11) default '' unique ,
-nickname varchar(16) default '' ,
+nickname varchar(12) default '' ,
 email varchar(32) default '' ,
 head_icon varchar default '',
 sign  varchar(256) default '',

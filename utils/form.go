@@ -74,7 +74,7 @@ func (f *FormEditUser) Valid() (ret map[string]interface{}, err error) {
 		err = ErrFormParamInvalid
 		return
 	} else if f.Nickname != nil {
-		ret["nick_name"] = *f.Nickname
+		ret["nickname"] = *f.Nickname
 	}
 
 	if f.Sign != nil {

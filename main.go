@@ -9,6 +9,8 @@ import (
 	"github.com/olongfen/user_base/models"
 	"github.com/olongfen/user_base/pkg/gredis"
 	"github.com/olongfen/user_base/pkg/setting"
+	"github.com/olongfen/user_base/service/srv_user"
+	"github.com/olongfen/user_base/utils"
 	"github.com/sirupsen/logrus"
 	"net/http"
 	"os"
@@ -73,10 +75,10 @@ func main() {
 		}
 	}()
 
-	//srv_user.AddUser(&utils.AddUserForm{
-	//	Phone:    "4543534534",
-	//	Password: "123456",
-	//})
+	srv_user.AddUser(&utils.AddUserForm{
+		Phone:    "4543534534",
+		Password: "123456",
+	})
 
 	var state int32 = 1
 	sc := make(chan os.Signal, 1)

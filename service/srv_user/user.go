@@ -2,7 +2,6 @@ package srv_user
 
 import (
 	"encoding/json"
-
 	"github.com/olongfen/user_base/models"
 	"github.com/olongfen/user_base/utils"
 	uuid "github.com/satori/go.uuid"
