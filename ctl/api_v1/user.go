@@ -12,6 +12,7 @@ import (
 )
 
 // UserRegister 用户注册
+// @tags 用户
 // @Summary 用户注册
 // @Produce json
 // @Param phone body string true "Phone"
@@ -46,6 +47,7 @@ func UserRegister(c *gin.Context) {
 }
 
 // Login 登录
+// @tags 用户
 // @Summary 用户登录
 // @Produce json
 // @Param username body string true "用户名"
@@ -78,6 +80,7 @@ func Login(c *gin.Context) {
 }
 
 // UserUpdate 用户更新基本信息
+// @tags 用户
 // @Summary 更新用户信息
 // @Produce json
 // @Param nickname body string false "昵称"
@@ -116,6 +119,7 @@ func UserUpdate(c *gin.Context) {
 }
 
 // GetUserProfile 获取用户信息
+// @tags 用户
 // @Summary 获取个人信息
 // @Produce json
 // @Success 200 {object} app.Response
@@ -141,5 +145,97 @@ func GetUserProfile(c *gin.Context) {
 	if err = data.GetUserByUId(s.UID); err != nil {
 		return
 	}
+
+}
+
+// ChangePayPasswd 修改密码
+// @tags 用户
+// @Summary 修改用户密码
+// @Produce json
+// @Accept json
+// @Param oldPasswd query string true "旧密码"
+// @Param newPasswd query string true "新密码"
+// @Success 200 {object} app.Response
+// @Failure 500 {object} app.Response
+// @router /api/v1/changeLoginPasswd [post]
+func ChangeLoginPasswd(c *gin.Context) {
+	var (
+		err            error
+		httpCode       = http.StatusInternalServerError
+		s              *session.Session
+		oldPwd, newPwd string
+	)
+	defer func() {
+		if err != nil {
+			app.NewGin(c).Response(httpCode, err.Error())
+		} else {
+			app.NewGin(c).Response(200, "")
+		}
+	}()
+	oldPwd = c.Param("oldPasswd")
+	newPwd = c.Param("newPasswd")
+	if s, err = getSession(c); err != nil {
+		return
+	}
+	if err = srv_user.ChangePasswd(s.UID, oldPwd, newPwd); err != nil {
+		return
+	}
+}
+
+// ChangePayPasswd 修改密码
+// @tags 用户
+// @Summary 修改用户密码
+// @Produce json
+// @Accept json
+// @Param oldPasswd query string true "旧密码"
+// @Param newPasswd query string true "新密码"
+// @Success 200 {object} app.Response
+// @Failure 500 {object} app.Response
+// @router /api/v1/changeLoginPasswd [post]
+func ChangePayPasswd(c *gin.Context) {
+	var (
+		err            error
+		httpCode       = http.StatusInternalServerError
+		s              *session.Session
+		oldPwd, newPwd string
+	)
+	defer func() {
+		if err != nil {
+			app.NewGin(c).Response(httpCode, err.Error())
+		} else {
+			app.NewGin(c).Response(200, "")
+		}
+	}()
+	oldPwd = c.Param("oldPasswd")
+	newPwd = c.Param("newPasswd")
+	if s, err = getSession(c); err != nil {
+		return
+	}
+	if err = srv_user.ChangePayPasswd(s.UID, oldPwd, newPwd); err != nil {
+		return
+	}
+}
+
+// EditHeadIcon 修改用户头像
+// @tags 用户
+// @Summary 修改用户头像
+// @Produce json
+// @Accept  json
+// @Param headIcon query string true '头像'
+// @Success 200 {object} app.Response
+// @Failure 500 {object} app.Response
+func EditHeadIcon(c *gin.Context) {
+
+	var (
+		err      error
+		s        *session.Session
+		headIcon string
+	)
+	headIcon = c.Query("headIcon")
+	if s, err = getSession(c); err != nil {
+		return
+	}
+	_ = s
+	_ = headIcon
 
 }

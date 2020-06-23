@@ -10,13 +10,14 @@ type Gin struct {
 }
 
 type Response struct {
-	Msg  string      `json:"msg"`
+	Meta Meta        `json:"meta"`
 	Data interface{} `json:"data"`
 }
 
-type ResponseError struct {
-	Msg   string      `json:"msg"`
-	Error interface{} `json:"error"`
+type Meta struct {
+	Status int         `json:"status"`
+	Msg    string      `json:"msg"`
+	Error  interface{} `json:"error"`
 }
 
 // NewGin
@@ -29,13 +30,19 @@ func NewGin(c *gin.Context) *Gin {
 // Response setting gin.JSON
 func (g *Gin) Response(httpCode int, data interface{}) {
 	if httpCode != http.StatusOK {
-		g.C.JSON(httpCode, ResponseError{
-			Msg:   "fail",
-			Error: data,
+		g.C.JSON(httpCode, Response{
+			Meta: Meta{
+				Status: httpCode,
+				Msg:    "fail",
+				Error:  data,
+			},
 		})
 	} else {
 		g.C.JSON(httpCode, Response{
-			Msg:  "success",
+			Meta: Meta{
+				Status: httpCode,
+				Msg:    "success",
+			},
 			Data: data,
 		})
 	}

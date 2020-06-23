@@ -54,3 +54,53 @@ func EditUser(uid string, form *utils.FormEditUser) (ret *models.UserBase, err e
 	ret = data
 	return
 }
+
+// ChangePasswd 修改密码
+func ChangePasswd(uid string, oldPasswd, newPasswd string) (err error) {
+	var (
+		data = &models.UserBase{}
+	)
+	if len(oldPasswd) == 0 || len(newPasswd) == 0 {
+		err = utils.ErrFormParamInvalid
+		return
+	}
+	if err = data.GetUserByUId(uid); err != nil {
+		return
+	}
+	if err = bcrypt.CompareHashAndPassword([]byte(data.LoginPasswd), []byte(oldPasswd)); err != nil {
+		return
+	}
+	if _d, _err := bcrypt.GenerateFromPassword([]byte(newPasswd), bcrypt.DefaultCost); _err != nil {
+		err = _err
+		return
+	} else {
+		return data.UpdateUserOneColumn(uid, "login_passwd", string(_d))
+	}
+}
+
+// ChangePayPasswd 修改密码
+func ChangePayPasswd(uid string, oldPasswd, newPasswd string) (err error) {
+	var (
+		data = &models.UserBase{}
+	)
+	if len(oldPasswd) == 0 || len(newPasswd) == 0 {
+		err = utils.ErrFormParamInvalid
+		return
+	}
+	if err = data.GetUserByUId(uid); err != nil {
+		return
+	}
+	if len(data.PayPasswd) == 0 {
+		err = utils.ErrPayPasswdNotSet
+		return
+	}
+	if err = bcrypt.CompareHashAndPassword([]byte(data.PayPasswd), []byte(oldPasswd)); err != nil {
+		return
+	}
+	if _d, _err := bcrypt.GenerateFromPassword([]byte(newPasswd), bcrypt.DefaultCost); _err != nil {
+		err = _err
+		return
+	} else {
+		return data.UpdateUserOneColumn(uid, "pay_passwd", string(_d))
+	}
+}
