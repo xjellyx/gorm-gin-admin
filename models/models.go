@@ -49,7 +49,13 @@ func init() {
 	UserKey.SetHookSessionCheck(func(sess *session.Session) error {
 		return nil
 	})
+	UserKey.SetHookTokenCheck(func(token interface{}) error {
+		return nil
+	})
 	AdminKey.SetHookSessionCheck(func(sess *session.Session) error {
+		return nil
+	})
+	AdminKey.SetHookTokenCheck(func(token interface{}) error {
 		return nil
 	})
 }

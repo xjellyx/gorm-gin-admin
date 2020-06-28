@@ -20,6 +20,10 @@ func UserLogin(f *utils.LoginForm, isAdmin bool) (token string, err error) {
 	if err = data.GetUserByUsername(f.Username); err != nil {
 		return
 	}
+	if data.Status == models.UserStatusLock {
+		err = utils.ErrUserAccountFroze
+		return
+	}
 	// 验证密码是否正确
 	if err = bcrypt.CompareHashAndPassword([]byte(data.LoginPasswd), []byte(f.Password)); err != nil {
 		return
@@ -27,7 +31,7 @@ func UserLogin(f *utils.LoginForm, isAdmin bool) (token string, err error) {
 
 	s.Password = data.LoginPasswd
 	if f.DeviceId != nil {
-		s.ID = *f.DeviceId
+		s.DeviceID = *f.DeviceId
 	}
 	s.UID = data.Uid
 	s.IP = f.IP
@@ -35,6 +39,7 @@ func UserLogin(f *utils.LoginForm, isAdmin bool) (token string, err error) {
 	s.CreateTime = n.Unix()
 	s.ExpireTime = n.Add(session.SessionExpMaxSecure).Unix()
 	s.Level = session.SessionLevelSecure
+	s.ID = int64(data.ID)
 	if !isAdmin {
 		if token, err = models.UserKey.SessionEncode(s); err != nil {
 			return
@@ -44,7 +49,7 @@ func UserLogin(f *utils.LoginForm, isAdmin bool) (token string, err error) {
 			return
 		}
 	}
-	if err = data.UpdateUserOneColumn(s.UID, "status", 1); err != nil {
+	if err = data.UpdateUserOneColumn(s.UID, "status", models.UserStatusLogin); err != nil {
 		return
 	}
 	//var (
@@ -86,4 +91,19 @@ func UserLogin(f *utils.LoginForm, isAdmin bool) (token string, err error) {
 	//}
 
 	return
+}
+
+// UserLogout 用户登出
+func UserLogout(uid string) (err error) {
+	var (
+		data = new(models.UserBase)
+	)
+	if err = data.GetUserByUId(uid); err != nil {
+		return err
+	}
+	if data.Status != models.UserStatusLogin {
+		err = utils.ErrActionNotAllow
+		return
+	}
+	return data.UpdateUserOneColumn(uid, "status", models.UserStatusLogout)
 }

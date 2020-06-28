@@ -2,19 +2,29 @@ package models
 
 import "gorm.io/gorm"
 
+const (
+	UserStatusRegister = iota // 0 注册状态
+	UserStatusLogin           // 1 登录状态
+	UserStatusLogout          // 2 登出状态
+	UserStatusLock            // 3 封锁状态
+)
+
 // UserBase 用户信息
 type UserBase struct {
 	gorm.Model
-	Uid         string `json:"uid"`
-	Username    string `json:"username"`
-	Phone       string `json:"phone"`
-	LoginPasswd string `json:"-"`
-	PayPasswd   string `json:"-"`
-	Email       string `json:"email"`
-	Nickname    string `json:"nickname"`
+	Uid         string `json:"uid" gorm:"type:varchar(36); unique_index"`
+	Username    string `json:"username" gorm:"type:varchar(16); unique_index"`
+	Phone       string `json:"phone" gorm:"type:varchar(11); unique_index"`
+	LoginPasswd string `json:"-" gorm:"type:varchar(16)"`
+	PayPasswd   string `json:"-" gorm:"type:varchar(16)"`
+	Email       string `json:"email" gorm:"type:varchar(32)"`
+	Nickname    string `json:"nickname" gorm:"type:varchar(12)"`
 	HeadIcon    string `json:"headIcon"`
-	Sign        string `json:"sign"`
+	Sign        string `json:"sign" gorm:"type:varchar(256)"`
 	Status      int    `json:"status"`
+
+	// 外键
+	UserCard UserCard `json:"userCard" gorm:"foreignkey:ID"`
 }
 
 // InsertUserData 插入一条数据

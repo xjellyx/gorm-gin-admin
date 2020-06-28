@@ -12,8 +12,8 @@ var (
 	logCtl = log.NewLogFile("./log/log_ctrl", setting.ProjectSetting.IsProduct)
 )
 
-// getSession 获取会话信息
-func getSession(c *gin.Context) (ret *session.Session, err error) {
+// GetSession 获取会话信息
+func GetSession(c *gin.Context) (ret *session.Session, err error) {
 	var (
 		ok bool
 		s  interface{}

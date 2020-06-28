@@ -36,4 +36,7 @@ var (
 	ErrCapOfAddress        = contrib.NewError(9, "cap of user address", prefix)
 	ErrUserNotOnline       = contrib.NewError(10, "user dose not online", prefix)
 	ErrPayPasswdNotSet     = contrib.NewError(11, "user pay password dose not set", prefix)
+	ErrImageSizeToBig      = contrib.NewError(12, "image size to big", prefix)
+	ErrImagePixelToBig     = contrib.NewError(13, "image pixel to big ", prefix)
+	ErrIPAddressInvalid = contrib.NewError(14,"ip address invalid",prefix )
 )

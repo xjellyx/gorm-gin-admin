@@ -218,6 +218,10 @@ github.com/olongfen/contrib v0.0.0-20200306055042-0b7eb9ce59ea h1:0u2MTH6K4bOPz2
 github.com/olongfen/contrib v0.0.0-20200306055042-0b7eb9ce59ea/go.mod h1:2W5Xto9goGVSXjhxmNDa4Ep7U7zJorRPPCPBzpgS3zI=
 github.com/olongfen/contrib v0.0.0-20200611080036-9b6fde1eaa7e h1:rrlG3suHLZxrWFQxNz9sr5BR6k6axYi4E/aUuixEYX4=
 github.com/olongfen/contrib v0.0.0-20200611080036-9b6fde1eaa7e/go.mod h1:UYTh2wisCjvJh73khhEeOyhOzZYIRisaCNawK/r656E=
+github.com/olongfen/contrib v0.0.0-20200628020232-ff50cbf9bd99 h1:64/+oF4fjKuhWLZStXzDFAHplI457++Iwnrq/W2N/2Y=
+github.com/olongfen/contrib v0.0.0-20200628020232-ff50cbf9bd99/go.mod h1:UYTh2wisCjvJh73khhEeOyhOzZYIRisaCNawK/r656E=
+github.com/olongfen/contrib v0.0.0-20200628023202-36d2180ce685 h1:ijtIWjOR5ZIgNqhQqBxObdR7gE95kFQDhuWsNnxJk5c=
+github.com/olongfen/contrib v0.0.0-20200628023202-36d2180ce685/go.mod h1:UYTh2wisCjvJh73khhEeOyhOzZYIRisaCNawK/r656E=
 github.com/olongfen/gen-id v1.0.2-0.20200205020411-aa724763f90c h1:tn1x4gRakTpnY97zuliQ81pHqclQXolnpPar02LWE4Q=
 github.com/olongfen/gen-id v1.0.2-0.20200205020411-aa724763f90c/go.mod h1:C/CUI5OzvtkRtITIOzDw8UkiVcpBamaYlSP7kLq/yoU=
 github.com/olongfen/model.grpc v0.0.0-20200205020547-b36df4fd0c97 h1:6GUWAg7siWCipKq27k7qaPLQxNnGNftK7TBn90JKSEU=

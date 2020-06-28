@@ -1,15 +1,109 @@
 definitions:
+  app.Meta:
+    properties:
+      error:
+        type: object
+      msg:
+        type: string
+      status:
+        type: integer
+    type: object
   app.Response:
     properties:
       data:
         type: object
-      msg:
-        type: string
+      meta:
+        $ref: '#/definitions/app.Meta'
+        type: object
     type: object
 info:
   contact: {}
   license: {}
 paths:
+  /api/v1/changeLoginPasswd:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 旧密码
+        in: query
+        name: oldPasswd
+        required: true
+        type: string
+      - description: 新密码
+        in: query
+        name: newPasswd
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 修改用户密码
+      tags:
+      - 用户
+  /api/v1/editHeadIcon:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 头像
+        in: query
+        name: headIcon
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 修改用户头像
+      tags:
+      - 用户
+  /api/v1/getHeadIcon:
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200": {}
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 获取用户头像
+      tags:
+      - 用户
+  /api/v1/getUserProfile:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 获取个人信息
+      tags:
+      - 用户
   /api/v1/login:
     post:
       parameters:
@@ -37,6 +131,8 @@ paths:
           schema:
             $ref: '#/definitions/app.Response'
       summary: 用户登录
+      tags:
+      - 用户
   /api/v1/register:
     post:
       parameters:
@@ -69,6 +165,8 @@ paths:
           schema:
             $ref: '#/definitions/app.Response'
       summary: 用户注册
+      tags:
+      - 用户
   /api/v1/userUpdate:
     post:
       parameters:
@@ -104,4 +202,6 @@ paths:
           schema:
             $ref: '#/definitions/app.Response'
       summary: 更新用户信息
+      tags:
+      - 用户
 swagger: "2.0"

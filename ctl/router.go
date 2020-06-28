@@ -34,7 +34,8 @@ func InitRouter() (ret *gin.Engine) {
 		})
 	})
 	// 获取验证码
-	engine.GET("/srv_captcha", api_v1.Captcha)
+	engine.GET("/captcha", api_v1.Captcha)
+	engine.GET("/captcha/verify/", api_v1.VerifyCaptcha)
 	engine.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	// TODO 路由
 	{
@@ -51,11 +52,13 @@ func InitRouter() (ret *gin.Engine) {
 			v1_user := v1.Group("/user")
 			v1_user.POST("/login", api_v1.Login)
 			v1_user.Use(mdw_sessions.CheckUserAuth(false))
+			v1_user.POST("/logout", api_v1.Logout)
 			v1_user.POST("/updateUser", api_v1.UserUpdate)
 			v1_user.GET("/getUserProfile", api_v1.GetUserProfile)
 			v1_user.POST("/changeLoginPasswd", api_v1.ChangeLoginPasswd)
 			v1_user.POST("/changePayPasswd", api_v1.ChangePayPasswd)
 			v1_user.POST("/editHeadIcon", api_v1.EditHeadIcon)
+			v1_user.POST("/getHeadIcon", api_v1.GetHeadIcon)
 			//v1_user.POST("/login", Ctrl.Login)
 			//v1_user.GET("/logout", Ctrl.Logout)
 			//v1_user.GET("/getUserDetailSelf", Ctrl.GetUserDetailSelf)

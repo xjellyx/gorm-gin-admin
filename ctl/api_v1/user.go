@@ -6,9 +6,15 @@ import (
 	"github.com/olongfen/contrib/session"
 	"github.com/olongfen/user_base/models"
 	"github.com/olongfen/user_base/pkg/app"
+	"github.com/olongfen/user_base/pkg/setting"
 	"github.com/olongfen/user_base/service/srv_user"
 	"github.com/olongfen/user_base/utils"
+	uuid "github.com/satori/go.uuid"
+	"image"
+	"mime/multipart"
 	"net/http"
+	"os"
+	"strings"
 )
 
 // UserRegister 用户注册
@@ -79,6 +85,36 @@ func Login(c *gin.Context) {
 
 }
 
+// Login 登出
+// @tags 用户
+// @Summary 用户登出
+// @Produce json
+// @Accept json
+// @Success 200 {object} app.Response
+// @Failure 500 {object} app.Response
+// @router /api/v1/login [post]
+func Logout(c *gin.Context) {
+	var (
+		err      error
+		httpCode = http.StatusInternalServerError
+		s        *session.Session
+	)
+	defer func() {
+		if err != nil {
+			app.NewGin(c).Response(httpCode, err.Error())
+		} else {
+			app.NewGin(c).Response(200, map[string]string{})
+		}
+	}()
+	if s, err = GetSession(c); err != nil {
+		return
+	}
+	if err = srv_user.UserLogout(s.UID); err != nil {
+		return
+	}
+
+}
+
 // UserUpdate 用户更新基本信息
 // @tags 用户
 // @Summary 更新用户信息
@@ -105,7 +141,7 @@ func UserUpdate(c *gin.Context) {
 			app.NewGin(c).Response(200, data)
 		}
 	}()
-	if s, err = getSession(c); err != nil {
+	if s, err = GetSession(c); err != nil {
 		return
 	}
 	if err = c.ShouldBind(form); err != nil {
@@ -139,7 +175,7 @@ func GetUserProfile(c *gin.Context) {
 			app.NewGin(c).Response(200, data)
 		}
 	}()
-	if s, err = getSession(c); err != nil {
+	if s, err = GetSession(c); err != nil {
 		return
 	}
 	if err = data.GetUserByUId(s.UID); err != nil {
@@ -174,7 +210,7 @@ func ChangeLoginPasswd(c *gin.Context) {
 	}()
 	oldPwd = c.Param("oldPasswd")
 	newPwd = c.Param("newPasswd")
-	if s, err = getSession(c); err != nil {
+	if s, err = GetSession(c); err != nil {
 		return
 	}
 	if err = srv_user.ChangePasswd(s.UID, oldPwd, newPwd); err != nil {
@@ -208,7 +244,7 @@ func ChangePayPasswd(c *gin.Context) {
 	}()
 	oldPwd = c.Param("oldPasswd")
 	newPwd = c.Param("newPasswd")
-	if s, err = getSession(c); err != nil {
+	if s, err = GetSession(c); err != nil {
 		return
 	}
 	if err = srv_user.ChangePayPasswd(s.UID, oldPwd, newPwd); err != nil {
@@ -221,21 +257,93 @@ func ChangePayPasswd(c *gin.Context) {
 // @Summary 修改用户头像
 // @Produce json
 // @Accept  json
-// @Param headIcon query string true '头像'
+// @Param headIcon query string true "头像"
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
+// @Router /api/v1/editHeadIcon [post]
 func EditHeadIcon(c *gin.Context) {
 
 	var (
 		err      error
 		s        *session.Session
-		headIcon string
+		headIcon *multipart.FileHeader
+		httpCode = http.StatusInternalServerError
+		d        = new(models.UserBase)
+		img      image.Image
 	)
-	headIcon = c.Query("headIcon")
-	if s, err = getSession(c); err != nil {
+	defer func() {
+		if err != nil {
+			app.NewGin(c).Response(httpCode, err.Error())
+		} else {
+			app.NewGin(c).Response(200, gin.H{
+				"headIcon": d.HeadIcon,
+			})
+		}
+	}()
+	if headIcon, err = c.FormFile("headIcon"); err != nil {
+		httpCode = http.StatusBadRequest
 		return
 	}
-	_ = s
-	_ = headIcon
+	_f, _ := headIcon.Open()
+	if img, _, err = image.Decode(_f); err != nil {
+		return
+	}
+	b := img.Bounds()
+	if b.Max.X > 300 || b.Max.Y > 300 {
+		err = utils.ErrImagePixelToBig
+		return
+	}
+	// 最高能够保存500kb的头像
+	if headIcon.Size > 2<<20 {
+		err = utils.ErrImageSizeToBig
+		return
+	}
 
+	if s, err = GetSession(c); err != nil {
+		return
+	}
+	if err = d.GetUserByUId(s.UID); err != nil {
+		return
+	}
+	oldDst := d.HeadIcon
+	//
+	arr := strings.Split(headIcon.Filename, ".")
+	dst := setting.ProjectSetting.HeadIconDir + uuid.NewV4().String() + "." + arr[len(arr)-1]
+	if err = c.SaveUploadedFile(headIcon, dst); err != nil {
+		return
+	}
+
+	if err = d.UpdateUserOneColumn(s.UID, "head_icon", dst); err != nil {
+		return
+	}
+	os.Remove(oldDst)
+
+}
+
+// GetHeadIcon 获取用户头像
+// @tags 用户
+// @Summary 获取用户头像
+// @Produce json
+// @Accept json
+// @Success 200
+// @Failure 500 {object} app.Response
+// @Router /api/v1/getHeadIcon [post]
+func GetHeadIcon(c *gin.Context) {
+	var (
+		err  error
+		s    *session.Session
+		data = new(models.UserBase)
+	)
+	defer func() {
+		if err != nil {
+			app.NewGin(c).Response(500, err.Error())
+		}
+	}()
+	if s, err = GetSession(c); err != nil {
+		return
+	}
+	if err = data.GetUserByUId(s.UID); err != nil {
+		return
+	}
+	c.File(data.HeadIcon)
 }

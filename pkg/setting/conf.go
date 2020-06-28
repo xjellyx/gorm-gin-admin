@@ -26,6 +26,7 @@ type ProjectConfig struct {
 	TLS           *TLS
 	IsCaptcha     bool
 	LogDir        string
+	HeadIconDir   string
 }
 
 // RedisDB 缓存的连接参数
@@ -84,6 +85,7 @@ var (
 		AdminKeyDir: "./conf/admin.key",
 		AdminPubDir: "./conf/admin.pub",
 		LogDir:      "./log",
+		HeadIconDir: "./public/static/",
 	}
 )
 

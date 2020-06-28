@@ -2,8 +2,11 @@ package mdw_sessions
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/olongfen/contrib"
 	"github.com/olongfen/contrib/session"
 	"github.com/olongfen/user_base/models"
+	"github.com/olongfen/user_base/pkg/app"
+	"github.com/olongfen/user_base/utils"
 	"net/http"
 	"strings"
 )
@@ -31,9 +34,12 @@ func CheckUserAuth(isAdmin bool) gin.HandlerFunc {
 		}
 
 		if tokenStr == "" {
-			c.JSON(http.StatusOK, gin.H{
-				"code": 500,
-				"msg":  "get token fail",
+			c.JSON(http.StatusOK, app.Response{
+				Meta: app.Meta{
+					Status: 500,
+					Error:  contrib.ErrTokenUndefined,
+				},
+				Data: nil,
 			})
 			c.Abort()
 			return
@@ -46,9 +52,12 @@ func CheckUserAuth(isAdmin bool) gin.HandlerFunc {
 
 		if isAdmin {
 			if s, err = models.AdminKey.SessionDecode(tokenStr); err != nil {
-				c.JSON(http.StatusOK, gin.H{
-					"code": 2005,
-					"msg":  "Invalid token",
+				c.JSON(http.StatusOK, app.Response{
+					Meta: app.Meta{
+						Status: 500,
+						Error:  contrib.ErrTokenInvalid,
+					},
+					Data: nil,
 				})
 				c.Abort()
 				return
@@ -57,9 +66,12 @@ func CheckUserAuth(isAdmin bool) gin.HandlerFunc {
 			// 验证用户,管理员和普通用户的密钥对不一样，所以验证两次,管理员token可以使用与普通界面
 			if s, err = models.UserKey.SessionDecode(tokenStr); err != nil {
 				if s, err = models.AdminKey.SessionDecode(tokenStr); err != nil {
-					c.JSON(http.StatusOK, gin.H{
-						"code": 2005,
-						"msg":  "Invalid token",
+					c.JSON(http.StatusOK, app.Response{
+						Meta: app.Meta{
+							Status: 500,
+							Error:  contrib.ErrTokenInvalid,
+						},
+						Data: nil,
 					})
 					c.Abort()
 					return
@@ -68,9 +80,12 @@ func CheckUserAuth(isAdmin bool) gin.HandlerFunc {
 		}
 		// 不是同一个ip地址
 		if s.IP != c.ClientIP() {
-			c.JSON(http.StatusOK, gin.H{
-				"code": 500,
-				"msg":  "ip 地址改变",
+			c.JSON(http.StatusOK, app.Response{
+				Meta: app.Meta{
+					Status: 500,
+					Error:  utils.ErrIPAddressInvalid,
+				},
+				Data: nil,
 			})
 			c.Abort()
 			return
