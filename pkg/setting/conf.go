@@ -27,6 +27,8 @@ type ProjectConfig struct {
 	IsCaptcha     bool
 	LogDir        string
 	HeadIconDir   string
+	RBACModelDir  string
+	RABCPolicyDir string
 }
 
 // RedisDB 缓存的连接参数
@@ -80,12 +82,14 @@ var (
 			DB:       0,
 			Password: utils.PubGetEnvString("RDB_PASSWORD", ""),
 		},
-		UserKeyDir:  "./conf/user.key",
-		UserPubDir:  "./conf/user.pub",
-		AdminKeyDir: "./conf/admin.key",
-		AdminPubDir: "./conf/admin.pub",
-		LogDir:      "./log",
-		HeadIconDir: "./public/static/",
+		UserKeyDir:    "./conf/user.key",
+		UserPubDir:    "./conf/user.pub",
+		AdminKeyDir:   "./conf/admin.key",
+		AdminPubDir:   "./conf/admin.pub",
+		LogDir:        "./log",
+		HeadIconDir:   "./public/static/",
+		RBACModelDir:  "./conf/model.conf",
+		RABCPolicyDir: "./conf/policy.csv",
 	}
 )
 

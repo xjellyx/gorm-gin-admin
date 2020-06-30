@@ -3,12 +3,16 @@ package ctl
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/olongfen/contrib/session"
 	"github.com/olongfen/user_base/ctl/api_v1"
 	"github.com/olongfen/user_base/middleware/cors"
 	"github.com/olongfen/user_base/middleware/mdw_sessions"
+	"github.com/olongfen/user_base/middleware/rbac"
+	"github.com/olongfen/user_base/models"
 	"github.com/olongfen/user_base/pkg/setting"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
+	"log"
 	"net/http"
 )
 
@@ -52,34 +56,35 @@ func InitRouter() (ret *gin.Engine) {
 			v1_user := v1.Group("/user")
 			v1_user.POST("/login", api_v1.Login)
 			v1_user.Use(mdw_sessions.CheckUserAuth(false))
+
 			v1_user.POST("/logout", api_v1.Logout)
-			v1_user.POST("/updateUser", api_v1.UserUpdate)
-			v1_user.GET("/getUserProfile", api_v1.GetUserProfile)
-			v1_user.POST("/changeLoginPasswd", api_v1.ChangeLoginPasswd)
-			v1_user.POST("/changePayPasswd", api_v1.ChangePayPasswd)
-			v1_user.POST("/editHeadIcon", api_v1.EditHeadIcon)
-			v1_user.POST("/getHeadIcon", api_v1.GetHeadIcon)
-			//v1_user.POST("/login", Ctrl.Login)
-			//v1_user.GET("/logout", Ctrl.Logout)
-			//v1_user.GET("/getUserDetailSelf", Ctrl.GetUserDetailSelf)
-			//v1_user.GET("/getUserBankCardList", Ctrl.GetUserBankCardList)
-			//v1_user.GET("/getUserIDCard", Ctrl.GetUserIDCard)
-			//v1_user.GET("/getUserAddressList", Ctrl.GetUserAddressList)
-			//
-			//v1_user.POST("/updateUserDetail", Ctrl.UpdateUserDetail)
-			//v1_user.POST("/addUserIDCard", Ctrl.AddUserIDCard)
-			//v1_user.POST("/addUserBankCard", Ctrl.AddUserBankCard)
-			//v1_user.POST("/addUserAddress", Ctrl.AddUserAddress)
-			//v1_user.POST("/updateUserAddress", Ctrl.UpdateUserAddress)
-			//
-			//v1_user.DELETE("/deleteUserBankCard/:number", Ctrl.DeleteUserBankCard)
-			//v1_user.DELETE("/deleteUserAddress/:id", Ctrl.DeleteUserAddress)
+			v1_user.POST("/verified", api_v1.Verified)
+			v1_user.PUT("/update", api_v1.UserUpdate)
+			v1_user.PUT("/changeLoginPwd", api_v1.ChangeLoginPwd)
+			v1_user.PUT("/changePayPwd", api_v1.ChangePayPwd)
+			v1_user.PUT("/editHeadIcon", api_v1.EditHeadIcon)
+			v1_user.GET("/getHeadIcon", api_v1.GetHeadIcon)
+			v1_user.GET("/profile", api_v1.GetUserProfile)
+
 		}
 
 		// Admin
 		{
 			v1_admin := v1.Group("/admin")
 			v1_admin.Use(mdw_sessions.CheckUserAuth(true))
+			auth, err := rbac.NewCasbinMiddleware(setting.ProjectSetting.RBACModelDir, setting.ProjectSetting.RABCPolicyDir, func(c *gin.Context) string {
+				_d, _ := c.Get("sessionTag")
+				s := _d.(*session.Session)
+				u := new(models.UserBase)
+				if err := u.GetUserByUId(s.UID); err != nil {
+					return ""
+				}
+				return u.Username
+			})
+			if err != nil {
+				log.Fatal(err)
+			}
+			_ = auth
 		}
 
 	}

@@ -16,6 +16,39 @@ definitions:
         $ref: '#/definitions/app.Meta'
         type: object
     type: object
+  utils.FormIDCard:
+    properties:
+      birthday:
+        description: 出生日期
+        type: string
+      idCard:
+        description: 身份证号
+        type: string
+      idCardAddr:
+        description: 身份证地址
+        type: string
+      issueOrg:
+        description: 身份证发证机关
+        type: string
+      name:
+        type: string
+      nation:
+        type: string
+      sex:
+        type: integer
+      validPeriod:
+        description: 有效时期
+        type: string
+    required:
+    - birthday
+    - idCard
+    - idCardAddr
+    - issueOrg
+    - name
+    - nation
+    - sex
+    - validPeriod
+    type: object
 info:
   contact: {}
   license: {}
@@ -27,12 +60,12 @@ paths:
       parameters:
       - description: 旧密码
         in: query
-        name: oldPasswd
+        name: oldPwd
         required: true
         type: string
       - description: 新密码
         in: query
-        name: newPasswd
+        name: newPwd
         required: true
         type: string
       produces:
@@ -74,7 +107,7 @@ paths:
       tags:
       - 用户
   /api/v1/getHeadIcon:
-    post:
+    get:
       consumes:
       - application/json
       produces:
@@ -106,19 +139,8 @@ paths:
       - 用户
   /api/v1/login:
     post:
-      parameters:
-      - description: 用户名
-        in: body
-        name: username
-        required: true
-        schema:
-          type: string
-      - description: 密码
-        in: body
-        name: password
-        required: true
-        schema:
-          type: string
+      consumes:
+      - application/json
       produces:
       - application/json
       responses:
@@ -130,7 +152,7 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/app.Response'
-      summary: 用户登录
+      summary: 用户登出
       tags:
       - 用户
   /api/v1/register:

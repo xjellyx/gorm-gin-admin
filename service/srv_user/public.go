@@ -25,11 +25,11 @@ func UserLogin(f *utils.LoginForm, isAdmin bool) (token string, err error) {
 		return
 	}
 	// 验证密码是否正确
-	if err = bcrypt.CompareHashAndPassword([]byte(data.LoginPasswd), []byte(f.Password)); err != nil {
+	if err = bcrypt.CompareHashAndPassword([]byte(data.LoginPwd), []byte(f.Password)); err != nil {
 		return
 	}
 
-	s.Password = data.LoginPasswd
+	s.Password = data.LoginPwd
 	if f.DeviceId != nil {
 		s.DeviceID = *f.DeviceId
 	}

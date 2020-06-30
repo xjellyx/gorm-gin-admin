@@ -46,9 +46,9 @@ func (f *LoginForm) Valid() (err error) {
 type FormEditUser struct {
 	Nickname *string `json:"nickname" form:"nickname"`
 	Username *string `json:"username" form:"username"`
-	// 	LocNum   *string `json:"locNum" form:"locNum"`
-	Phone *string `json:"phone" form:"phone"`
-	Sign  *string `json:"sign" form:"sign"`
+	Email    *string `json:"email" form:"email"`
+	Phone    *string `json:"phone" form:"phone"`
+	Sign     *string `json:"sign" form:"sign"`
 }
 
 func (f *FormEditUser) Valid() (ret map[string]interface{}, err error) {
@@ -61,9 +61,22 @@ func (f *FormEditUser) Valid() (ret map[string]interface{}, err error) {
 		err = ErrFormParamInvalid
 		return
 	} else if f.Phone != nil && len(*f.Phone) != 0 {
+		if len(RegPhoneNum.FindString(*f.Phone)) == 0 {
+			err = ErrPhoneInvalid
+			return
+		}
 		ret["phone"] = *f.Phone
 	}
-
+	if f.Email != nil && len(*f.Email) == 0 {
+		err = ErrFormParamInvalid
+		return
+	} else if f.Email != nil && len(*f.Email) != 0 {
+		if len(RegPhoneNum.FindString(*f.Email)) == 0 {
+			err = ErrEmailInvalid
+			return
+		}
+		ret["email"] = *f.Email
+	}
 	if f.Username != nil && len(*f.Username) == 0 {
 		err = ErrFormParamInvalid
 		return
@@ -103,11 +116,11 @@ func (f *FormBankCard) Valid() (err error) {
 // FormIDCard
 type FormIDCard struct {
 	Name        string `json:"name" form:"name" binding:"required"`
-	IDCard      string `json:"idCard" from:"idCard" binding:"required" `          // 身份证号
+	CardId      string `json:"cardId" from:"idCard" binding:"required" `          // 身份证号
 	IssueOrg    string `json:"issueOrg" from:"issueOrg" binding:"required"`       // 身份证发证机关
 	Birthday    string `json:"birthday" from:"birthday" binding:"required"`       // 出生日期
 	ValidPeriod string `json:"validPeriod" from:"validPeriod" binding:"required"` // 有效时期
-	IDCardAddr  string `json:"idCardAddr"from:"idCardAddr" binding:"required" `   // 身份证地址
+	CardIdAddr  string `json:"cardIdAddr"from:"idCardAddr" binding:"required" `   // 身份证地址
 	Sex         int    `json:"sex" form:"sex" binding:"required"`
 	Nation      string `json:"nation" form:"nation" binding:"required"`
 }
@@ -117,15 +130,20 @@ func (f *FormIDCard) Valid() (err error) {
 		err = ErrFormParamInvalid
 		return
 	}
-	if len(f.IDCard) == 0 {
+	if len(f.CardId) == 0 {
 		err = ErrFormParamInvalid
 		return
+	} else {
+		if len(RegIDCard.FindString(f.CardId)) == 0 {
+			err = ErrIDCardInvalid
+			return
+		}
 	}
 	if len(f.IssueOrg) == 0 {
 		err = ErrFormParamInvalid
 		return
 	}
-	if len(f.IDCardAddr) == 0 {
+	if len(f.CardIdAddr) == 0 {
 		err = ErrFormParamInvalid
 		return
 	}

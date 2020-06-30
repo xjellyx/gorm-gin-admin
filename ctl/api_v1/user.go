@@ -189,12 +189,12 @@ func GetUserProfile(c *gin.Context) {
 // @Summary 修改用户密码
 // @Produce json
 // @Accept json
-// @Param oldPasswd query string true "旧密码"
-// @Param newPasswd query string true "新密码"
+// @Param oldPwd query string true "旧密码"
+// @Param newPwd query string true "新密码"
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
 // @router /api/v1/changeLoginPasswd [post]
-func ChangeLoginPasswd(c *gin.Context) {
+func ChangeLoginPwd(c *gin.Context) {
 	var (
 		err            error
 		httpCode       = http.StatusInternalServerError
@@ -208,12 +208,12 @@ func ChangeLoginPasswd(c *gin.Context) {
 			app.NewGin(c).Response(200, "")
 		}
 	}()
-	oldPwd = c.Param("oldPasswd")
-	newPwd = c.Param("newPasswd")
+	oldPwd = c.Param("oldPwd")
+	newPwd = c.Param("newPwd")
 	if s, err = GetSession(c); err != nil {
 		return
 	}
-	if err = srv_user.ChangePasswd(s.UID, oldPwd, newPwd); err != nil {
+	if err = srv_user.ChangePwd(s.UID, oldPwd, newPwd); err != nil {
 		return
 	}
 }
@@ -223,12 +223,12 @@ func ChangeLoginPasswd(c *gin.Context) {
 // @Summary 修改用户密码
 // @Produce json
 // @Accept json
-// @Param oldPasswd query string true "旧密码"
-// @Param newPasswd query string true "新密码"
+// @Param oldPwd query string true "旧密码"
+// @Param newPwd query string true "新密码"
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
 // @router /api/v1/changeLoginPasswd [post]
-func ChangePayPasswd(c *gin.Context) {
+func ChangePayPwd(c *gin.Context) {
 	var (
 		err            error
 		httpCode       = http.StatusInternalServerError
@@ -242,12 +242,12 @@ func ChangePayPasswd(c *gin.Context) {
 			app.NewGin(c).Response(200, "")
 		}
 	}()
-	oldPwd = c.Param("oldPasswd")
-	newPwd = c.Param("newPasswd")
+	oldPwd = c.Param("oldPwd")
+	newPwd = c.Param("newPwd")
 	if s, err = GetSession(c); err != nil {
 		return
 	}
-	if err = srv_user.ChangePayPasswd(s.UID, oldPwd, newPwd); err != nil {
+	if err = srv_user.ChangePayPwd(s.UID, oldPwd, newPwd); err != nil {
 		return
 	}
 }
@@ -327,7 +327,7 @@ func EditHeadIcon(c *gin.Context) {
 // @Accept json
 // @Success 200
 // @Failure 500 {object} app.Response
-// @Router /api/v1/getHeadIcon [post]
+// @Router /api/v1/getHeadIcon [get]
 func GetHeadIcon(c *gin.Context) {
 	var (
 		err  error

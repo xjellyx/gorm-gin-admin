@@ -41,14 +41,14 @@ var doc = `{
                     {
                         "type": "string",
                         "description": "旧密码",
-                        "name": "oldPasswd",
+                        "name": "oldPwd",
                         "in": "query",
                         "required": true
                     },
                     {
                         "type": "string",
                         "description": "新密码",
-                        "name": "newPasswd",
+                        "name": "newPwd",
                         "in": "query",
                         "required": true
                     }
@@ -107,7 +107,7 @@ var doc = `{
             }
         },
         "/api/v1/getHeadIcon": {
-            "post": {
+            "get": {
                 "consumes": [
                     "application/json"
                 ],
@@ -156,33 +156,16 @@ var doc = `{
         },
         "/api/v1/login": {
             "post": {
+                "consumes": [
+                    "application/json"
+                ],
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "用户"
                 ],
-                "summary": "用户登录",
-                "parameters": [
-                    {
-                        "description": "用户名",
-                        "name": "username",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "密码",
-                        "name": "password",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
+                "summary": "用户登出",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -336,6 +319,50 @@ var doc = `{
                 "meta": {
                     "type": "object",
                     "$ref": "#/definitions/app.Meta"
+                }
+            }
+        },
+        "utils.FormIDCard": {
+            "type": "object",
+            "required": [
+                "birthday",
+                "idCard",
+                "idCardAddr",
+                "issueOrg",
+                "name",
+                "nation",
+                "sex",
+                "validPeriod"
+            ],
+            "properties": {
+                "birthday": {
+                    "description": "出生日期",
+                    "type": "string"
+                },
+                "idCard": {
+                    "description": "身份证号",
+                    "type": "string"
+                },
+                "idCardAddr": {
+                    "description": "身份证地址",
+                    "type": "string"
+                },
+                "issueOrg": {
+                    "description": "身份证发证机关",
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "nation": {
+                    "type": "string"
+                },
+                "sex": {
+                    "type": "integer"
+                },
+                "validPeriod": {
+                    "description": "有效时期",
+                    "type": "string"
                 }
             }
         }

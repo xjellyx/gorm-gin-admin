@@ -13,14 +13,17 @@ func AddUser(form *utils.AddUserForm) (ret *models.UserBase, err error) {
 	var (
 		u = new(models.UserBase)
 	)
-
+	if len(utils.RegPhoneNum.FindString(form.Phone)) == 0 {
+		err = utils.ErrPhoneInvalid
+		return
+	}
 	u.Phone = form.Phone
 	u.Username = form.Phone
 	if _d, _err := bcrypt.GenerateFromPassword([]byte(form.Password), bcrypt.DefaultCost); _err != nil {
 		err = _err
 		return
 	} else {
-		u.LoginPasswd = string(_d)
+		u.LoginPwd = string(_d)
 	}
 	u.Uid = uuid.NewV4().String()
 	if err = u.InsertUserData(); err != nil {
@@ -55,8 +58,8 @@ func EditUser(uid string, form *utils.FormEditUser) (ret *models.UserBase, err e
 	return
 }
 
-// ChangePasswd 修改密码
-func ChangePasswd(uid string, oldPasswd, newPasswd string) (err error) {
+// ChangePwd 修改密码
+func ChangePwd(uid string, oldPasswd, newPasswd string) (err error) {
 	var (
 		data = &models.UserBase{}
 	)
@@ -67,7 +70,7 @@ func ChangePasswd(uid string, oldPasswd, newPasswd string) (err error) {
 	if err = data.GetUserByUId(uid); err != nil {
 		return
 	}
-	if err = bcrypt.CompareHashAndPassword([]byte(data.LoginPasswd), []byte(oldPasswd)); err != nil {
+	if err = bcrypt.CompareHashAndPassword([]byte(data.LoginPwd), []byte(oldPasswd)); err != nil {
 		return
 	}
 	if _d, _err := bcrypt.GenerateFromPassword([]byte(newPasswd), bcrypt.DefaultCost); _err != nil {
@@ -78,8 +81,8 @@ func ChangePasswd(uid string, oldPasswd, newPasswd string) (err error) {
 	}
 }
 
-// ChangePayPasswd 修改密码
-func ChangePayPasswd(uid string, oldPasswd, newPasswd string) (err error) {
+// ChangePayPwd 修改密码
+func ChangePayPwd(uid string, oldPasswd, newPasswd string) (err error) {
 	var (
 		data = &models.UserBase{}
 	)
@@ -90,11 +93,11 @@ func ChangePayPasswd(uid string, oldPasswd, newPasswd string) (err error) {
 	if err = data.GetUserByUId(uid); err != nil {
 		return
 	}
-	if len(data.PayPasswd) == 0 {
+	if len(data.PayPwd) == 0 {
 		err = utils.ErrPayPasswdNotSet
 		return
 	}
-	if err = bcrypt.CompareHashAndPassword([]byte(data.PayPasswd), []byte(oldPasswd)); err != nil {
+	if err = bcrypt.CompareHashAndPassword([]byte(data.PayPwd), []byte(oldPasswd)); err != nil {
 		return
 	}
 	if _d, _err := bcrypt.GenerateFromPassword([]byte(newPasswd), bcrypt.DefaultCost); _err != nil {
@@ -104,3 +107,5 @@ func ChangePayPasswd(uid string, oldPasswd, newPasswd string) (err error) {
 		return data.UpdateUserOneColumn(uid, "pay_passwd", string(_d))
 	}
 }
+
+// SetUserPwd

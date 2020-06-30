@@ -27,3 +27,5 @@ tls: null
 iscaptcha: false
 logdir: ./log
 headicondir: ./public/static/
+rbacmodeldir: ./conf/model.conf
+rabcpolicydir: ./conf/policy.csv
