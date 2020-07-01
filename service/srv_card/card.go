@@ -28,7 +28,7 @@ func AddIDCard(uid string, f *utils.FormIDCard) (ret *models.UserCard, err error
 	data.Name = f.Name
 	data.CardIdAddr = f.CardIdAddr
 	data.IssueOrg = f.IssueOrg
-	data.Birthday = f.Birthday
+	data.Birthday = string(f.CardId[6:10]) + "/" + string(f.CardId[10:12]) + "/" + string(f.CardId[12:14])
 	data.Sex = f.Sex
 	data.CardId = f.CardId
 	data.Nation = f.Nation
@@ -40,4 +40,8 @@ func AddIDCard(uid string, f *utils.FormIDCard) (ret *models.UserCard, err error
 	//
 	ret = data
 	return
+}
+
+func IDCardList(pageNum, pageSize int, cond interface{}) {
+
 }

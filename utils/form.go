@@ -115,10 +115,10 @@ func (f *FormBankCard) Valid() (err error) {
 
 // FormIDCard
 type FormIDCard struct {
-	Name        string `json:"name" form:"name" binding:"required"`
-	CardId      string `json:"cardId" from:"idCard" binding:"required" `          // 身份证号
-	IssueOrg    string `json:"issueOrg" from:"issueOrg" binding:"required"`       // 身份证发证机关
-	Birthday    string `json:"birthday" from:"birthday" binding:"required"`       // 出生日期
+	Name     string `json:"name" form:"name" binding:"required"`
+	CardId   string `json:"cardId" from:"idCard" binding:"required" `    // 身份证号
+	IssueOrg string `json:"issueOrg" from:"issueOrg" binding:"required"` // 身份证发证机关
+	// Birthday    string `json:"birthday" from:"birthday" binding:"required"`       // 出生日期
 	ValidPeriod string `json:"validPeriod" from:"validPeriod" binding:"required"` // 有效时期
 	CardIdAddr  string `json:"cardIdAddr"from:"idCardAddr" binding:"required" `   // 身份证地址
 	Sex         int    `json:"sex" form:"sex" binding:"required"`
@@ -151,10 +151,10 @@ func (f *FormIDCard) Valid() (err error) {
 		err = ErrFormParamInvalid
 		return
 	}
-	if len(f.Birthday) == 0 {
-		err = ErrFormParamInvalid
-		return
-	}
+	//if len(f.Birthday) == 0 {
+	//	err = ErrFormParamInvalid
+	//	return
+	//}
 	if len(f.Name) == 0 {
 		err = ErrFormParamInvalid
 		return
