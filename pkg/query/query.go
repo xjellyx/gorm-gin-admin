@@ -1,7 +1,5 @@
 package query
 
-import "github.com/suboat/sorm/songo"
-
 // Query
 type Query struct {
 	PageNum  int
@@ -34,7 +32,7 @@ func NewQuery(pageNum int, pageSize int) *Query {
 }
 
 func (q *Query) ValidCond(cond map[string]interface{}) (err error) {
-	if q.Cond, q.Values, err = songo.ParseSQL(cond, 0); err != nil {
+	if q.Cond, q.Values, err = ParseSQL(cond, 0); err != nil {
 		return
 	}
 	return

@@ -82,7 +82,7 @@ func main() {
 	//	"$or$nickname$ne$": "select id from user_bases --",
 	//	"$or$id": []interface{}{
 	//		"$lte$1",
-	//		"(select id from user_bases)",
+	//		"$gte$3",
 	//	},
 	//})
 	//if _err != nil {
