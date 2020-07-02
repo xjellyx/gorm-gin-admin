@@ -1,6 +1,7 @@
 package models
 
 import (
+	"github.com/olongfen/user_base/pkg/query"
 	"github.com/olongfen/user_base/utils"
 	"gorm.io/gorm"
 )
@@ -82,8 +83,8 @@ func (u *UserCard) GetIDCardByCardID(cardId string) (err error) {
 }
 
 // GetIDCardList
-func GetIDCardList(pageNum int, pageSize int, cond interface{}) (ret []*UserCard, err error) {
-	if err = db.Model(&UserCard{}).Offset(pageNum).Limit(pageSize).Find(&ret).Error; err != nil {
+func GetIDCardList(q *query.Query) (ret []*UserCard, err error) {
+	if err = db.Model(&UserCard{}).Where(q.Cond, q.Values...).Offset(q.PageNum).Limit(q.PageSize).Find(&ret).Error; err != nil {
 		logModel.Errorln("[GetIDCardList] err: ", err)
 		err = utils.ErrGetDataFailed
 		return

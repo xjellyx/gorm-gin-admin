@@ -29,6 +29,7 @@ func InitModel() {
 	if db, err = gorm.Open(postgres.Open(dataSourceName), nil); err != nil {
 		logrus.Fatal(err)
 	}
+	db = db.Debug()
 	// 初始化密钥对
 	if err = UserKey.SetRSA(setting.ProjectSetting.AdminKeyDir, setting.ProjectSetting.AdminPubDir); err != nil {
 		logrus.Fatal(err)

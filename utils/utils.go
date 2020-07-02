@@ -4,6 +4,7 @@ import (
 	"os"
 	"regexp"
 	"strings"
+	"unicode"
 )
 
 var (
@@ -11,6 +12,33 @@ var (
 	RegPhoneNum = regexp.MustCompile("^([\\w-_]+(?:\\.[\\w-_]+)*)@((?:[a-z0-9]+(?:-[a-zA-Z0-9]+)*)+\\.[a-z]{2,6})$")
 	RegEmail    = regexp.MustCompile("^[1](([3][0-9])|([4][5-9])|([5][0-3,5-9])|([6][5,6])|([7][0-8])|([8][0-9])|([9][1,8,9]))[0-9]{8}$")
 )
+
+// SQLColumnToHumpStyle sql转换成驼峰模式
+func SQLColumnToHumpStyle(in string) (ret string) {
+	for i := 0; i < len(in); i++ {
+		if i > 0 && in[i-1] == '_' && in[i] != '_' {
+			s := strings.ToUpper(string(in[i]))
+			ret += s
+		} else if in[i] == '_' {
+			continue
+		} else {
+			ret += string(in[i])
+		}
+	}
+	return
+}
+
+// HumpToSQLColumnStyle 驼峰转sql
+func HumpToSQLColumnStyle(in string) (ret string) {
+	for i := 0; i < len(in); i++ {
+		if unicode.IsUpper(rune(in[i])) {
+			ret += "_" + strings.ToLower(string(in[i]))
+		} else {
+			ret += string(in[i])
+		}
+	}
+	return
+}
 
 // PubGetEnvString
 func PubGetEnvString(key string, defaultValue string) (ret string) {

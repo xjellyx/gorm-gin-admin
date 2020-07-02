@@ -9,8 +9,6 @@ import (
 	"github.com/olongfen/user_base/models"
 	"github.com/olongfen/user_base/pkg/gredis"
 	"github.com/olongfen/user_base/pkg/setting"
-	"github.com/olongfen/user_base/service/srv_user"
-	"github.com/olongfen/user_base/utils"
 	"github.com/sirupsen/logrus"
 	"net/http"
 	"os"
@@ -75,11 +73,22 @@ func main() {
 		}
 	}()
 
-	srv_user.AddUser(&utils.AddUserForm{
-		Phone:    "4543534534",
-		Password: "123456",
-	})
-
+	//srv_user.AddUser(&utils.AddUserForm{
+	//	Phone:    "4543534534",
+	//	Password: "123456",
+	//})
+	//q := query.NewQuery(1, 10)
+	//_err := q.ValidCond(map[string]interface{}{
+	//	"$or$nickname$ne$": "select id from user_bases --",
+	//	"$or$id": []interface{}{
+	//		"$lte$1",
+	//		"(select id from user_bases)",
+	//	},
+	//})
+	//if _err != nil {
+	//	panic(_err)
+	//}
+	//fmt.Println(models.GetUserList(q))
 	var state int32 = 1
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)

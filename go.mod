@@ -27,6 +27,7 @@ require (
 	github.com/robfig/cron/v3 v3.0.0 // indirect
 	github.com/satori/go.uuid v1.2.0
 	github.com/sirupsen/logrus v1.4.2
+	github.com/suboat/sorm v0.2.0
 	github.com/swaggo/gin-swagger v1.2.0
 	github.com/swaggo/swag v1.6.7
 	golang.org/x/crypto v0.0.0-20200311171314-f7b00557c8c4

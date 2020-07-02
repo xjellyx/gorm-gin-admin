@@ -1,6 +1,7 @@
 package models
 
 import (
+	"github.com/olongfen/user_base/pkg/query"
 	"github.com/olongfen/user_base/utils"
 	"gorm.io/gorm"
 )
@@ -110,8 +111,8 @@ func (u *UserBase) GetUserByPhone(phone string) (err error) {
 }
 
 // GetUserList 获取用户列表
-func GetUserList(pageNum int, pageSize int, cond interface{}) (ret []*UserBase, err error) {
-	if err = db.Where(cond).Offset(pageNum).Limit(pageSize).Find(&ret).Error; err != nil {
+func GetUserList(q *query.Query) (ret []*UserBase, err error) {
+	if err = db.Model(&UserBase{}).Where(q.Cond, q.Values...).Offset(q.PageNum).Limit(q.PageSize).Find(&ret).Error; err != nil {
 		logModel.Errorln("[GetUserList] err: ", err)
 		err = utils.ErrGetDataFailed
 		return
