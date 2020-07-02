@@ -43,6 +43,7 @@ nickname varchar(12) default '' ,
 email varchar(32) default '' ,
 head_icon varchar default '',
 sign  varchar(256) default '',
+is_admin  bool default false,
 status int,
 -- card_id int references user_cards(id),
 created_at timestamp  ,
@@ -61,6 +62,7 @@ comment on column user_bases.pay_pwd is '支付密码';
 comment on column user_bases.phone is '手机号码';
 comment on column user_bases.email is '邮箱';
 comment on column user_bases.status is '状态' ;
+comment on column user_bases.is_admin is '是否是管理员';
 comment on column user_bases.created_at is '创建时间';
 comment on column user_bases.updated_at is '更新时间';
 comment on column user_bases.deleted_at is '删除时间';

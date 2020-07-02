@@ -45,6 +45,10 @@ func UserLogin(f *utils.LoginForm, isAdmin bool) (token string, err error) {
 			return
 		}
 	} else {
+		if !data.IsAdmin {
+			err = utils.ErrActionNotAllow
+			return
+		}
 		if token, err = models.AdminKey.SessionEncode(s); err != nil {
 			return
 		}

@@ -26,6 +26,8 @@ type UserBase struct {
 	HeadIcon string `json:"headIcon"`
 	Sign     string `json:"sign" gorm:"type:varchar(256)"`
 	Status   int    `json:"status"`
+	//
+	IsAdmin bool `json:"isAdmin"`
 
 	// 外键
 	// UserCard UserCard `json:"userCard" gorm:"foreignkey:ID"`
