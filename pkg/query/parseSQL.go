@@ -314,7 +314,7 @@ func parserSQLOperator(deep int, prefix *int, sep string, k string, v interface{
 	default:
 		*prefix++
 		if _sql, _val, err2 := parserSQLUnit(k, v, *prefix, sep); err2 == nil {
-			*nameLis = append(*nameLis, "("+_sql+")")
+			*nameLis = append(*nameLis, _sql)
 			*vals = append(*vals, _val)
 		} else {
 			err = err2

@@ -52,7 +52,7 @@ func UserRegister(c *gin.Context) {
 	}
 }
 
-// Login 登录
+// UserLogin 登录
 // @tags 用户
 // @Summary 用户登录
 // @Produce json
@@ -60,8 +60,8 @@ func UserRegister(c *gin.Context) {
 // @Param password body string true "密码"
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
-// @router /api/v1/login [post]
-func Login(c *gin.Context) {
+// @router /api/v1/user/login [post]
+func UserLogin(c *gin.Context) {
 	var (
 		form     = &utils.LoginForm{}
 		err      error
@@ -85,15 +85,15 @@ func Login(c *gin.Context) {
 
 }
 
-// Login 登出
+// UserLogin 登出
 // @tags 用户
 // @Summary 用户登出
 // @Produce json
 // @Accept json
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
-// @router /api/v1/login [post]
-func Logout(c *gin.Context) {
+// @router /api/v1/user/logout [post]
+func UserLogout(c *gin.Context) {
 	var (
 		err      error
 		httpCode = http.StatusInternalServerError
@@ -115,7 +115,7 @@ func Logout(c *gin.Context) {
 
 }
 
-// UserUpdate 用户更新基本信息
+// ModifyProfile 用户更新基本信息
 // @tags 用户
 // @Summary 更新用户信息
 // @Produce json
@@ -125,8 +125,8 @@ func Logout(c *gin.Context) {
 // @Param sign body string false "签名"
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
-// @router /api/v1/userUpdate [post]
-func UserUpdate(c *gin.Context) {
+// @router /api/v1/user/modifyProfile [put]
+func ModifyProfile(c *gin.Context) {
 	var (
 		err      error
 		form     = new(utils.FormEditUser)
@@ -160,7 +160,7 @@ func UserUpdate(c *gin.Context) {
 // @Produce json
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
-// @router /api/v1/getUserProfile [get]
+// @router /api/v1/user/getUserProfile [get]
 func GetUserProfile(c *gin.Context) {
 	var (
 		err      error
@@ -184,22 +184,25 @@ func GetUserProfile(c *gin.Context) {
 
 }
 
-// ChangePayPasswd 修改密码
+// ModifyLoginPwd 修改密码
 // @tags 用户
 // @Summary 修改用户密码
 // @Produce json
 // @Accept json
-// @Param oldPwd query string true "旧密码"
-// @Param newPwd query string true "新密码"
+// @Param oldPwd body string true "旧密码"
+// @Param newPwd body string true "新密码"
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
-// @router /api/v1/changeLoginPasswd [post]
-func ChangeLoginPwd(c *gin.Context) {
+// @router /api/v1/user/modifyLoginPwd [put]
+func ModifyLoginPwd(c *gin.Context) {
 	var (
-		err            error
-		httpCode       = http.StatusInternalServerError
-		s              *session.Session
-		oldPwd, newPwd string
+		err      error
+		httpCode = http.StatusInternalServerError
+		s        *session.Session
+		f        struct {
+			OldPwd string `form:"oldPwd" binding:"required"`
+			NewPwd string `form:"newPwd" binding:"required"`
+		}
 	)
 	defer func() {
 		if err != nil {
@@ -208,32 +211,37 @@ func ChangeLoginPwd(c *gin.Context) {
 			app.NewGin(c).Response(200, "")
 		}
 	}()
-	oldPwd = c.Param("oldPwd")
-	newPwd = c.Param("newPwd")
+	if err = c.ShouldBind(&f); err != nil {
+		httpCode = 400
+		return
+	}
 	if s, err = GetSession(c); err != nil {
 		return
 	}
-	if err = srv_user.ChangePwd(s.UID, oldPwd, newPwd); err != nil {
+	if err = srv_user.ChangePwd(s.UID, f.OldPwd, f.NewPwd); err != nil {
 		return
 	}
 }
 
-// ChangePayPasswd 修改密码
+// ModifyPayPwd 修改密码
 // @tags 用户
 // @Summary 修改用户密码
 // @Produce json
 // @Accept json
-// @Param oldPwd query string true "旧密码"
-// @Param newPwd query string true "新密码"
+// @Param oldPwd body string true "旧密码"
+// @Param newPwd body string true "新密码"
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
-// @router /api/v1/changeLoginPasswd [post]
-func ChangePayPwd(c *gin.Context) {
+// @router /api/v1/user/modifyPayPwd [put]
+func ModifyPayPwd(c *gin.Context) {
 	var (
-		err            error
-		httpCode       = http.StatusInternalServerError
-		s              *session.Session
-		oldPwd, newPwd string
+		err      error
+		httpCode = http.StatusInternalServerError
+		s        *session.Session
+		f        struct {
+			OldPwd string `form:"oldPwd" binding:"required"`
+			NewPwd string `form:"newPwd" binding:"required"`
+		}
 	)
 	defer func() {
 		if err != nil {
@@ -242,26 +250,28 @@ func ChangePayPwd(c *gin.Context) {
 			app.NewGin(c).Response(200, "")
 		}
 	}()
-	oldPwd = c.Param("oldPwd")
-	newPwd = c.Param("newPwd")
+	if err = c.ShouldBind(&f); err != nil {
+		httpCode = 400
+		return
+	}
 	if s, err = GetSession(c); err != nil {
 		return
 	}
-	if err = srv_user.ChangePayPwd(s.UID, oldPwd, newPwd); err != nil {
+	if err = srv_user.ChangePayPwd(s.UID, f.OldPwd, f.NewPwd); err != nil {
 		return
 	}
 }
 
-// EditHeadIcon 修改用户头像
+// ModifyHeadIcon 修改用户头像
 // @tags 用户
 // @Summary 修改用户头像
 // @Produce json
 // @Accept  json
-// @Param headIcon query string true "头像"
+// @Param headIcon body string true "头像"
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
-// @Router /api/v1/editHeadIcon [post]
-func EditHeadIcon(c *gin.Context) {
+// @Router /api/v1/user/modifyHeadIcon [put]
+func ModifyHeadIcon(c *gin.Context) {
 
 	var (
 		err      error
@@ -325,9 +335,9 @@ func EditHeadIcon(c *gin.Context) {
 // @Summary 获取用户头像
 // @Produce json
 // @Accept json
-// @Success 200
+// @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
-// @Router /api/v1/getHeadIcon [get]
+// @Router /api/v1/user/getHeadIcon [get]
 func GetHeadIcon(c *gin.Context) {
 	var (
 		err  error
@@ -346,4 +356,40 @@ func GetHeadIcon(c *gin.Context) {
 		return
 	}
 	c.File(data.HeadIcon)
+}
+
+// @tags 用户
+// @Title 用户设置支付密码
+// @Summary 用户设置支付密码
+// @Description 用户设置支付密码
+// @Accept json
+// @Produce json
+// @Param pwd body string true "密码"
+// @Success 200 {object} app.Response
+// @Failure 500 {object} app.Response
+// @Router /api/v1/user/setPayPwd/ [post]
+func SetPayPwd(c *gin.Context) {
+	var (
+		sess     *session.Session
+		err      error
+		httpCode = 500
+		pwd      string
+	)
+	defer func() {
+		if err != nil {
+			app.NewGin(c).Response(httpCode, err.Error())
+		}
+	}()
+	if pwd = c.PostForm("pwd"); len(pwd) == 0 {
+		httpCode = 400
+		err = contrib.ErrParamInvalid
+		return
+	}
+	if sess, err = GetSession(c); err != nil {
+		return
+	}
+	if err = srv_user.SetUserPayPwd(sess.UID, pwd); err != nil {
+		return
+	}
+	app.NewGin(c).Response(200, nil)
 }

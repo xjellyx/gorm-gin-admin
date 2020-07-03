@@ -1,3 +1,4 @@
-p,user,getHeadIcon,*
-p,user,editHeadIcon,*
-g,4543534534,user
+p,admin,getHeadIcon,*
+p,admin,profile,*
+p,admin,userList,*
+g,4543534534,admin

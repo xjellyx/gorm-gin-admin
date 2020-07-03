@@ -25,7 +25,7 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/v1/changeLoginPasswd": {
+        "/api/v1/admin/login": {
             "post": {
                 "consumes": [
                     "application/json"
@@ -34,23 +34,27 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "用户"
+                    "管理员"
                 ],
-                "summary": "修改用户密码",
+                "summary": "管理员登录",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "旧密码",
-                        "name": "oldPwd",
-                        "in": "query",
-                        "required": true
+                        "description": "用户名",
+                        "name": "username",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
                     },
                     {
-                        "type": "string",
-                        "description": "新密码",
-                        "name": "newPwd",
-                        "in": "query",
-                        "required": true
+                        "description": "密码",
+                        "name": "password",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 ],
                 "responses": {
@@ -69,7 +73,7 @@ var doc = `{
                 }
             }
         },
-        "/api/v1/editHeadIcon": {
+        "/api/v1/admin/logout": {
             "post": {
                 "consumes": [
                     "application/json"
@@ -78,94 +82,49 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    "用户"
+                    "管理员"
                 ],
-                "summary": "修改用户头像",
+                "summary": "管理员登出",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/admin/userList": {
+            "get": {
+                "description": "获取用户列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "管理员"
+                ],
+                "summary": "获取用户列表",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "头像",
-                        "name": "headIcon",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
+                        "description": "查询数据",
+                        "name": "{}",
+                        "in": "body",
+                        "required": true,
                         "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
+                            "$ref": "#/definitions/utils.FormUserList"
                         }
                     }
-                }
-            }
-        },
-        "/api/v1/getHeadIcon": {
-            "get": {
-                "consumes": [
-                    "application/json"
                 ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "用户"
-                ],
-                "summary": "获取用户头像",
-                "responses": {
-                    "200": {},
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/getUserProfile": {
-            "get": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "用户"
-                ],
-                "summary": "获取个人信息",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/login": {
-            "post": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "用户"
-                ],
-                "summary": "用户登出",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -235,8 +194,269 @@ var doc = `{
                 }
             }
         },
-        "/api/v1/userUpdate": {
+        "/api/v1/user/getHeadIcon": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户"
+                ],
+                "summary": "获取用户头像",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/user/getUserProfile": {
+            "get": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户"
+                ],
+                "summary": "获取个人信息",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/user/login": {
             "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户"
+                ],
+                "summary": "用户登录",
+                "parameters": [
+                    {
+                        "description": "用户名",
+                        "name": "username",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "密码",
+                        "name": "password",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/user/logout": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户"
+                ],
+                "summary": "用户登出",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/user/modifyHeadIcon": {
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户"
+                ],
+                "summary": "修改用户头像",
+                "parameters": [
+                    {
+                        "description": "头像",
+                        "name": "headIcon",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/user/modifyLoginPwd": {
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户"
+                ],
+                "summary": "修改用户密码",
+                "parameters": [
+                    {
+                        "description": "旧密码",
+                        "name": "oldPwd",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "新密码",
+                        "name": "newPwd",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/user/modifyPayPwd": {
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户"
+                ],
+                "summary": "修改用户密码",
+                "parameters": [
+                    {
+                        "description": "旧密码",
+                        "name": "oldPwd",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "description": "新密码",
+                        "name": "newPwd",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/user/modifyProfile": {
+            "put": {
                 "produces": [
                     "application/json"
                 ],
@@ -293,6 +513,82 @@ var doc = `{
                     }
                 }
             }
+        },
+        "/api/v1/user/setPayPwd/": {
+            "post": {
+                "description": "用户设置支付密码",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户"
+                ],
+                "summary": "用户设置支付密码",
+                "parameters": [
+                    {
+                        "description": "密码",
+                        "name": "pwd",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/user/verified": {
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "用户"
+                ],
+                "summary": "用户实名认证",
+                "parameters": [
+                    {
+                        "description": "实名认证Form",
+                        "name": "form",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/utils.FormIDCard"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -325,25 +621,19 @@ var doc = `{
         "utils.FormIDCard": {
             "type": "object",
             "required": [
-                "birthday",
-                "idCard",
-                "idCardAddr",
+                "cardId",
+                "cardIdAddr",
                 "issueOrg",
                 "name",
                 "nation",
-                "sex",
                 "validPeriod"
             ],
             "properties": {
-                "birthday": {
-                    "description": "出生日期",
-                    "type": "string"
-                },
-                "idCard": {
+                "cardId": {
                     "description": "身份证号",
                     "type": "string"
                 },
-                "idCardAddr": {
+                "cardIdAddr": {
                     "description": "身份证地址",
                     "type": "string"
                 },
@@ -355,13 +645,34 @@ var doc = `{
                     "type": "string"
                 },
                 "nation": {
+                    "description": "Sex         int    ` + "`" + `json:\"sex\" form:\"sex\" binding:\"required\"` + "`" + `",
                     "type": "string"
                 },
-                "sex": {
+                "validPeriod": {
+                    "description": "Birthday    string ` + "`" + `json:\"birthday\" from:\"birthday\" binding:\"required\"` + "`" + `       // 出生日期",
+                    "type": "string"
+                }
+            }
+        },
+        "utils.FormUserList": {
+            "type": "object",
+            "properties": {
+                "createdTime": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "pageNum": {
                     "type": "integer"
                 },
-                "validPeriod": {
-                    "description": "有效时期",
+                "pageSize": {
+                    "type": "integer"
+                },
+                "status": {
+                    "type": "string"
+                },
+                "username": {
                     "type": "string"
                 }
             }

@@ -3,6 +3,7 @@ package ctl
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	log2 "github.com/olongfen/contrib/log"
 	"github.com/olongfen/contrib/session"
 	"github.com/olongfen/user_base/ctl/api_v1"
 	"github.com/olongfen/user_base/middleware/cors"
@@ -14,6 +15,7 @@ import (
 	"github.com/swaggo/gin-swagger/swaggerFiles"
 	"log"
 	"net/http"
+	"time"
 )
 
 // InitRouter 初始化路由模块
@@ -30,7 +32,23 @@ func InitRouter() (ret *gin.Engine) {
 	// 添加中间件
 	engine.Use(gin.Recovery())
 	engine.Use(cors.CORS())
-
+	engine.Use(gin.LoggerWithConfig(gin.LoggerConfig{
+		Formatter: func(param gin.LogFormatterParams) string {
+			// 你的自定义格式
+			return fmt.Sprintf(`address: %s, time: [%s], method: %s, path: %s, proto: %s, code: %d, latency: %s, agent: %s, message: %s`,
+				param.ClientIP,
+				param.TimeStamp.Format(time.RFC1123),
+				param.Method,
+				param.Path,
+				param.Request.Proto,
+				param.StatusCode,
+				param.Latency,
+				param.Request.UserAgent(),
+				param.ErrorMessage,
+			)
+		},
+		Output: log2.NewLogFile("./log/ctl", !setting.ProjectSetting.IsProduct).Out,
+	}))
 	// 没有路由请求
 	engine.NoRoute(func(c *gin.Context) {
 		c.JSON(http.StatusNotFound, map[string]interface{}{
@@ -54,23 +72,25 @@ func InitRouter() (ret *gin.Engine) {
 		v1.POST("/register", api_v1.UserRegister)
 		{
 			v1_user := v1.Group("/user")
-			v1_user.POST("/login", api_v1.Login)
+			v1_user.POST("/login", api_v1.UserLogin)
 			v1_user.Use(mdw_sessions.CheckUserAuth(false))
 
-			v1_user.POST("/logout", api_v1.Logout)
+			v1_user.POST("/logout", api_v1.UserLogout)
 			v1_user.POST("/verified", api_v1.Verified)
-			v1_user.PUT("/update", api_v1.UserUpdate)
-			v1_user.PUT("/changeLoginPwd", api_v1.ChangeLoginPwd)
-			v1_user.PUT("/changePayPwd", api_v1.ChangePayPwd)
-			v1_user.PUT("/editHeadIcon", api_v1.EditHeadIcon)
+			v1_user.POST("/setPayPwd", api_v1.SetPayPwd)
+			v1_user.PUT("/modifyProfile", api_v1.ModifyProfile)
+			v1_user.PUT("/modifyLoginPwd", api_v1.ModifyLoginPwd)
+			v1_user.PUT("/modifyPayPwd", api_v1.ModifyPayPwd)
+			v1_user.PUT("/modifyHeadIcon", api_v1.ModifyHeadIcon)
 			v1_user.GET("/getHeadIcon", api_v1.GetHeadIcon)
 			v1_user.GET("/profile", api_v1.GetUserProfile)
 
 		}
 
-		// Admin
+		// Adminmodify
 		{
 			v1_admin := v1.Group("/admin")
+			v1_admin.POST("/login", api_v1.AdminLogin)
 			v1_admin.Use(mdw_sessions.CheckUserAuth(true))
 			auth, err := rbac.NewCasbinMiddleware(setting.ProjectSetting.RBACModelDir, setting.ProjectSetting.RABCPolicyDir, func(c *gin.Context) string {
 				_d, _ := c.Get("sessionTag")
@@ -84,7 +104,11 @@ func InitRouter() (ret *gin.Engine) {
 			if err != nil {
 				log.Fatal(err)
 			}
-			_ = auth
+			v1_admin.POST("/logout", auth.RequiresPermissions([]string{"logout:admin"}), api_v1.AdminLogout)
+			v1_admin.POST("/editUser", auth.RequiresPermissions([]string{"editUser:rootAdmin"}))
+			v1_admin.GET("/userList", auth.RequiresPermissions([]string{"userList:admin"}), api_v1.UserList)
+			// v1_admin.GET("/profile", auth.RequiresPermissions([]string{"profile:admin"}), api_v1.GetUserProfile)
+
 		}
 
 	}

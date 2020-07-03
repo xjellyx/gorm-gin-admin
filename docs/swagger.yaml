@@ -18,13 +18,10 @@ definitions:
     type: object
   utils.FormIDCard:
     properties:
-      birthday:
-        description: 出生日期
-        type: string
-      idCard:
+      cardId:
         description: 身份证号
         type: string
-      idCardAddr:
+      cardIdAddr:
         description: 身份证地址
         type: string
       issueOrg:
@@ -33,41 +30,55 @@ definitions:
       name:
         type: string
       nation:
+        description: Sex         int    `json:"sex" form:"sex" binding:"required"`
         type: string
-      sex:
-        type: integer
       validPeriod:
-        description: 有效时期
+        description: Birthday    string `json:"birthday" from:"birthday" binding:"required"`       // 出生日期
         type: string
     required:
-    - birthday
-    - idCard
-    - idCardAddr
+    - cardId
+    - cardIdAddr
     - issueOrg
     - name
     - nation
-    - sex
     - validPeriod
+    type: object
+  utils.FormUserList:
+    properties:
+      createdTime:
+        type: string
+      id:
+        type: string
+      pageNum:
+        type: integer
+      pageSize:
+        type: integer
+      status:
+        type: string
+      username:
+        type: string
     type: object
 info:
   contact: {}
   license: {}
 paths:
-  /api/v1/changeLoginPasswd:
+  /api/v1/admin/login:
     post:
       consumes:
       - application/json
       parameters:
-      - description: 旧密码
-        in: query
-        name: oldPwd
+      - description: 用户名
+        in: body
+        name: username
         required: true
-        type: string
-      - description: 新密码
-        in: query
-        name: newPwd
+        schema:
+          type: string
+      - description: 密码
+        in: body
+        name: password
         required: true
-        type: string
+        schema:
+          type: string
       produces:
       - application/json
       responses:
@@ -79,19 +90,39 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/app.Response'
-      summary: 修改用户密码
+      summary: 管理员登录
       tags:
-      - 用户
-  /api/v1/editHeadIcon:
+      - 管理员
+  /api/v1/admin/logout:
     post:
       consumes:
       - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 管理员登出
+      tags:
+      - 管理员
+  /api/v1/admin/userList:
+    get:
+      consumes:
+      - application/json
+      description: 获取用户列表
       parameters:
-      - description: 头像
-        in: query
-        name: headIcon
+      - description: 查询数据
+        in: body
+        name: '{}'
         required: true
-        type: string
+        schema:
+          $ref: '#/definitions/utils.FormUserList'
       produces:
       - application/json
       responses:
@@ -103,58 +134,9 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/app.Response'
-      summary: 修改用户头像
+      summary: 获取用户列表
       tags:
-      - 用户
-  /api/v1/getHeadIcon:
-    get:
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      responses:
-        "200": {}
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/app.Response'
-      summary: 获取用户头像
-      tags:
-      - 用户
-  /api/v1/getUserProfile:
-    get:
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/app.Response'
-      summary: 获取个人信息
-      tags:
-      - 用户
-  /api/v1/login:
-    post:
-      consumes:
-      - application/json
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/app.Response'
-      summary: 用户登出
-      tags:
-      - 用户
+      - 管理员
   /api/v1/register:
     post:
       parameters:
@@ -189,8 +171,176 @@ paths:
       summary: 用户注册
       tags:
       - 用户
-  /api/v1/userUpdate:
+  /api/v1/user/getHeadIcon:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 获取用户头像
+      tags:
+      - 用户
+  /api/v1/user/getUserProfile:
+    get:
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 获取个人信息
+      tags:
+      - 用户
+  /api/v1/user/login:
     post:
+      parameters:
+      - description: 用户名
+        in: body
+        name: username
+        required: true
+        schema:
+          type: string
+      - description: 密码
+        in: body
+        name: password
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 用户登录
+      tags:
+      - 用户
+  /api/v1/user/logout:
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 用户登出
+      tags:
+      - 用户
+  /api/v1/user/modifyHeadIcon:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 头像
+        in: body
+        name: headIcon
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 修改用户头像
+      tags:
+      - 用户
+  /api/v1/user/modifyLoginPwd:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 旧密码
+        in: body
+        name: oldPwd
+        required: true
+        schema:
+          type: string
+      - description: 新密码
+        in: body
+        name: newPwd
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 修改用户密码
+      tags:
+      - 用户
+  /api/v1/user/modifyPayPwd:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 旧密码
+        in: body
+        name: oldPwd
+        required: true
+        schema:
+          type: string
+      - description: 新密码
+        in: body
+        name: newPwd
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 修改用户密码
+      tags:
+      - 用户
+  /api/v1/user/modifyProfile:
+    put:
       parameters:
       - description: 昵称
         in: body
@@ -224,6 +374,55 @@ paths:
           schema:
             $ref: '#/definitions/app.Response'
       summary: 更新用户信息
+      tags:
+      - 用户
+  /api/v1/user/setPayPwd/:
+    post:
+      consumes:
+      - application/json
+      description: 用户设置支付密码
+      parameters:
+      - description: 密码
+        in: body
+        name: pwd
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 用户设置支付密码
+      tags:
+      - 用户
+  /api/v1/user/verified:
+    post:
+      parameters:
+      - description: 实名认证Form
+        in: body
+        name: form
+        required: true
+        schema:
+          $ref: '#/definitions/utils.FormIDCard'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 用户实名认证
       tags:
       - 用户
 swagger: "2.0"

@@ -4,6 +4,7 @@ import (
 	"errors"
 	lcasbin "github.com/casbin/casbin"
 	"github.com/gin-gonic/gin"
+	"github.com/olongfen/user_base/pkg/app"
 	"log"
 	"reflect"
 	"sort"
@@ -92,7 +93,8 @@ func (am *GinRbac) RequiresPermissions(permissions []string, opts ...Option) gin
 		// Look up current subject.
 		sub := am.subFn(c)
 		if sub == "" {
-			c.AbortWithStatus(401)
+			app.NewGin(c).Response(401, "casbnin check failed")
+			c.Abort()
 			return
 		}
 
@@ -104,12 +106,15 @@ func (am *GinRbac) RequiresPermissions(permissions []string, opts ...Option) gin
 				if obj == "" || act == "" {
 					// Can not handle any illegal permission strings.
 					log.Println("illegal permission string: ", permission)
-					c.AbortWithStatus(500)
+					app.NewGin(c).Response(500, "illegal permission")
+					c.Abort()
 					return
 				}
 
 				if ok := am.enforcer.Enforce(sub, obj, act); !ok {
-					c.AbortWithStatus(401)
+					println(sub, " ", obj, " ", act)
+					app.NewGin(c).Response(401, "casbnin check failed")
+					c.Abort()
 					return
 				}
 			}
@@ -120,7 +125,8 @@ func (am *GinRbac) RequiresPermissions(permissions []string, opts ...Option) gin
 				obj, act := parsePermissionStrings(permission)
 				if obj == "" || act == "" {
 					log.Println("illegal permission string: ", permission)
-					c.AbortWithStatus(500)
+					app.NewGin(c).Response(500, "illegal permission")
+					c.Abort()
 					continue
 				}
 
@@ -129,7 +135,8 @@ func (am *GinRbac) RequiresPermissions(permissions []string, opts ...Option) gin
 					return
 				}
 			}
-			c.AbortWithStatus(401)
+			app.NewGin(c).Response(401, "casbnin check failed")
+			c.Abort()
 		}
 	}
 }

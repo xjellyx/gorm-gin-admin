@@ -3,19 +3,18 @@ package models
 import (
 	"github.com/olongfen/user_base/pkg/query"
 	"github.com/olongfen/user_base/utils"
-	"gorm.io/gorm"
 )
 
 // UserCard
 type UserCard struct {
-	gorm.Model
+	Model
 	Uid string `json:"uid" gorm:"type:varchar(36); unique_index"`
 	//
 	Name        string `json:"name" `
 	CardId      string `json:"cardId" gorm:"unique_index;type:varchar(18)" ` // 身份证号
 	IssueOrg    string `json:"issueOrg" `                                    // 身份证发证机关
 	Birthday    string `json:"birthday" gorm:"type:varchar(12)"`             // 出生日期
-	ValidPeriod string `json:"validPeriod"  gorm:"type:varchar(12)"`         // 有效时期
+	ValidPeriod string `json:"validPeriod"  gorm:"type:varchar(24)"`         // 有效时期
 	CardIdAddr  string `json:"cardIdAddr"  gorm:"type:varchar(64)"`          // 身份证地址
 	Sex         int    `json:"sex" `
 	Nation      string `json:"nation" `

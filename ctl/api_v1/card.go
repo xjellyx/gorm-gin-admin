@@ -16,7 +16,7 @@ import (
 // @Param form body utils.FormIDCard true "实名认证Form"
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
-// @router /api/v1/register [post]
+// @router /api/v1/user/verified [post]
 func Verified(c *gin.Context) {
 	var (
 		s        *session.Session

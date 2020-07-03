@@ -4,11 +4,12 @@
 
 create table if not exists user_cards(
     id bigserial not null primary key ,
+    uid varchar(36) default '' unique  ,
     name varchar not null ,
     card_id varchar(18) unique ,
     issue_org varchar,
     birthday varchar(12),
-    valid_period varchar(12),
+    valid_period varchar(24),
     card_id_addr varchar(64),
     sex int ,
     nation varchar,
@@ -19,6 +20,7 @@ create table if not exists user_cards(
 create index if not exists user_cards_card_id on user_cards(card_id);
 
 comment on column user_cards.name is '姓名';
+comment on column user_cards.uid is '唯一uid';
 comment on column user_cards.card_id is '身份证号码';
 comment on column user_cards.issue_org is '身份证发证机关';
 comment on column user_cards.birthday is '出生日期';

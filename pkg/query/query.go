@@ -31,9 +31,9 @@ func NewQuery(pageNum int, pageSize int) *Query {
 	return q
 }
 
-func (q *Query) ValidCond(cond map[string]interface{}) (err error) {
+func (q *Query) ValidCond(cond map[string]interface{}) (ret *Query, err error) {
 	if q.Cond, q.Values, err = ParseSQL(cond, 0); err != nil {
 		return
 	}
-	return
+	return q, nil
 }

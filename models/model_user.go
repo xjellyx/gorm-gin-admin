@@ -3,7 +3,6 @@ package models
 import (
 	"github.com/olongfen/user_base/pkg/query"
 	"github.com/olongfen/user_base/utils"
-	"gorm.io/gorm"
 )
 
 const (
@@ -15,8 +14,8 @@ const (
 
 // UserBase 用户信息
 type UserBase struct {
-	gorm.Model
-	Uid      string `json:"uid" gorm:"type:varchar(36); unique_index"`
+	Model
+	Uid      string `json:"-" gorm:"type:varchar(36); unique_index"`
 	Username string `json:"username" gorm:"type:varchar(16); unique_index"`
 	Phone    string `json:"phone" gorm:"type:varchar(11); unique_index"`
 	LoginPwd string `json:"-" gorm:"type:varchar(16)"`
@@ -27,7 +26,7 @@ type UserBase struct {
 	Sign     string `json:"sign" gorm:"type:varchar(256)"`
 	Status   int    `json:"status"`
 	//
-	IsAdmin bool `json:"isAdmin"`
+	IsAdmin bool `json:"isAdmin"  gorm:"default:false"`
 
 	// 外键
 	// UserCard UserCard `json:"userCard" gorm:"foreignkey:ID"`
@@ -94,7 +93,7 @@ func (u *UserBase) GetUserByUId(uid string) (err error) {
 
 // GetUserByUsername 通过username获取用户信息
 func (u *UserBase) GetUserByUsername(username string) (err error) {
-	if err = db.First(u, "username = ?", username).Error; err != nil {
+	if err = db.Find(u, "username = ?", username).Error; err != nil {
 		logModel.Errorln("[GetUserByUsername] err: ", err)
 		err = utils.ErrGetDataFailed
 		return

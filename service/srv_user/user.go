@@ -3,6 +3,7 @@ package srv_user
 import (
 	"encoding/json"
 	"github.com/olongfen/user_base/models"
+	"github.com/olongfen/user_base/pkg/query"
 	"github.com/olongfen/user_base/utils"
 	uuid "github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
@@ -77,7 +78,7 @@ func ChangePwd(uid string, oldPasswd, newPasswd string) (err error) {
 		err = _err
 		return
 	} else {
-		return data.UpdateUserOneColumn(uid, "login_passwd", string(_d))
+		return data.UpdateUserOneColumn(uid, "login_pwd", string(_d))
 	}
 }
 
@@ -94,7 +95,7 @@ func ChangePayPwd(uid string, oldPasswd, newPasswd string) (err error) {
 		return
 	}
 	if len(data.PayPwd) == 0 {
-		err = utils.ErrPayPasswdNotSet
+		err = utils.ErrPayPwdNotSet
 		return
 	}
 	if err = bcrypt.CompareHashAndPassword([]byte(data.PayPwd), []byte(oldPasswd)); err != nil {
@@ -104,8 +105,48 @@ func ChangePayPwd(uid string, oldPasswd, newPasswd string) (err error) {
 		err = _err
 		return
 	} else {
-		return data.UpdateUserOneColumn(uid, "pay_passwd", string(_d))
+		return data.UpdateUserOneColumn(uid, "pay_pwd", string(_d))
 	}
 }
 
-// SetUserPwd
+// SetUserPayPwd
+func SetUserPayPwd(uid string, pwd string) (err error) {
+	u := new(models.UserBase)
+	if err = u.GetUserByUId(uid); err != nil {
+		return
+	}
+	if len(u.PayPwd) > 0 {
+		err = utils.ErrActionNotAllow
+		return
+	}
+	if _d, _err := bcrypt.GenerateFromPassword([]byte(pwd), bcrypt.DefaultCost); _err != nil {
+		err = _err
+		return
+	} else {
+		return u.UpdateUserOneColumn(uid, "pay_pwd", string(_d))
+	}
+}
+
+// GetUserList
+func GetUserList(uid string, form *utils.FormUserList) (ret []*models.UserBase, err error) {
+	cond := map[string]interface{}{}
+	if form.Username != "" {
+		cond["username"] = form.Username
+	}
+	if form.Status != "" {
+		cond["status"] = form.Status
+	}
+	if form.ID != "" {
+		cond["id"] = form.ID
+	}
+	if form.CreatedTime != "" {
+		cond["created_at"] = form.CreatedTime
+	}
+	var (
+		q *query.Query
+	)
+	if q, err = query.NewQuery(form.PageNum, form.PageSize).ValidCond(cond); err != nil {
+		return
+	}
+	return models.GetUserList(q)
+}

@@ -121,8 +121,8 @@ type FormIDCard struct {
 	// Birthday    string `json:"birthday" from:"birthday" binding:"required"`       // 出生日期
 	ValidPeriod string `json:"validPeriod" from:"validPeriod" binding:"required"` // 有效时期
 	CardIdAddr  string `json:"cardIdAddr"from:"idCardAddr" binding:"required" `   // 身份证地址
-	Sex         int    `json:"sex" form:"sex" binding:"required"`
-	Nation      string `json:"nation" form:"nation" binding:"required"`
+	// Sex         int    `json:"sex" form:"sex" binding:"required"`
+	Nation string `json:"nation" form:"nation" binding:"required"`
 }
 
 func (f *FormIDCard) Valid() (err error) {
@@ -224,4 +224,14 @@ type AddUserForm struct {
 	Phone    string `form:"phone" binding:"required"`
 	Password string `form:"password" binding:"required"`
 	Code     string `form:"code"`
+}
+
+// FormUserList
+type FormUserList struct {
+	ID          string `json:"id" form:"id"`
+	Username    string `json:"username" form:"username" `
+	CreatedTime string `json:"createdTime" form:"createdTime" `
+	Status      string `json:"status" form:"status"`
+	PageSize    int    `json:"pageSize" form:"pageSize" `
+	PageNum     int    `json:"pageNum" form:"pageNum" `
 }
