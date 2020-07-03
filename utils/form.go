@@ -228,10 +228,10 @@ type AddUserForm struct {
 
 // FormUserList
 type FormUserList struct {
-	ID          string `json:"id" form:"id"`
-	Username    string `json:"username" form:"username" `
-	CreatedTime string `json:"createdTime" form:"createdTime" `
-	Status      string `json:"status" form:"status"`
+	ID          string `json:"id" form:"id"`                    // ID
+	Username    string `json:"username" form:"username" `       // 用户名
+	CreatedTime string `json:"createdTime" form:"createdTime" ` // 创建时间
+	Status      string `json:"status" form:"status"`            // 状态
 	PageSize    int    `json:"pageSize" form:"pageSize" `
 	PageNum     int    `json:"pageNum" form:"pageNum" `
 }

@@ -46,17 +46,29 @@ definitions:
   utils.FormUserList:
     properties:
       createdTime:
-        type: string
+        description: 创建时间
+        items:
+          type: string
+        type: array
       id:
-        type: string
+        description: ID
+        items:
+          type: string
+        type: array
       pageNum:
         type: integer
       pageSize:
         type: integer
       status:
-        type: string
+        description: 状态
+        items:
+          type: string
+        type: array
       username:
-        type: string
+        description: 用户名
+        items:
+          type: string
+        type: array
     type: object
 info:
   contact: {}

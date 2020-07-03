@@ -225,20 +225,20 @@ func parserSQL(m map[string]interface{}, prefix int, sep string) (sql string, va
 }
 
 // parserSQLOperator 解析操作符
-func parserSQLOperator(deep int, prefix *int, sep string, k string, v interface{}, nameLis *[]string, vals *[]interface{}) (err error) {
+func parserSQLOperator(deep int, prefix *int, sep string, key string, val interface{}, nameLis *[]string, vals *[]interface{}) (err error) {
 	if deep+1 >= ParseMapMax {
 		err = ErrMapDeepOutOf
 		return
 	}
 	oper := ""
-	oper, k = isKeyOperator(k)
+	oper, key = isKeyOperator(key)
 	switch oper {
 	case TagQueryKeyOr, TagQueryKeyAnd:
 		// 解析语句
 		var _nameLis []string
-		_lis, ok := v.([]interface{})
+		_lis, ok := val.([]interface{})
 		if !ok {
-			_lis = []interface{}{v} // 默认都是数组
+			_lis = []interface{}{val} // 默认都是数组
 		}
 		for _, v2 := range _lis {
 			switch _v := v2.(type) {
@@ -294,7 +294,7 @@ func parserSQLOperator(deep int, prefix *int, sep string, k string, v interface{
 			default:
 				// string int 等
 				*prefix++
-				if _sql, _val, err2 := parserSQLUnit(k, _v, *prefix, sep); err2 == nil {
+				if _sql, _val, err2 := parserSQLUnit(key, _v, *prefix, sep); err2 == nil {
 					_nameLis = append(_nameLis, _sql)
 					*vals = append(*vals, _val)
 				} else {
@@ -313,7 +313,7 @@ func parserSQLOperator(deep int, prefix *int, sep string, k string, v interface{
 		}
 	default:
 		*prefix++
-		if _sql, _val, err2 := parserSQLUnit(k, v, *prefix, sep); err2 == nil {
+		if _sql, _val, err2 := parserSQLUnit(key, val, *prefix, sep); err2 == nil {
 			*nameLis = append(*nameLis, _sql)
 			*vals = append(*vals, _val)
 		} else {

@@ -658,10 +658,18 @@ var doc = `{
             "type": "object",
             "properties": {
                 "createdTime": {
-                    "type": "string"
+                    "description": "创建时间",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "id": {
-                    "type": "string"
+                    "description": "ID",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "pageNum": {
                     "type": "integer"
@@ -670,10 +678,18 @@ var doc = `{
                     "type": "integer"
                 },
                 "status": {
-                    "type": "string"
+                    "description": "状态",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 },
                 "username": {
-                    "type": "string"
+                    "description": "用户名",
+                    "type": "array",
+                    "items": {
+                        "type": "string"
+                    }
                 }
             }
         }

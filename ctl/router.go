@@ -35,16 +35,16 @@ func InitRouter() (ret *gin.Engine) {
 	engine.Use(gin.LoggerWithConfig(gin.LoggerConfig{
 		Formatter: func(param gin.LogFormatterParams) string {
 			// 你的自定义格式
-			return fmt.Sprintf(`address: %s, time: [%s], method: %s, path: %s, proto: %s, code: %d, latency: %s, agent: %s, message: %s`,
+			return fmt.Sprintf(`address: %s, time: [%s], method: %s,  message: %s `+"\n"+`path: %s, proto: %s, code: %d, latency: %s, agent: %s`+"\n",
 				param.ClientIP,
 				param.TimeStamp.Format(time.RFC1123),
 				param.Method,
+				param.ErrorMessage,
 				param.Path,
 				param.Request.Proto,
 				param.StatusCode,
 				param.Latency,
 				param.Request.UserAgent(),
-				param.ErrorMessage,
 			)
 		},
 		Output: log2.NewLogFile("./log/ctl", !setting.ProjectSetting.IsProduct).Out,

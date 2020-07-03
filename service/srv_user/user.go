@@ -7,6 +7,7 @@ import (
 	"github.com/olongfen/user_base/utils"
 	uuid "github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
+	"strings"
 )
 
 // AddUser 添加哟个用户
@@ -131,16 +132,21 @@ func SetUserPayPwd(uid string, pwd string) (err error) {
 func GetUserList(uid string, form *utils.FormUserList) (ret []*models.UserBase, err error) {
 	cond := map[string]interface{}{}
 	if form.Username != "" {
-		cond["username"] = form.Username
+		cond["$and$username"] = utils.SpiltInterfaceList(form.Username, ",")
 	}
 	if form.Status != "" {
-		cond["status"] = form.Status
+		cond["$and$status"] = utils.SpiltInterfaceList(form.Status, ",")
 	}
 	if form.ID != "" {
-		cond["id"] = form.ID
+		var d []interface{}
+		for _, v := range strings.Split(form.ID, ",") {
+			d = append(d, v)
+		}
+		cond["$and$id"] = d
+
 	}
 	if form.CreatedTime != "" {
-		cond["created_at"] = form.CreatedTime
+		cond["$and$created_at"] = utils.SpiltInterfaceList(form.CreatedTime, ",")
 	}
 	var (
 		q *query.Query

@@ -1,7 +1,6 @@
 package api_v1
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/olongfen/contrib/session"
 	"github.com/olongfen/user_base/models"
@@ -103,7 +102,6 @@ func UserList(c *gin.Context) {
 		return
 	}
 	if err = c.ShouldBindQuery(form); err != nil {
-		fmt.Println("sssssssssss", err)
 		return
 	}
 	if data, err = srv_user.GetUserList(s.UID, form); err != nil {

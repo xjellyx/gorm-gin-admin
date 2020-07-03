@@ -61,3 +61,13 @@ func PubGetEnvBool(key string, defaultValue bool) (ret bool) {
 	}
 	return
 }
+
+func SpiltInterfaceList(d string, sep string) []interface{} {
+	var (
+		list []interface{}
+	)
+	for _, v := range strings.Split(d, sep) {
+		list = append(list, v)
+	}
+	return list
+}
