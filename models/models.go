@@ -8,7 +8,6 @@ import (
 	"github.com/sirupsen/logrus"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
-	"time"
 )
 
 var (
@@ -18,13 +17,6 @@ var (
 	logModel *logrus.Logger
 	//Captcha
 )
-
-type Model struct {
-	ID        uint `json:"-"gorm:"primarykey"`
-	CreatedAt time.Time
-	UpdatedAt time.Time
-	DeletedAt gorm.DeletedAt `json:"-" gorm:"index"`
-}
 
 // InitModel 初始化模型
 func InitModel() {

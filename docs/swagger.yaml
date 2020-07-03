@@ -47,28 +47,20 @@ definitions:
     properties:
       createdTime:
         description: 创建时间
-        items:
-          type: string
-        type: array
+        type: string
       id:
         description: ID
-        items:
-          type: string
-        type: array
+        type: string
       pageNum:
         type: integer
       pageSize:
         type: integer
       status:
         description: 状态
-        items:
-          type: string
-        type: array
+        type: string
       username:
         description: 用户名
-        items:
-          type: string
-        type: array
+        type: string
     type: object
 info:
   contact: {}
@@ -357,11 +349,6 @@ paths:
       - description: 昵称
         in: body
         name: nickname
-        schema:
-          type: string
-      - description: 用户名,之可以修改一次
-        in: body
-        name: username
         schema:
           type: string
       - description: 手机号码

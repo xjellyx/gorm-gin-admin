@@ -1,7 +1,6 @@
 package srv_user
 
 import (
-	"encoding/json"
 	"github.com/olongfen/user_base/models"
 	"github.com/olongfen/user_base/pkg/query"
 	"github.com/olongfen/user_base/utils"
@@ -43,15 +42,15 @@ func EditUser(uid string, form *utils.FormEditUser) (ret *models.UserBase, err e
 	if dataMap, err = form.Valid(); err != nil {
 		return
 	}
-	//
-	if _d, _err := json.Marshal(dataMap); _err != nil {
+
+	if err = data.GetUserByUId(uid); err != nil {
 		return
-	} else {
-		if err = json.Unmarshal(_d, data); err != nil {
-			return
-		}
 	}
-	if err = data.UpdateUser(uid); err != nil {
+	if data.IsAdmin {
+		err = utils.ErrActionNotAllow
+		return
+	}
+	if err = data.UpdateUserInterface(uid, dataMap); err != nil {
 		return nil, err
 	}
 

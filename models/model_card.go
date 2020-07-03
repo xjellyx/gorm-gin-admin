@@ -3,11 +3,12 @@ package models
 import (
 	"github.com/olongfen/user_base/pkg/query"
 	"github.com/olongfen/user_base/utils"
+	"gorm.io/gorm"
 )
 
 // UserCard
 type UserCard struct {
-	Model
+	gorm.Model
 	Uid string `json:"uid" gorm:"type:varchar(36); unique_index"`
 	//
 	Name        string `json:"name" `

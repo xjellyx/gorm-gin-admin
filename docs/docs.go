@@ -474,14 +474,6 @@ var doc = `{
                         }
                     },
                     {
-                        "description": "用户名,之可以修改一次",
-                        "name": "username",
-                        "in": "body",
-                        "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
                         "description": "手机号码",
                         "name": "Phone",
                         "in": "body",
@@ -659,17 +651,11 @@ var doc = `{
             "properties": {
                 "createdTime": {
                     "description": "创建时间",
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
+                    "type": "string"
                 },
                 "id": {
                     "description": "ID",
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
+                    "type": "string"
                 },
                 "pageNum": {
                     "type": "integer"
@@ -679,17 +665,11 @@ var doc = `{
                 },
                 "status": {
                     "description": "状态",
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
+                    "type": "string"
                 },
                 "username": {
                     "description": "用户名",
-                    "type": "array",
-                    "items": {
-                        "type": "string"
-                    }
+                    "type": "string"
                 }
             }
         }

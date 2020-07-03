@@ -45,10 +45,10 @@ func (f *LoginForm) Valid() (err error) {
 // FormEditUser
 type FormEditUser struct {
 	Nickname *string `json:"nickname" form:"nickname"`
-	Username *string `json:"username" form:"username"`
-	Email    *string `json:"email" form:"email"`
-	Phone    *string `json:"phone" form:"phone"`
-	Sign     *string `json:"sign" form:"sign"`
+	// Username *string `json:"username" form:"username"`
+	Email *string `json:"email" form:"email"`
+	Phone *string `json:"phone" form:"phone"`
+	Sign  *string `json:"sign" form:"sign"`
 }
 
 func (f *FormEditUser) Valid() (ret map[string]interface{}, err error) {
@@ -77,12 +77,12 @@ func (f *FormEditUser) Valid() (ret map[string]interface{}, err error) {
 		}
 		ret["email"] = *f.Email
 	}
-	if f.Username != nil && len(*f.Username) == 0 {
-		err = ErrFormParamInvalid
-		return
-	} else if f.Username != nil {
-		ret["username"] = *f.Username
-	}
+	//if f.Username != nil && len(*f.Username) == 0 {
+	//	err = ErrFormParamInvalid
+	//	return
+	//} else if f.Username != nil {
+	//	ret["username"] = *f.Username
+	//}
 	if f.Nickname != nil && len(*f.Nickname) == 0 {
 		err = ErrFormParamInvalid
 		return

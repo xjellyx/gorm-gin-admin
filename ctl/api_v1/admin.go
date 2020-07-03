@@ -2,6 +2,7 @@ package api_v1
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 	"github.com/olongfen/contrib/session"
 	"github.com/olongfen/user_base/models"
 	"github.com/olongfen/user_base/pkg/app"
@@ -108,4 +109,37 @@ func UserList(c *gin.Context) {
 		return
 	}
 	app.NewGin(c).Response(200, data)
+}
+
+// @tags 管理员
+// @Title
+// @Summary
+// @Description
+// @Accept json
+// @Produce json
+// @Param uid path string true "用户uid"
+// @Param {} body utils.FormEditUser true "修改用户信息"
+// @Success 200 {object} app.Response
+// @Failure 500 {object} app.Response
+// @Router []
+func EditUser(c *gin.Context) {
+	var (
+		err  error
+		form = new(utils.FormEditUser)
+		// s    *session.Session
+		uid  string
+		code int
+	)
+	defer func() {
+		if err != nil {
+			app.NewGin(c).Response(code, err.Error())
+		}
+	}()
+	uid = c.Param(uid)
+	if _, code, err = GetSessionAndBindingForm(form, binding.JSON, c); err != nil {
+		return
+	}
+	if _, err = srv_user.EditUser(uid, form); err != nil {
+		return
+	}
 }

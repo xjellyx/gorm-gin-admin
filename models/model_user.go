@@ -3,6 +3,7 @@ package models
 import (
 	"github.com/olongfen/user_base/pkg/query"
 	"github.com/olongfen/user_base/utils"
+	"gorm.io/gorm"
 )
 
 const (
@@ -14,8 +15,8 @@ const (
 
 // UserBase 用户信息
 type UserBase struct {
-	Model
-	Uid      string `json:"-" gorm:"type:varchar(36); unique_index"`
+	gorm.Model
+	Uid      string `json:"uid" gorm:"type:varchar(36); unique_index"`
 	Username string `json:"username" gorm:"type:varchar(16); unique_index"`
 	Phone    string `json:"phone" gorm:"type:varchar(11); unique_index"`
 	LoginPwd string `json:"-" gorm:"type:varchar(16)"`

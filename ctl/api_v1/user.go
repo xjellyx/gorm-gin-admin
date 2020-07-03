@@ -120,7 +120,6 @@ func UserLogout(c *gin.Context) {
 // @Summary 更新用户信息
 // @Produce json
 // @Param nickname body string false "昵称"
-// @Param username body string false "用户名,之可以修改一次"
 // @Param Phone body string false "手机号码"
 // @Param sign body string false "签名"
 // @Success 200 {object} app.Response

@@ -107,6 +107,7 @@ func InitRouter() (ret *gin.Engine) {
 			v1_admin.POST("/logout", auth.RequiresPermissions([]string{"logout:admin"}), api_v1.AdminLogout)
 			v1_admin.POST("/editUser", auth.RequiresPermissions([]string{"editUser:rootAdmin"}))
 			v1_admin.GET("/userList", auth.RequiresPermissions([]string{"userList:admin"}), api_v1.UserList)
+			v1_admin.POST("/editUser/:uid", auth.RequiresPermissions([]string{"editUser:admin"}), api_v1.EditUser)
 			// v1_admin.GET("/profile", auth.RequiresPermissions([]string{"profile:admin"}), api_v1.GetUserProfile)
 
 		}
