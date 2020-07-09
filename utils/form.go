@@ -235,3 +235,20 @@ type FormUserList struct {
 	PageSize    int    `json:"pageSize" form:"pageSize" `
 	PageNum     int    `json:"pageNum" form:"pageNum" `
 }
+
+// FormAPIGroupAdd 添加api数据
+type FormAPIGroupAdd struct {
+	Path        string `json:"path" form:"path" binding:"required"`               // api路径
+	Method      string `json:"method" form:"method" binding:"required"`           // 请求方式
+	Description string `json:"description" form:"description" binding:"required"` // 中文描述
+	ApiGroup    string `json:"apiGroup" form:"apiGroup" binding:"required"`       // 组名
+}
+
+// FromAPIGroupEdit 添加api数据
+type FromAPIGroupEdit struct {
+	Id          int64  `json:"id" form:"id" binding:"required"`
+	Path        string `json:"path" form:"path" `               // api路径
+	Method      string `json:"method" form:"method" `           // 请求方式
+	Description string `json:"description" form:"description" ` // 中文描述
+	ApiGroup    string `json:"apiGroup" form:"apiGroup" `       // 组名
+}

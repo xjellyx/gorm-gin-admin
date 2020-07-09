@@ -1,4 +1,4 @@
-package api_v1
+package v1
 
 import (
 	"github.com/gin-gonic/gin"
@@ -6,7 +6,7 @@ import (
 	"github.com/olongfen/contrib/session"
 	"github.com/olongfen/user_base/models"
 	"github.com/olongfen/user_base/pkg/app"
-	"github.com/olongfen/user_base/service/srv_user"
+	"github.com/olongfen/user_base/service"
 	"github.com/olongfen/user_base/utils"
 	"net/http"
 )
@@ -40,7 +40,7 @@ func AdminLogin(c *gin.Context) {
 	if err = c.ShouldBind(form); err != nil {
 		return
 	}
-	if token, err = srv_user.UserLogin(form, true); err != nil {
+	if token, err = service.UserLogin(form, true); err != nil {
 		return
 	}
 }
@@ -69,7 +69,7 @@ func AdminLogout(c *gin.Context) {
 	if s, err = GetSession(c); err != nil {
 		return
 	}
-	if err = srv_user.UserLogout(s.UID); err != nil {
+	if err = service.UserLogout(s.UID); err != nil {
 		return
 	}
 
@@ -89,7 +89,6 @@ func UserList(c *gin.Context) {
 	var (
 		err      error
 		httpCode = http.StatusInternalServerError
-		s        *session.Session
 		form     = new(utils.FormUserList)
 		data     []*models.UserBase
 	)
@@ -99,13 +98,13 @@ func UserList(c *gin.Context) {
 		}
 	}()
 
-	if s, err = GetSession(c); err != nil {
+	if _, err = GetSession(c); err != nil {
 		return
 	}
 	if err = c.ShouldBindQuery(form); err != nil {
 		return
 	}
-	if data, err = srv_user.GetUserList(s.UID, form); err != nil {
+	if data, err = service.GetUserList(form); err != nil {
 		return
 	}
 	app.NewGin(c).Response(200, data)
@@ -139,7 +138,7 @@ func EditUser(c *gin.Context) {
 	if _, code, err = GetSessionAndBindingForm(form, binding.JSON, c); err != nil {
 		return
 	}
-	if _, err = srv_user.EditUser(uid, form); err != nil {
+	if _, err = service.EditUser(uid, form); err != nil {
 		return
 	}
 }

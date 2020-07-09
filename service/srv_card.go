@@ -1,4 +1,4 @@
-package srv_card
+package service
 
 import (
 	"github.com/olongfen/user_base/models"

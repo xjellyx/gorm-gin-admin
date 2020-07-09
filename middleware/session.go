@@ -1,4 +1,4 @@
-package mdw_sessions
+package middleware
 
 import (
 	"github.com/gin-gonic/gin"

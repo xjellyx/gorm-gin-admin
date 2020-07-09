@@ -4,11 +4,11 @@ import (
 	"crypto/tls"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/olongfen/user_base/ctl"
 	_ "github.com/olongfen/user_base/docs"
 	"github.com/olongfen/user_base/models"
 	"github.com/olongfen/user_base/pkg/gredis"
 	"github.com/olongfen/user_base/pkg/setting"
+	"github.com/olongfen/user_base/router"
 	"github.com/sirupsen/logrus"
 	"net/http"
 	"os"
@@ -30,7 +30,7 @@ func init() {
 	// 初始化redis
 	gredis.InitRedisInstance()
 	// 初始化路由
-	engine = ctl.InitRouter()
+	engine = router.InitRouter()
 }
 
 func main() {

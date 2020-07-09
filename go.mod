@@ -7,7 +7,8 @@ require (
 	github.com/alecthomas/template v0.0.0-20190718012654-fb15b899a751
 	github.com/astaxie/beego v1.9.3-0.20171218111859-f16688817aa4
 	github.com/casbin/casbin v1.9.1
-	github.com/casbin/casbin/v2 v2.7.2
+	github.com/casbin/casbin/v2 v2.8.1
+	github.com/casbin/xorm-adapter/v2 v2.0.1 // indirect
 	github.com/dchest/captcha v0.0.0-20170622155422-6a29415a8364
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-openapi/spec v0.19.8 // indirect

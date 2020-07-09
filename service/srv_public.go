@@ -1,4 +1,4 @@
-package srv_user
+package service
 
 import (
 	"github.com/olongfen/contrib/session"
@@ -53,7 +53,7 @@ func UserLogin(f *utils.LoginForm, isAdmin bool) (token string, err error) {
 			return
 		}
 	}
-	if err = data.UpdateUserOneColumn(s.UID, "status", models.UserStatusLogin); err != nil {
+	if err = data.UpdateUserOne(s.UID, "status", models.UserStatusLogin); err != nil {
 		return
 	}
 	//var (
@@ -109,5 +109,5 @@ func UserLogout(uid string) (err error) {
 		err = utils.ErrActionNotAllow
 		return
 	}
-	return data.UpdateUserOneColumn(uid, "status", models.UserStatusLogout)
+	return data.UpdateUserOne(uid, "status", models.UserStatusLogout)
 }

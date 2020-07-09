@@ -1,4 +1,4 @@
-package api_v1
+package v1
 
 import (
 	"github.com/gin-gonic/gin"
@@ -7,7 +7,7 @@ import (
 	"github.com/olongfen/user_base/models"
 	"github.com/olongfen/user_base/pkg/app"
 	"github.com/olongfen/user_base/pkg/setting"
-	"github.com/olongfen/user_base/service/srv_user"
+	"github.com/olongfen/user_base/service"
 	"github.com/olongfen/user_base/utils"
 	uuid "github.com/satori/go.uuid"
 	"image"
@@ -47,7 +47,7 @@ func UserRegister(c *gin.Context) {
 		err = contrib.ErrParamInvalid
 		return
 	}
-	if data, err = srv_user.AddUser(form); err != nil {
+	if data, err = service.AddUser(form); err != nil {
 		return
 	}
 }
@@ -79,7 +79,7 @@ func UserLogin(c *gin.Context) {
 	if err = c.ShouldBind(form); err != nil {
 		return
 	}
-	if token, err = srv_user.UserLogin(form, false); err != nil {
+	if token, err = service.UserLogin(form, false); err != nil {
 		return
 	}
 
@@ -109,7 +109,7 @@ func UserLogout(c *gin.Context) {
 	if s, err = GetSession(c); err != nil {
 		return
 	}
-	if err = srv_user.UserLogout(s.UID); err != nil {
+	if err = service.UserLogout(s.UID); err != nil {
 		return
 	}
 
@@ -148,7 +148,7 @@ func ModifyProfile(c *gin.Context) {
 		err = contrib.ErrParamInvalid
 		return
 	}
-	if data, err = srv_user.EditUser(s.UID, form); err != nil {
+	if data, err = service.EditUser(s.UID, form); err != nil {
 		return
 	}
 }
@@ -217,7 +217,7 @@ func ModifyLoginPwd(c *gin.Context) {
 	if s, err = GetSession(c); err != nil {
 		return
 	}
-	if err = srv_user.ChangePwd(s.UID, f.OldPwd, f.NewPwd); err != nil {
+	if err = service.ChangePwd(s.UID, f.OldPwd, f.NewPwd); err != nil {
 		return
 	}
 }
@@ -256,7 +256,7 @@ func ModifyPayPwd(c *gin.Context) {
 	if s, err = GetSession(c); err != nil {
 		return
 	}
-	if err = srv_user.ChangePayPwd(s.UID, f.OldPwd, f.NewPwd); err != nil {
+	if err = service.ChangePayPwd(s.UID, f.OldPwd, f.NewPwd); err != nil {
 		return
 	}
 }
@@ -322,7 +322,7 @@ func ModifyHeadIcon(c *gin.Context) {
 		return
 	}
 
-	if err = d.UpdateUserOneColumn(s.UID, "head_icon", dst); err != nil {
+	if err = d.UpdateUserOne(s.UID, "head_icon", dst); err != nil {
 		return
 	}
 	os.Remove(oldDst)
@@ -387,7 +387,7 @@ func SetPayPwd(c *gin.Context) {
 	if sess, err = GetSession(c); err != nil {
 		return
 	}
-	if err = srv_user.SetUserPayPwd(sess.UID, pwd); err != nil {
+	if err = service.SetUserPayPwd(sess.UID, pwd); err != nil {
 		return
 	}
 	app.NewGin(c).Response(200, nil)

@@ -2,8 +2,10 @@ package models
 
 import (
 	"fmt"
+
 	"github.com/olongfen/contrib/log"
 	"github.com/olongfen/contrib/session"
+	"github.com/olongfen/user_base/pkg/adapter"
 	"github.com/olongfen/user_base/pkg/setting"
 	"github.com/sirupsen/logrus"
 	"gorm.io/driver/postgres"
@@ -13,6 +15,7 @@ import (
 var (
 	AdminKey *session.Key
 	UserKey  *session.Key
+	Adapter  *adapter.Adapter
 	db       *gorm.DB
 	logModel *logrus.Logger
 	//Captcha
@@ -37,8 +40,11 @@ func InitModel() {
 	if err = AdminKey.SetRSA(setting.ProjectSetting.UserKeyDir, setting.ProjectSetting.UserPubDir); err != nil {
 		logrus.Fatal(err)
 	}
-	err = db.AutoMigrate(&UserBase{})
+	err = db.AutoMigrate(&UserBase{}, &UserCard{}, &APIGroup{})
 	if err != nil {
+		panic(err)
+	}
+	if Adapter, err = adapter.NewAdapterByDB(db); err != nil {
 		panic(err)
 	}
 

@@ -62,10 +62,10 @@ func (u *UserBase) UpdateUser(uid string) (err error) {
 	return
 }
 
-// UpdateUserOneColumn 更新一个字段
-func (u *UserBase) UpdateUserOneColumn(uid string, column string, val interface{}) (err error) {
+// UpdateUserOne 更新一个字段
+func (u *UserBase) UpdateUserOne(uid string, column string, val interface{}) (err error) {
 	if err = db.Model(u).Where("uid = ?", uid).Update(column, val).Error; err != nil {
-		logModel.Errorln("[UpdateUserOneColumn] err: ", err)
+		logModel.Errorln("[UpdateUserOne] err: ", err)
 		err = utils.ErrUpdateDataFailed
 		return
 	}

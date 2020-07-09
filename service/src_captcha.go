@@ -1,4 +1,4 @@
-package srv_captcha
+package service
 
 import (
 	"bytes"

@@ -1,4 +1,4 @@
-package cors
+package middleware
 
 import (
 	"github.com/gin-gonic/gin"
@@ -39,7 +39,7 @@ var (
 )
 
 // CORS
-func  CORS() gin.HandlerFunc {
+func CORS() gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		origin := ctx.GetHeader("Origin")
 		ctx.Writer.Header().Set("Access-Control-Allow-Origin", origin)
@@ -82,4 +82,3 @@ func Common() gin.HandlerFunc {
 		header.Set("X-Content-Type-Options", "nosniff")
 	}
 }
-

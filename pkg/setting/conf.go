@@ -28,7 +28,7 @@ type ProjectConfig struct {
 	LogDir        string
 	HeadIconDir   string
 	RBACModelDir  string
-	RABCPolicyDir string
+	// RABCPolicyDir string
 }
 
 // RedisDB 缓存的连接参数
@@ -82,14 +82,14 @@ var (
 			DB:       0,
 			Password: utils.PubGetEnvString("RDB_PASSWORD", ""),
 		},
-		UserKeyDir:    "./conf/user.key",
-		UserPubDir:    "./conf/user.pub",
-		AdminKeyDir:   "./conf/admin.key",
-		AdminPubDir:   "./conf/admin.pub",
-		LogDir:        "./log",
-		HeadIconDir:   "./public/static/",
-		RBACModelDir:  "./conf/model.conf",
-		RABCPolicyDir: "./conf/policy.csv",
+		UserKeyDir:   "./conf/user.key",
+		UserPubDir:   "./conf/user.pub",
+		AdminKeyDir:  "./conf/admin.key",
+		AdminPubDir:  "./conf/admin.pub",
+		LogDir:       "./log",
+		HeadIconDir:  "./public/static/",
+		RBACModelDir: "./conf/model_api.conf",
+		// RABCPolicyDir: "./conf/policy_api.csv",
 	}
 )
 

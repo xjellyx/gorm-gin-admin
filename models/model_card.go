@@ -41,10 +41,10 @@ func (u *UserCard) UpdateIDCard(uid string) (err error) {
 	return
 }
 
-// UpdateIDCardOneColumn 更新一个字段
-func (u *UserCard) UpdateIDCardOneColumn(uid string, column string, value interface{}) (err error) {
+// UpdateIDCardOne 更新一个字段
+func (u *UserCard) UpdateIDCardOne(uid string, column string, value interface{}) (err error) {
 	if err = db.Model(u).Where("uid = ?", uid).Update(column, value).Error; err != nil {
-		logModel.Errorln("[UpdateIDCardOneColumn] err: ", err)
+		logModel.Errorln("[UpdateIDCardOne] err: ", err)
 		err = utils.ErrUpdateDataFailed
 		return err
 	}

@@ -2,7 +2,7 @@ package rbac
 
 import (
 	"errors"
-	lcasbin "github.com/casbin/casbin"
+	lcasbin "github.com/casbin/casbin/v2"
 	"github.com/gin-gonic/gin"
 	"github.com/olongfen/user_base/pkg/app"
 	"log"
@@ -12,8 +12,8 @@ import (
 )
 
 type GinRbac struct {
-	enforcer *lcasbin.Enforcer
-	subFn    SubjectFn
+	*lcasbin.Enforcer
+	SubjectFn
 }
 
 // SubjectFn is used to look up current subject in runtime.
@@ -43,10 +43,13 @@ func NewCasbinMiddleware(modelFile string, policyAdapter interface{}, subFn Subj
 	if subFn == nil {
 		return nil, SubFnNilErr
 	}
-
+	enforcer, err := lcasbin.NewEnforcer(modelFile, policyAdapter)
+	if err != nil {
+		return nil, err
+	}
 	return &GinRbac{
-		enforcer: lcasbin.NewEnforcer(modelFile, policyAdapter),
-		subFn:    subFn,
+		enforcer,
+		subFn,
 	}, nil
 }
 
@@ -91,7 +94,7 @@ func (am *GinRbac) RequiresPermissions(permissions []string, opts ...Option) gin
 		}
 
 		// Look up current subject.
-		sub := am.subFn(c)
+		sub := am.SubjectFn(c)
 		if sub == "" {
 			app.NewGin(c).Response(401, "casbnin check failed")
 			c.Abort()
@@ -111,8 +114,7 @@ func (am *GinRbac) RequiresPermissions(permissions []string, opts ...Option) gin
 					return
 				}
 
-				if ok := am.enforcer.Enforce(sub, obj, act); !ok {
-					println(sub, " ", obj, " ", act)
+				if ok, err := am.Enforce(sub, obj, act); !ok || err != nil {
 					app.NewGin(c).Response(401, "casbnin check failed")
 					c.Abort()
 					return
@@ -130,7 +132,7 @@ func (am *GinRbac) RequiresPermissions(permissions []string, opts ...Option) gin
 					continue
 				}
 
-				if ok := am.enforcer.Enforce(sub, obj, act); ok {
+				if ok, err := am.Enforce(sub, obj, act); ok && err == nil {
 					c.Next()
 					return
 				}
@@ -160,9 +162,9 @@ func (am *GinRbac) RequiresRoles(requiredRoles []string, opts ...Option) gin.Han
 		}
 
 		// Look up current subject.
-		sub := am.subFn(c)
+		sub := am.SubjectFn(c)
 		if sub == "" {
-			c.AbortWithStatus(401)
+			app.NewGin(c).Response(401, "casbnin check failed")
 			return
 		}
 
@@ -175,10 +177,10 @@ func (am *GinRbac) RequiresRoles(requiredRoles []string, opts ...Option) gin.Han
 			opt.apply(&actualOptions)
 		}
 
-		actualRoles, err := am.enforcer.GetRolesForUser(sub)
+		actualRoles, err := am.GetRolesForUser(sub)
 		if err != nil {
 			log.Println("couldn't get roles of subject: ", err)
-			c.AbortWithStatus(500)
+			app.NewGin(c).Response(500, "illegal permission")
 			return
 		}
 
@@ -188,7 +190,7 @@ func (am *GinRbac) RequiresRoles(requiredRoles []string, opts ...Option) gin.Han
 		if actualOptions.logic == AND {
 			// Must have all required roles.
 			if !reflect.DeepEqual(requiredRoles, actualRoles) {
-				c.AbortWithStatus(401)
+				app.NewGin(c).Response(401, "casbnin check failed")
 			} else {
 				c.Next()
 			}
@@ -202,7 +204,7 @@ func (am *GinRbac) RequiresRoles(requiredRoles []string, opts ...Option) gin.Han
 					return
 				}
 			}
-			c.AbortWithStatus(401)
+			app.NewGin(c).Response(401, "casbnin check failed")
 		}
 	}
 }

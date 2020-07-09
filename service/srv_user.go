@@ -1,4 +1,4 @@
-package srv_user
+package service
 
 import (
 	"github.com/olongfen/user_base/models"
@@ -78,7 +78,7 @@ func ChangePwd(uid string, oldPasswd, newPasswd string) (err error) {
 		err = _err
 		return
 	} else {
-		return data.UpdateUserOneColumn(uid, "login_pwd", string(_d))
+		return data.UpdateUserOne(uid, "login_pwd", string(_d))
 	}
 }
 
@@ -105,7 +105,7 @@ func ChangePayPwd(uid string, oldPasswd, newPasswd string) (err error) {
 		err = _err
 		return
 	} else {
-		return data.UpdateUserOneColumn(uid, "pay_pwd", string(_d))
+		return data.UpdateUserOne(uid, "pay_pwd", string(_d))
 	}
 }
 
@@ -123,12 +123,12 @@ func SetUserPayPwd(uid string, pwd string) (err error) {
 		err = _err
 		return
 	} else {
-		return u.UpdateUserOneColumn(uid, "pay_pwd", string(_d))
+		return u.UpdateUserOne(uid, "pay_pwd", string(_d))
 	}
 }
 
 // GetUserList
-func GetUserList(uid string, form *utils.FormUserList) (ret []*models.UserBase, err error) {
+func GetUserList(form *utils.FormUserList) (ret []*models.UserBase, err error) {
 	cond := map[string]interface{}{}
 	if form.Username != "" {
 		cond["$and$username"] = utils.SpiltInterfaceList(form.Username, ",")

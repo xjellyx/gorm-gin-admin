@@ -1,10 +1,10 @@
-package api_v1
+package v1
 
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/olongfen/contrib/session"
 	"github.com/olongfen/user_base/pkg/app"
-	"github.com/olongfen/user_base/service/srv_card"
+	"github.com/olongfen/user_base/service"
 	"github.com/olongfen/user_base/utils"
 	"net/http"
 )
@@ -36,7 +36,7 @@ func Verified(c *gin.Context) {
 		httpCode = 404
 		return
 	}
-	if _d, _err := srv_card.AddIDCard(s.UID, form); _err != nil {
+	if _d, _err := service.AddIDCard(s.UID, form); _err != nil {
 		err = _err
 		return
 	} else {
