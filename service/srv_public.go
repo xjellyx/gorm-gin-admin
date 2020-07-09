@@ -69,7 +69,7 @@ func UserLogin(f *utils.LoginForm, isAdmin bool) (token string, err error) {
 	//		dataOnline.IsOnline = true
 	//		dataOnline.LoginIp = f.IP
 	//		dataOnline.LoginTime = time.Now()
-	//		if err = Database.Table(dataOnline.TableName()).Create(dataOnline).Error; err != nil {
+	//		if err = Database.Table(dataOnline.APIGroupTableName()).Create(dataOnline).Error; err != nil {
 	//			return
 	//		}
 	//	}

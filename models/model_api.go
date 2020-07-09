@@ -15,7 +15,7 @@ type APIGroup struct {
 	// CreateUID   string `json:"create_uid" gorm:"type:varchar(36)"`
 }
 
-func TableName() string {
+func APIGroupTableName() string {
 	return "api_groups"
 }
 
@@ -31,7 +31,7 @@ func (a *APIGroup) InsertAPIGroup() (err error) {
 
 // UpdateAPIGroup 更新数据
 func (a *APIGroup) UpdateAPIGroup(id int64, m interface{}) (err error) {
-	if err = db.Table(TableName()).Where("id = ?", id).Updates(m).Error; err != nil {
+	if err = db.Table(APIGroupTableName()).Where("id = ?", id).Updates(m).Error; err != nil {
 		logModel.Errorln("[UpdateAPIGroup] err: ", err)
 		err = utils.ErrUpdateDataFailed
 		return err
@@ -41,7 +41,7 @@ func (a *APIGroup) UpdateAPIGroup(id int64, m interface{}) (err error) {
 
 // DeleteAPIGroup 删除api数据
 func (a *APIGroup) DeleteAPIGroup(id int64) (err error) {
-	if err = db.Table(TableName()).Where("id =  ?", id).Delete(a).Error; err != nil {
+	if err = db.Table(APIGroupTableName()).Where("id =  ?", id).Delete(a).Error; err != nil {
 		logModel.Errorln("[DeleteAPIGroup] err: ", err)
 		err = utils.ErrDeleteDataFailed
 		return err
@@ -51,7 +51,7 @@ func (a *APIGroup) DeleteAPIGroup(id int64) (err error) {
 
 // GetAPIGroup 获取api数据
 func (a *APIGroup) GetAPIGroup(id int64) (err error) {
-	if err = db.Table(TableName()).Where("id = ?", id).Error; err != nil {
+	if err = db.Table(APIGroupTableName()).Where("id = ?", id).Error; err != nil {
 		logModel.Errorln("[GetAPIGroup] err: ", err)
 		err = utils.ErrGetDataFailed
 		return err
@@ -61,7 +61,7 @@ func (a *APIGroup) GetAPIGroup(id int64) (err error) {
 
 // GetAPIGroupList 获取api列表
 func GetAPIGroupList(q *query.Query) (ret []*APIGroup, err error) {
-	if err = db.Table(TableName()).Where(q.Cond, q.Values).Find(&ret).Error; err != nil {
+	if err = db.Table(APIGroupTableName()).Where(q.Cond, q.Values).Find(&ret).Error; err != nil {
 		logModel.Errorln("[GetAPIGroupList] err: ", err)
 		err = utils.ErrGetDataFailed
 		return nil, err
