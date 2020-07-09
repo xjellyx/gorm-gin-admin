@@ -26,7 +26,7 @@ func CasbinHandler() gin.HandlerFunc {
 			app.NewGin(c).Response(401, "casbnin check failed")
 			c.Abort()
 			return
-		} else if !ok {
+		} else if !ok && setting.ProjectSetting.IsProduct {
 			app.NewGin(c).Response(500, "illegal permission")
 			c.Abort()
 			return
