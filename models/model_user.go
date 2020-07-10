@@ -33,9 +33,13 @@ type UserBase struct {
 	// UserCard UserCard `json:"userCard" gorm:"foreignkey:ID"`
 }
 
+func NewUserBase() *UserBase {
+	return new(UserBase)
+}
+
 // InsertUserData 插入一条数据
 func (u *UserBase) InsertUserData() (err error) {
-	if err = db.Create(u).Error; err != nil {
+	if err = DB.Create(u).Error; err != nil {
 		logModel.Errorln("[InsertUserData] err: ", err)
 		err = utils.ErrInsertDataFailed
 		return
@@ -44,7 +48,7 @@ func (u *UserBase) InsertUserData() (err error) {
 }
 
 func (u *UserBase) UpdateUserInterface(uid string, data interface{}) (err error) {
-	if err = db.Model(u).Where("uid = ?", uid).Updates(data).Error; err != nil {
+	if err = DB.Model(u).Where("uid = ?", uid).Updates(data).Error; err != nil {
 		logModel.Errorln("[UpdateUserInterface] err: ", err)
 		err = utils.ErrInsertDataFailed
 		return
@@ -54,7 +58,7 @@ func (u *UserBase) UpdateUserInterface(uid string, data interface{}) (err error)
 
 // UpdateUser 更新数据
 func (u *UserBase) UpdateUser(uid string) (err error) {
-	if err = db.Model(u).Where("uid = ?", uid).Updates(u).Error; err != nil {
+	if err = DB.Model(u).Where("uid = ?", uid).Updates(u).Error; err != nil {
 		logModel.Errorln("[UpdateUser] err: ", err)
 		err = utils.ErrUpdateDataFailed
 		return
@@ -64,7 +68,7 @@ func (u *UserBase) UpdateUser(uid string) (err error) {
 
 // UpdateUserOne 更新一个字段
 func (u *UserBase) UpdateUserOne(uid string, column string, val interface{}) (err error) {
-	if err = db.Model(u).Where("uid = ?", uid).Update(column, val).Error; err != nil {
+	if err = DB.Model(u).Where("uid = ?", uid).Update(column, val).Error; err != nil {
 		logModel.Errorln("[UpdateUserOne] err: ", err)
 		err = utils.ErrUpdateDataFailed
 		return
@@ -74,7 +78,7 @@ func (u *UserBase) UpdateUserOne(uid string, column string, val interface{}) (er
 
 // GetUserById 通过id获取数据
 func (u *UserBase) GetUserById(id int64) (err error) {
-	if err = db.First(u, "id = ?", id).Error; err != nil {
+	if err = DB.First(u, "id = ?", id).Error; err != nil {
 		logModel.Errorln("[GetUserById] err: ", err)
 		err = utils.ErrGetDataFailed
 		return
@@ -84,7 +88,7 @@ func (u *UserBase) GetUserById(id int64) (err error) {
 
 // GetUserByUId 通过id获取数据
 func (u *UserBase) GetUserByUId(uid string) (err error) {
-	if err = db.First(u, "uid = ?", uid).Error; err != nil {
+	if err = DB.First(u, "uid = ?", uid).Error; err != nil {
 		logModel.Errorln("[GetUserById] err: ", err)
 		err = utils.ErrGetDataFailed
 		return
@@ -94,7 +98,7 @@ func (u *UserBase) GetUserByUId(uid string) (err error) {
 
 // GetUserByUsername 通过username获取用户信息
 func (u *UserBase) GetUserByUsername(username string) (err error) {
-	if err = db.Find(u, "username = ?", username).Error; err != nil {
+	if err = DB.Find(u, "username = ?", username).Error; err != nil {
 		logModel.Errorln("[GetUserByUsername] err: ", err)
 		err = utils.ErrGetDataFailed
 		return
@@ -104,7 +108,7 @@ func (u *UserBase) GetUserByUsername(username string) (err error) {
 
 // GetUserByPhone 通过phone获取信息
 func (u *UserBase) GetUserByPhone(phone string) (err error) {
-	if err = db.First(u, "phone = ?", phone).Error; err != nil {
+	if err = DB.First(u, "phone = ?", phone).Error; err != nil {
 		logModel.Errorln("[GetUserByPhone] err: ", err)
 		err = utils.ErrGetDataFailed
 		return
@@ -114,7 +118,7 @@ func (u *UserBase) GetUserByPhone(phone string) (err error) {
 
 // GetUserList 获取用户列表
 func GetUserList(q *query.Query) (ret []*UserBase, err error) {
-	if err = db.Model(&UserBase{}).Where(q.Cond, q.Values...).Offset(q.PageNum).Limit(q.PageSize).Find(&ret).Error; err != nil {
+	if err = DB.Model(&UserBase{}).Where(q.Cond, q.Values...).Offset(q.PageNum).Limit(q.PageSize).Find(&ret).Error; err != nil {
 		logModel.Errorln("[GetUserList] err: ", err)
 		err = utils.ErrGetDataFailed
 		return
@@ -125,7 +129,7 @@ func GetUserList(q *query.Query) (ret []*UserBase, err error) {
 // GetUserTotal 获取总数
 func GetUserTotal(cond interface{}) (ret int64, err error) {
 	var count int64
-	if err = db.Model(&UserBase{}).Where(cond).Count(&count).Error; err != nil {
+	if err = DB.Model(&UserBase{}).Where(cond).Count(&count).Error; err != nil {
 		logModel.Errorln("[GetUserTotal] err: ", err)
 		err = utils.ErrGetDataFailed
 		return 0, err

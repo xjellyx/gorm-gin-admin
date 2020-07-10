@@ -2,7 +2,6 @@ package v1
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/gin-gonic/gin/binding"
 	"github.com/olongfen/contrib"
 	"github.com/olongfen/contrib/log"
 	"github.com/olongfen/contrib/session"
@@ -28,12 +27,12 @@ func GetSession(c *gin.Context) (ret *session.Session, err error) {
 	return
 }
 
-func GetSessionAndBindingForm(form interface{}, bind binding.Binding, c *gin.Context) (ret *session.Session, code int, err error) {
-
+func GetSessionAndBindingForm(form interface{}, c *gin.Context) (ret *session.Session, code int, err error) {
+	code = 500
 	if ret, err = GetSession(c); err != nil {
 		return nil, 500, err
 	}
-	if err = c.BindWith(form, bind); err != nil {
+	if err = c.ShouldBind(form); err != nil {
 		return nil, 404, err
 	}
 	return

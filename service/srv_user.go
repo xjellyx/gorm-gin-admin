@@ -34,7 +34,7 @@ func AddUser(form *utils.AddUserForm) (ret *models.UserBase, err error) {
 }
 
 // EditUser 修改用户信息
-func EditUser(uid string, form *utils.FormEditUser) (ret *models.UserBase, err error) {
+func EditUser(form *utils.FormEditUser) (ret *models.UserBase, err error) {
 	var (
 		dataMap map[string]interface{}
 		data    = &models.UserBase{}
@@ -43,14 +43,14 @@ func EditUser(uid string, form *utils.FormEditUser) (ret *models.UserBase, err e
 		return
 	}
 
-	if err = data.GetUserByUId(uid); err != nil {
+	if err = data.GetUserByUId(form.Uid); err != nil {
 		return
 	}
 	if data.IsAdmin {
 		err = utils.ErrActionNotAllow
 		return
 	}
-	if err = data.UpdateUserInterface(uid, dataMap); err != nil {
+	if err = data.UpdateUserInterface(form.Uid, dataMap); err != nil {
 		return nil, err
 	}
 

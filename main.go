@@ -73,22 +73,6 @@ func main() {
 		}
 	}()
 
-	//srv_user.AddUser(&utils.AddUserForm{
-	//	Phone:    "4543534534",
-	//	Password: "123456",
-	//})
-	//q := query.NewQuery(1, 10)
-	//_err := q.ValidCond(map[string]interface{}{
-	//	"$or$nickname$ne$": "select id from user_bases --",
-	//	"$or$id": []interface{}{
-	//		"$lte$1",
-	//		"$gte$3",
-	//	},
-	//})
-	//if _err != nil {
-	//	panic(_err)
-	//}
-	//fmt.Println(models.GetUserList(q))
 	var state int32 = 1
 	sc := make(chan os.Signal, 1)
 	signal.Notify(sc, syscall.SIGHUP, syscall.SIGINT, syscall.SIGTERM, syscall.SIGQUIT)

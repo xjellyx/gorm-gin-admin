@@ -16,7 +16,7 @@ var (
 	AdminKey *session.Key
 	UserKey  *session.Key
 	Adapter  *adapter.Adapter
-	db       *gorm.DB
+	DB       *gorm.DB
 	logModel *logrus.Logger
 	//Captcha
 )
@@ -29,10 +29,10 @@ func InitModel() {
 	logModel = log.NewLogFile(setting.ProjectSetting.LogDir+"/"+"model", setting.ProjectSetting.IsProduct)
 	dataSourceName := fmt.Sprintf("%s://%s:%s@%s:%s/%s?sslmode=disable", setting.ProjectSetting.Db.Driver, setting.ProjectSetting.Db.Username,
 		setting.ProjectSetting.Db.Password, setting.ProjectSetting.Db.Host, setting.ProjectSetting.Db.Port, setting.ProjectSetting.Db.DatabaseName)
-	if db, err = gorm.Open(postgres.Open(dataSourceName), nil); err != nil {
+	if DB, err = gorm.Open(postgres.Open(dataSourceName), nil); err != nil {
 		logrus.Fatal(err)
 	}
-	db = db.Debug()
+	DB = DB.Debug()
 	// 初始化密钥对
 	if err = UserKey.SetRSA(setting.ProjectSetting.AdminKeyDir, setting.ProjectSetting.AdminPubDir); err != nil {
 		logrus.Fatal(err)
@@ -40,11 +40,11 @@ func InitModel() {
 	if err = AdminKey.SetRSA(setting.ProjectSetting.UserKeyDir, setting.ProjectSetting.UserPubDir); err != nil {
 		logrus.Fatal(err)
 	}
-	err = db.AutoMigrate(&UserBase{}, &UserCard{}, &APIGroup{})
+	err = DB.AutoMigrate(&UserBase{}, &UserCard{}, &APIGroup{})
 	if err != nil {
 		panic(err)
 	}
-	if Adapter, err = adapter.NewAdapterByDB(db); err != nil {
+	if Adapter, err = adapter.NewAdapterByDB(DB); err != nil {
 		panic(err)
 	}
 

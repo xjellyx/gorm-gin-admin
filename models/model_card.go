@@ -23,7 +23,7 @@ type UserCard struct {
 
 // InsertIDCard 插入一条数据
 func (u *UserCard) InsertIDCard() (err error) {
-	if err = db.Create(u).Error; err != nil {
+	if err = DB.Create(u).Error; err != nil {
 		logModel.Errorln("[InsertIDCard] err: ", err)
 		err = utils.ErrInsertDataFailed
 		return
@@ -33,7 +33,7 @@ func (u *UserCard) InsertIDCard() (err error) {
 
 // UpdateIDCard 更新数据
 func (u *UserCard) UpdateIDCard(uid string) (err error) {
-	if err = db.Model(u).Where("uid = ?", uid).Updates(u).Error; err != nil {
+	if err = DB.Model(u).Where("uid = ?", uid).Updates(u).Error; err != nil {
 		logModel.Errorln("[UpdateIDCard] err: ", err)
 		err = utils.ErrUpdateDataFailed
 		return
@@ -43,7 +43,7 @@ func (u *UserCard) UpdateIDCard(uid string) (err error) {
 
 // UpdateIDCardOne 更新一个字段
 func (u *UserCard) UpdateIDCardOne(uid string, column string, value interface{}) (err error) {
-	if err = db.Model(u).Where("uid = ?", uid).Update(column, value).Error; err != nil {
+	if err = DB.Model(u).Where("uid = ?", uid).Update(column, value).Error; err != nil {
 		logModel.Errorln("[UpdateIDCardOne] err: ", err)
 		err = utils.ErrUpdateDataFailed
 		return err
@@ -53,7 +53,7 @@ func (u *UserCard) UpdateIDCardOne(uid string, column string, value interface{})
 
 // GetIDCardById
 func (u *UserCard) GetIDCardById(id int64) (err error) {
-	if err = db.Model(u).Where("id = ?", id).Find(&u).Error; err != nil {
+	if err = DB.Model(u).Where("id = ?", id).Find(&u).Error; err != nil {
 		logModel.Errorln("[GetIDCardById] err: ", err)
 		err = utils.ErrGetDataFailed
 		return err
@@ -64,7 +64,7 @@ func (u *UserCard) GetIDCardById(id int64) (err error) {
 // GetIDCardByUid
 func (u *UserCard) GetIDCardByUid(uid string) (err error) {
 
-	if err = db.Model(u).Where("uid = ?", uid).Find(u).Error; err != nil {
+	if err = DB.Model(u).Where("uid = ?", uid).Find(u).Error; err != nil {
 		logModel.Errorln("[GetIDCardByUid] err: ", err)
 		err = utils.ErrGetDataFailed
 		return
@@ -74,7 +74,7 @@ func (u *UserCard) GetIDCardByUid(uid string) (err error) {
 
 // GetIDCardByCardID
 func (u *UserCard) GetIDCardByCardID(cardId string) (err error) {
-	if err = db.Model(u).Where("card_id = ?", cardId).Find(u).Error; err != nil {
+	if err = DB.Model(u).Where("card_id = ?", cardId).Find(u).Error; err != nil {
 		logModel.Errorln("[GetIDCarsByCardID] err: ", err)
 		err = utils.ErrGetDataFailed
 		return
@@ -84,7 +84,7 @@ func (u *UserCard) GetIDCardByCardID(cardId string) (err error) {
 
 // GetIDCardList
 func GetIDCardList(q *query.Query) (ret []*UserCard, err error) {
-	if err = db.Model(&UserCard{}).Where(q.Cond, q.Values...).Offset(q.PageNum).Limit(q.PageSize).Find(&ret).Error; err != nil {
+	if err = DB.Model(&UserCard{}).Where(q.Cond, q.Values...).Offset(q.PageNum).Limit(q.PageSize).Find(&ret).Error; err != nil {
 		logModel.Errorln("[GetIDCardList] err: ", err)
 		err = utils.ErrGetDataFailed
 		return
@@ -95,7 +95,7 @@ func GetIDCardList(q *query.Query) (ret []*UserCard, err error) {
 // GetUserIDCardTotal 获取总数
 func GetUserIDCardTotal(cond interface{}) (ret int64, err error) {
 	var count int64
-	if err = db.Model(&UserCard{}).Where(cond).Count(&count).Error; err != nil {
+	if err = DB.Model(&UserCard{}).Where(cond).Count(&count).Error; err != nil {
 		logModel.Errorln("[GetUserIDCardTotal] err: ", err)
 		err = utils.ErrGetDataFailed
 		return 0, err

@@ -16,6 +16,65 @@ definitions:
         $ref: '#/definitions/app.Meta'
         type: object
     type: object
+  utils.FormAPIGroupAdd:
+    properties:
+      apiGroup:
+        description: 组名
+        type: string
+      description:
+        description: 中文描述
+        type: string
+      method:
+        description: 请求方式
+        type: string
+      path:
+        description: api路径
+        type: string
+    required:
+    - apiGroup
+    - description
+    - method
+    - path
+    type: object
+  utils.FormAPIGroupEdit:
+    properties:
+      apiGroup:
+        description: 组名
+        type: string
+      description:
+        description: 中文描述
+        type: string
+      id:
+        type: integer
+      method:
+        description: 请求方式
+        type: string
+      path:
+        description: api路径
+        type: string
+    required:
+    - apiGroup
+    - description
+    - id
+    - method
+    - path
+    type: object
+  utils.FormEditUser:
+    properties:
+      email:
+        description: Username *string `json:"username" form:"username"`
+        type: string
+      nickname:
+        type: string
+      phone:
+        type: string
+      sign:
+        type: string
+      uid:
+        type: string
+    required:
+    - uid
+    type: object
   utils.FormIDCard:
     properties:
       cardId:
@@ -43,6 +102,20 @@ definitions:
     - nation
     - validPeriod
     type: object
+  utils.FormRoleAPIPerm:
+    properties:
+      groupIds:
+        description: api id
+        items:
+          type: integer
+        type: array
+      uid:
+        description: 角色uid
+        type: string
+    required:
+    - groupIds
+    - uid
+    type: object
   utils.FormUserList:
     properties:
       createdTime:
@@ -66,6 +139,157 @@ info:
   contact: {}
   license: {}
 paths:
+  /api/v1/admin/addApiGroup:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: api数组
+        in: body
+        name: '{array}'
+        required: true
+        schema:
+          $ref: '#/definitions/utils.FormAPIGroupAdd'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 创建api
+      tags:
+      - 管理员
+  /api/v1/admin/addRoleAPIPerm:
+    post:
+      consumes:
+      - application/json
+      description: 添加角色接口权限
+      parameters:
+      - description: 添加api权限表单
+        in: body
+        name: '{}'
+        required: true
+        schema:
+          $ref: '#/definitions/utils.FormRoleAPIPerm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 添加角色接口权限
+      tags:
+      - 管理员
+  /api/v1/admin/editApiGroup:
+    put:
+      consumes:
+      - application/json
+      description: 修改api
+      parameters:
+      - description: 表单
+        in: body
+        name: '{}'
+        required: true
+        schema:
+          $ref: '#/definitions/utils.FormAPIGroupEdit'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 修改api
+      tags:
+      - 管理员
+  /api/v1/admin/editUser:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 用户uid
+        in: path
+        name: uid
+        required: true
+        type: string
+      - description: 修改用户信息
+        in: body
+        name: '{}'
+        required: true
+        schema:
+          $ref: '#/definitions/utils.FormEditUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - 管理员
+  /api/v1/admin/getAllApiGroup:
+    get:
+      consumes:
+      - application/json
+      description: 获取全部api
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 获取全部api
+      tags:
+      - 管理员
+  /api/v1/admin/listUser:
+    get:
+      consumes:
+      - application/json
+      description: 获取用户列表
+      parameters:
+      - description: 查询数据
+        in: body
+        name: '{}'
+        required: true
+        schema:
+          $ref: '#/definitions/utils.FormUserList'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 获取用户列表
+      tags:
+      - 管理员
   /api/v1/admin/login:
     post:
       consumes:
@@ -115,18 +339,17 @@ paths:
       summary: 管理员登出
       tags:
       - 管理员
-  /api/v1/admin/userList:
-    get:
+  /api/v1/admin/removeApiGroup:
+    delete:
       consumes:
       - application/json
-      description: 获取用户列表
+      description: 删除api
       parameters:
-      - description: 查询数据
-        in: body
-        name: '{}'
+      - description: id
+        in: query
+        name: id
         required: true
-        schema:
-          $ref: '#/definitions/utils.FormUserList'
+        type: integer
       produces:
       - application/json
       responses:
@@ -138,7 +361,57 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/app.Response'
-      summary: 获取用户列表
+      summary: 删除api
+      tags:
+      - 管理员
+  /api/v1/admin/removeRoleAPIPerm:
+    delete:
+      consumes:
+      - application/json
+      description: 删除角色接口权限
+      parameters:
+      - description: 删除api权限表单
+        in: body
+        name: '{}'
+        required: true
+        schema:
+          $ref: '#/definitions/utils.FormRoleAPIPerm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 删除角色接口权限
+      tags:
+      - 管理员
+  /api/v1/getRoleApiList:
+    get:
+      consumes:
+      - application/json
+      description: 获取用户权限
+      parameters:
+      - description: 用户uid,不输入默认返回自己uid
+        in: query
+        name: uid
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 获取用户权限
       tags:
       - 管理员
   /api/v1/register:
@@ -359,6 +632,11 @@ paths:
       - description: 签名
         in: body
         name: sign
+        schema:
+          type: string
+      - description: 邮箱
+        in: body
+        name: email
         schema:
           type: string
       produces:

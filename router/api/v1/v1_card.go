@@ -26,7 +26,7 @@ func Verified(c *gin.Context) {
 	)
 	defer func() {
 		if err != nil {
-			app.NewGin(c).Response(httpCode, err.Error())
+			app.NewResponse(c).Response(httpCode, err.Error())
 		}
 	}()
 	if s, err = GetSession(c); err != nil {
@@ -40,6 +40,6 @@ func Verified(c *gin.Context) {
 		err = _err
 		return
 	} else {
-		app.NewGin(c).Response(200, _d)
+		app.NewResponse(c).Response(200, _d)
 	}
 }

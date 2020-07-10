@@ -20,8 +20,8 @@ type Meta struct {
 	Error  interface{} `json:"error"`
 }
 
-// NewGin
-func NewGin(c *gin.Context) *Gin {
+// NewResponse
+func NewResponse(c *gin.Context) *Gin {
 	return &Gin{
 		c,
 	}

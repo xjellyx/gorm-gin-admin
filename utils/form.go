@@ -44,6 +44,7 @@ func (f *LoginForm) Valid() (err error) {
 
 // FormEditUser
 type FormEditUser struct {
+	Uid      string  `json:"uid" form:"uid" binding:"required"`
 	Nickname *string `json:"nickname" form:"nickname"`
 	// Username *string `json:"username" form:"username"`
 	Email *string `json:"email" form:"email"`
@@ -244,11 +245,17 @@ type FormAPIGroupAdd struct {
 	ApiGroup    string `json:"apiGroup" form:"apiGroup" binding:"required"`       // 组名
 }
 
-// FromAPIGroupEdit 添加api数据
-type FromAPIGroupEdit struct {
+// FormAPIGroupEdit 添加api数据
+type FormAPIGroupEdit struct {
 	Id          int64  `json:"id" form:"id" binding:"required"`
-	Path        string `json:"path" form:"path" `               // api路径
-	Method      string `json:"method" form:"method" `           // 请求方式
-	Description string `json:"description" form:"description" ` // 中文描述
-	ApiGroup    string `json:"apiGroup" form:"apiGroup" `       // 组名
+	Path        string `json:"path" form:"path" binding:"required" `              // api路径
+	Method      string `json:"method" form:"method" binding:"required"`           // 请求方式
+	Description string `json:"description" form:"description" binding:"required"` // 中文描述
+	ApiGroup    string `json:"apiGroup" form:"apiGroup" binding:"required"`       // 组名
+}
+
+// FormRoleAPIPerm 添加角色api权限
+type FormRoleAPIPerm struct {
+	Uid     string  `json:"uid" form:"uid" binding:"required"`           // 角色uid
+	GroupID []int64 `json:"groupIds" form:"groupIds" binding:"required"` // api id
 }

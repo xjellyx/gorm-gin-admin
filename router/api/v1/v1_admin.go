@@ -2,13 +2,13 @@ package v1
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/gin-gonic/gin/binding"
 	"github.com/olongfen/contrib/session"
 	"github.com/olongfen/user_base/models"
 	"github.com/olongfen/user_base/pkg/app"
 	"github.com/olongfen/user_base/service"
 	"github.com/olongfen/user_base/utils"
 	"net/http"
+	"strconv"
 )
 
 // @tags 管理员
@@ -30,9 +30,9 @@ func AdminLogin(c *gin.Context) {
 	)
 	defer func() {
 		if err != nil {
-			app.NewGin(c).Response(httpCode, err.Error())
+			app.NewResponse(c).Response(httpCode, err.Error())
 		} else {
-			app.NewGin(c).Response(200, map[string]string{"token": token})
+			app.NewResponse(c).Response(200, map[string]string{"token": token})
 		}
 	}()
 
@@ -61,9 +61,9 @@ func AdminLogout(c *gin.Context) {
 	)
 	defer func() {
 		if err != nil {
-			app.NewGin(c).Response(httpCode, err.Error())
+			app.NewResponse(c).Response(httpCode, err.Error())
 		} else {
-			app.NewGin(c).Response(200, map[string]string{})
+			app.NewResponse(c).Response(200, map[string]string{})
 		}
 	}()
 	if s, err = GetSession(c); err != nil {
@@ -84,8 +84,8 @@ func AdminLogout(c *gin.Context) {
 // @Param {} body utils.FormUserList true "查询数据"
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
-// @Router /api/v1/admin/userList [get]
-func UserList(c *gin.Context) {
+// @Router /api/v1/admin/listUser [get]
+func ListUser(c *gin.Context) {
 	var (
 		err      error
 		httpCode = http.StatusInternalServerError
@@ -94,7 +94,7 @@ func UserList(c *gin.Context) {
 	)
 	defer func() {
 		if err != nil {
-			app.NewGin(c).Response(httpCode, err.Error())
+			app.NewResponse(c).Response(httpCode, err.Error())
 		}
 	}()
 
@@ -107,7 +107,7 @@ func UserList(c *gin.Context) {
 	if data, err = service.GetUserList(form); err != nil {
 		return
 	}
-	app.NewGin(c).Response(200, data)
+	app.NewResponse(c).Response(200, data)
 }
 
 // @tags 管理员
@@ -120,25 +120,265 @@ func UserList(c *gin.Context) {
 // @Param {} body utils.FormEditUser true "修改用户信息"
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
-// @Router []
+// @Router /api/v1/admin/editUser [post]
 func EditUser(c *gin.Context) {
 	var (
 		err  error
 		form = new(utils.FormEditUser)
 		// s    *session.Session
-		uid  string
+
 		code int
 	)
 	defer func() {
 		if err != nil {
-			app.NewGin(c).Response(code, err.Error())
+			app.NewResponse(c).Response(code, err.Error())
 		}
 	}()
-	uid = c.Param(uid)
-	if _, code, err = GetSessionAndBindingForm(form, binding.JSON, c); err != nil {
+	if _, code, err = GetSessionAndBindingForm(form, c); err != nil {
 		return
 	}
-	if _, err = service.EditUser(uid, form); err != nil {
+	if _, err = service.EditUser(form); err != nil {
+		code = 500
 		return
 	}
+}
+
+// @tags 管理员
+// @Title 添加角色接口权限
+// @Summary 添加角色接口权限
+// @Description 添加角色接口权限
+// @Accept json
+// @Produce json
+// @Param {} body utils.FormRoleAPIPerm true "添加api权限表单"
+// @Success 200 {object} app.Response
+// @Failure 500 {object} app.Response
+// @Router /api/v1/admin/addRoleAPIPerm [post]
+func AddRoleAPIPerm(c *gin.Context) {
+	var (
+		f    = &utils.FormRoleAPIPerm{}
+		err  error
+		code int
+		ret  []int64
+		s    *session.Session
+	)
+	defer func() {
+		if err != nil {
+			app.NewResponse(c).Response(code, err.Error())
+		}
+	}()
+	if s, code, err = GetSessionAndBindingForm(f, c); err != nil {
+		return
+	}
+	if s.UID == f.Uid {
+		err = utils.ErrActionNotAllow
+		return
+	}
+	if ret, err = service.AddRuleAPI(f); err != nil {
+		code = 500
+		return
+	}
+	app.NewResponse(c).Response(200, ret)
+}
+
+// @tags 管理员
+// @Title 删除角色接口权限
+// @Summary 删除角色接口权限
+// @Description 删除角色接口权限
+// @Accept json
+// @Produce json
+// @Param {} body utils.FormRoleAPIPerm true "删除api权限表单"
+// @Success 200 {object} app.Response
+// @Failure 500 {object} app.Response
+// @Router /api/v1/admin/removeRoleAPIPerm [delete]
+func RemoveRolePermAPI(c *gin.Context) {
+	var (
+		f    = &utils.FormRoleAPIPerm{}
+		err  error
+		code int
+		ret  []int64
+		s    *session.Session
+	)
+	defer func() {
+		if err != nil {
+			app.NewResponse(c).Response(code, err.Error())
+		}
+	}()
+	if s, code, err = GetSessionAndBindingForm(f, c); err != nil {
+		return
+	}
+	if s.UID == f.Uid {
+		err = utils.ErrActionNotAllow
+		return
+	}
+	if ret, err = service.RemoveRuleAPI(f); err != nil {
+		code = 500
+		return
+	}
+	app.NewResponse(c).Response(200, ret)
+}
+
+// @tags 管理员
+// @Title 获取用户权限
+// @Summary 获取用户权限
+// @Description 获取用户权限
+// @Accept json
+// @Produce json
+// @Param uid query string false "用户uid,不输入默认返回自己uid"
+// @Success 200 {object} app.Response
+// @Failure 500 {object} app.Response
+// @Router /api/v1/getRoleApiList [get]
+func GetRoleApiList(c *gin.Context) {
+	var (
+		err  error
+		code = 404
+		s    *session.Session
+		uid  string
+		data []struct {
+			Path   string
+			Method string
+		}
+	)
+	defer func() {
+		if err != nil {
+			app.NewResponse(c).Response(code, err.Error())
+		}
+	}()
+	if s, err = GetSession(c); err != nil {
+		return
+	}
+	uid = c.Query("uid")
+	if len(uid) == 0 {
+		uid = s.UID
+	}
+	if data, err = service.GetRuleApiList(uid); err != nil {
+		return
+	}
+	app.NewResponse(c).Response(200, data)
+
+}
+
+// @tags 管理员
+// @Title 获取全部api
+// @Summary 获取全部api
+// @Description 获取全部api
+// @Accept json
+// @Produce json
+// @Success 200 {object} app.Response
+// @Failure 500 {object} app.Response
+// @Router  /api/v1/admin/getAllApiGroup [get]
+func GetAllAPIGroup(c *gin.Context) {
+	var (
+		err error
+		ret []*models.APIGroup
+	)
+	defer func() {
+		if err != nil {
+			app.NewResponse(c).Response(500, err.Error())
+		}
+	}()
+	if ret, err = service.GetAPIGroupList(); err != nil {
+		return
+	}
+	app.NewResponse(c).Response(200, ret)
+}
+
+// @tags 管理员
+// @Title 创建api
+// @Summary 创建api
+// @Description
+// @Accept json
+// @Produce json
+// @Param {array} body utils.FormAPIGroupAdd true "api数组"
+// @Success 200 {object} app.Response
+// @Failure 500 {object} app.Response
+// @Router /api/v1/admin/addApiGroup [post]
+func AddApiGroup(c *gin.Context) {
+	var (
+		err  error
+		code int
+		f    []*utils.FormAPIGroupAdd
+		ret  []*models.APIGroup
+	)
+	defer func() {
+		if err != nil {
+			app.NewResponse(c).Response(code, err.Error())
+		}
+	}()
+	if _, code, err = GetSessionAndBindingForm(f, c); err != nil {
+		return
+	}
+	if ret, err = service.AddAPIGroup(f); err != nil {
+		code = 500
+		return
+	}
+	app.NewResponse(c).Response(200, ret)
+}
+
+// @tags 管理员
+// @Title 删除api
+// @Summary  删除api
+// @Description 删除api
+// @Accept json
+// @Produce json
+// @Param id query int true "id"
+// @Success 200 {object} app.Response
+// @Failure 500 {object} app.Response
+// @Router /api/v1/admin/removeApiGroup [delete]
+func RemoveApiGroup(c *gin.Context) {
+	var (
+		err  error
+		code int
+		id   string
+	)
+	defer func() {
+		if err != nil {
+			app.NewResponse(c).Response(code, err.Error())
+		}
+	}()
+	id = c.Query("id")
+	_id, err_ := strconv.ParseUint(id, 10, 64)
+	if err_ != nil {
+		code = 404
+		err = err_
+		return
+	}
+	if err = service.DelAPIGroup(int64(_id)); err != nil {
+		code = 500
+		return
+	}
+	app.NewResponse(c).Response(200, "")
+}
+
+// @tags 管理员
+// @Title 修改api
+// @Summary 修改api
+// @Description 修改api
+// @Accept json
+// @Produce json
+// @Param {} body utils.FormAPIGroupEdit true "表单"
+// @Success 200 {object} app.Response
+// @Failure 500 {object} app.Response
+// @Router  /api/v1/admin/editApiGroup [put]
+func EditApiGroup(c *gin.Context) {
+	var (
+		f    = &utils.FormAPIGroupEdit{}
+		err  error
+		code int
+		ret  *models.APIGroup
+	)
+	defer func() {
+		if err != nil {
+			app.NewResponse(c).Response(code, err.Error())
+		}
+	}()
+	if _, code, err = GetSessionAndBindingForm(f, c); err != nil {
+		return
+	}
+
+	if ret, err = service.EditAPIGroup(f); err != nil {
+		code = 500
+		return
+	}
+	app.NewResponse(c).Response(200, ret)
+
 }

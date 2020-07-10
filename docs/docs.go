@@ -25,6 +25,239 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
+        "/api/v1/admin/addApiGroup": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "管理员"
+                ],
+                "summary": "创建api",
+                "parameters": [
+                    {
+                        "description": "api数组",
+                        "name": "{array}",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/utils.FormAPIGroupAdd"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/admin/addRoleAPIPerm": {
+            "post": {
+                "description": "添加角色接口权限",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "管理员"
+                ],
+                "summary": "添加角色接口权限",
+                "parameters": [
+                    {
+                        "description": "添加api权限表单",
+                        "name": "{}",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/utils.FormRoleAPIPerm"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/admin/editApiGroup": {
+            "put": {
+                "description": "修改api",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "管理员"
+                ],
+                "summary": "修改api",
+                "parameters": [
+                    {
+                        "description": "表单",
+                        "name": "{}",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/utils.FormAPIGroupEdit"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/admin/editUser": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "管理员"
+                ],
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户uid",
+                        "name": "uid",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "description": "修改用户信息",
+                        "name": "{}",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/utils.FormEditUser"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/admin/getAllApiGroup": {
+            "get": {
+                "description": "获取全部api",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "管理员"
+                ],
+                "summary": "获取全部api",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/admin/listUser": {
+            "get": {
+                "description": "获取用户列表",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "管理员"
+                ],
+                "summary": "获取用户列表",
+                "parameters": [
+                    {
+                        "description": "查询数据",
+                        "name": "{}",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/utils.FormUserList"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/admin/login": {
             "post": {
                 "consumes": [
@@ -101,9 +334,9 @@ var doc = `{
                 }
             }
         },
-        "/api/v1/admin/userList": {
-            "get": {
-                "description": "获取用户列表",
+        "/api/v1/admin/removeApiGroup": {
+            "delete": {
+                "description": "删除api",
                 "consumes": [
                     "application/json"
                 ],
@@ -113,16 +346,91 @@ var doc = `{
                 "tags": [
                     "管理员"
                 ],
-                "summary": "获取用户列表",
+                "summary": "删除api",
                 "parameters": [
                     {
-                        "description": "查询数据",
+                        "type": "integer",
+                        "description": "id",
+                        "name": "id",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/admin/removeRoleAPIPerm": {
+            "delete": {
+                "description": "删除角色接口权限",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "管理员"
+                ],
+                "summary": "删除角色接口权限",
+                "parameters": [
+                    {
+                        "description": "删除api权限表单",
                         "name": "{}",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "$ref": "#/definitions/utils.FormUserList"
+                            "$ref": "#/definitions/utils.FormRoleAPIPerm"
                         }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/getRoleApiList": {
+            "get": {
+                "description": "获取用户权限",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "管理员"
+                ],
+                "summary": "获取用户权限",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "用户uid,不输入默认返回自己uid",
+                        "name": "uid",
+                        "in": "query"
                     }
                 ],
                 "responses": {
@@ -488,6 +796,14 @@ var doc = `{
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    {
+                        "description": "邮箱",
+                        "name": "email",
+                        "in": "body",
+                        "schema": {
+                            "type": "string"
+                        }
                     }
                 ],
                 "responses": {
@@ -610,6 +926,88 @@ var doc = `{
                 }
             }
         },
+        "utils.FormAPIGroupAdd": {
+            "type": "object",
+            "required": [
+                "apiGroup",
+                "description",
+                "method",
+                "path"
+            ],
+            "properties": {
+                "apiGroup": {
+                    "description": "组名",
+                    "type": "string"
+                },
+                "description": {
+                    "description": "中文描述",
+                    "type": "string"
+                },
+                "method": {
+                    "description": "请求方式",
+                    "type": "string"
+                },
+                "path": {
+                    "description": "api路径",
+                    "type": "string"
+                }
+            }
+        },
+        "utils.FormAPIGroupEdit": {
+            "type": "object",
+            "required": [
+                "apiGroup",
+                "description",
+                "id",
+                "method",
+                "path"
+            ],
+            "properties": {
+                "apiGroup": {
+                    "description": "组名",
+                    "type": "string"
+                },
+                "description": {
+                    "description": "中文描述",
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "method": {
+                    "description": "请求方式",
+                    "type": "string"
+                },
+                "path": {
+                    "description": "api路径",
+                    "type": "string"
+                }
+            }
+        },
+        "utils.FormEditUser": {
+            "type": "object",
+            "required": [
+                "uid"
+            ],
+            "properties": {
+                "email": {
+                    "description": "Username *string ` + "`" + `json:\"username\" form:\"username\"` + "`" + `",
+                    "type": "string"
+                },
+                "nickname": {
+                    "type": "string"
+                },
+                "phone": {
+                    "type": "string"
+                },
+                "sign": {
+                    "type": "string"
+                },
+                "uid": {
+                    "type": "string"
+                }
+            }
+        },
         "utils.FormIDCard": {
             "type": "object",
             "required": [
@@ -642,6 +1040,26 @@ var doc = `{
                 },
                 "validPeriod": {
                     "description": "Birthday    string ` + "`" + `json:\"birthday\" from:\"birthday\" binding:\"required\"` + "`" + `       // 出生日期",
+                    "type": "string"
+                }
+            }
+        },
+        "utils.FormRoleAPIPerm": {
+            "type": "object",
+            "required": [
+                "groupIds",
+                "uid"
+            ],
+            "properties": {
+                "groupIds": {
+                    "description": "api id",
+                    "type": "array",
+                    "items": {
+                        "type": "integer"
+                    }
+                },
+                "uid": {
+                    "description": "角色uid",
                     "type": "string"
                 }
             }

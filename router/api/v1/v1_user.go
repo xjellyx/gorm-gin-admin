@@ -37,9 +37,9 @@ func UserRegister(c *gin.Context) {
 
 	defer func() {
 		if err != nil {
-			app.NewGin(c).Response(httpCode, err.Error())
+			app.NewResponse(c).Response(httpCode, err.Error())
 		} else {
-			app.NewGin(c).Response(200, data)
+			app.NewResponse(c).Response(200, data)
 		}
 	}()
 	if err = c.Bind(form); err != nil {
@@ -70,9 +70,9 @@ func UserLogin(c *gin.Context) {
 	)
 	defer func() {
 		if err != nil {
-			app.NewGin(c).Response(httpCode, err.Error())
+			app.NewResponse(c).Response(httpCode, err.Error())
 		} else {
-			app.NewGin(c).Response(200, map[string]string{"token": token})
+			app.NewResponse(c).Response(200, map[string]string{"token": token})
 		}
 	}()
 	form.IP = c.ClientIP()
@@ -101,9 +101,9 @@ func UserLogout(c *gin.Context) {
 	)
 	defer func() {
 		if err != nil {
-			app.NewGin(c).Response(httpCode, err.Error())
+			app.NewResponse(c).Response(httpCode, err.Error())
 		} else {
-			app.NewGin(c).Response(200, map[string]string{})
+			app.NewResponse(c).Response(200, map[string]string{})
 		}
 	}()
 	if s, err = GetSession(c); err != nil {
@@ -122,6 +122,7 @@ func UserLogout(c *gin.Context) {
 // @Param nickname body string false "昵称"
 // @Param Phone body string false "手机号码"
 // @Param sign body string false "签名"
+// @Param email body string false "邮箱"
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
 // @router /api/v1/user/modifyProfile [put]
@@ -135,9 +136,9 @@ func ModifyProfile(c *gin.Context) {
 	)
 	defer func() {
 		if err != nil {
-			app.NewGin(c).Response(httpCode, err.Error())
+			app.NewResponse(c).Response(httpCode, err.Error())
 		} else {
-			app.NewGin(c).Response(200, data)
+			app.NewResponse(c).Response(200, data)
 		}
 	}()
 	if s, err = GetSession(c); err != nil {
@@ -148,7 +149,8 @@ func ModifyProfile(c *gin.Context) {
 		err = contrib.ErrParamInvalid
 		return
 	}
-	if data, err = service.EditUser(s.UID, form); err != nil {
+	form.Uid = s.UID
+	if data, err = service.EditUser(form); err != nil {
 		return
 	}
 }
@@ -169,9 +171,9 @@ func GetUserProfile(c *gin.Context) {
 	)
 	defer func() {
 		if err != nil {
-			app.NewGin(c).Response(httpCode, err.Error())
+			app.NewResponse(c).Response(httpCode, err.Error())
 		} else {
-			app.NewGin(c).Response(200, data)
+			app.NewResponse(c).Response(200, data)
 		}
 	}()
 	if s, err = GetSession(c); err != nil {
@@ -205,9 +207,9 @@ func ModifyLoginPwd(c *gin.Context) {
 	)
 	defer func() {
 		if err != nil {
-			app.NewGin(c).Response(httpCode, err.Error())
+			app.NewResponse(c).Response(httpCode, err.Error())
 		} else {
-			app.NewGin(c).Response(200, "")
+			app.NewResponse(c).Response(200, "")
 		}
 	}()
 	if err = c.ShouldBind(&f); err != nil {
@@ -244,9 +246,9 @@ func ModifyPayPwd(c *gin.Context) {
 	)
 	defer func() {
 		if err != nil {
-			app.NewGin(c).Response(httpCode, err.Error())
+			app.NewResponse(c).Response(httpCode, err.Error())
 		} else {
-			app.NewGin(c).Response(200, "")
+			app.NewResponse(c).Response(200, "")
 		}
 	}()
 	if err = c.ShouldBind(&f); err != nil {
@@ -282,9 +284,9 @@ func ModifyHeadIcon(c *gin.Context) {
 	)
 	defer func() {
 		if err != nil {
-			app.NewGin(c).Response(httpCode, err.Error())
+			app.NewResponse(c).Response(httpCode, err.Error())
 		} else {
-			app.NewGin(c).Response(200, gin.H{
+			app.NewResponse(c).Response(200, gin.H{
 				"headIcon": d.HeadIcon,
 			})
 		}
@@ -345,7 +347,7 @@ func GetHeadIcon(c *gin.Context) {
 	)
 	defer func() {
 		if err != nil {
-			app.NewGin(c).Response(500, err.Error())
+			app.NewResponse(c).Response(500, err.Error())
 		}
 	}()
 	if s, err = GetSession(c); err != nil {
@@ -376,7 +378,7 @@ func SetPayPwd(c *gin.Context) {
 	)
 	defer func() {
 		if err != nil {
-			app.NewGin(c).Response(httpCode, err.Error())
+			app.NewResponse(c).Response(httpCode, err.Error())
 		}
 	}()
 	if pwd = c.PostForm("pwd"); len(pwd) == 0 {
@@ -390,5 +392,5 @@ func SetPayPwd(c *gin.Context) {
 	if err = service.SetUserPayPwd(sess.UID, pwd); err != nil {
 		return
 	}
-	app.NewGin(c).Response(200, nil)
+	app.NewResponse(c).Response(200, nil)
 }

@@ -1,7 +1,8 @@
 package models
 
 import (
-	"github.com/olongfen/user_base/pkg/query"
+	"bytes"
+	"fmt"
 	"github.com/olongfen/user_base/utils"
 	"gorm.io/gorm"
 )
@@ -19,9 +20,13 @@ func APIGroupTableName() string {
 	return "api_groups"
 }
 
+func NewAPIGroup() *APIGroup {
+	return new(APIGroup)
+}
+
 // InsertAPIGroup 插入数据
 func (a *APIGroup) InsertAPIGroup() (err error) {
-	if err = db.Model(&APIGroup{}).Create(a).Error; err != nil {
+	if err = DB.Model(&APIGroup{}).Create(a).Error; err != nil {
 		logModel.Errorln("[InsertAPIGroup] err: ", err)
 		err = utils.ErrInsertDataFailed
 		return
@@ -31,7 +36,7 @@ func (a *APIGroup) InsertAPIGroup() (err error) {
 
 // UpdateAPIGroup 更新数据
 func (a *APIGroup) UpdateAPIGroup(id int64, m interface{}) (err error) {
-	if err = db.Table(APIGroupTableName()).Where("id = ?", id).Updates(m).Error; err != nil {
+	if err = DB.Table(APIGroupTableName()).Where("id = ?", id).Updates(m).Error; err != nil {
 		logModel.Errorln("[UpdateAPIGroup] err: ", err)
 		err = utils.ErrUpdateDataFailed
 		return err
@@ -41,7 +46,7 @@ func (a *APIGroup) UpdateAPIGroup(id int64, m interface{}) (err error) {
 
 // DeleteAPIGroup 删除api数据
 func (a *APIGroup) DeleteAPIGroup(id int64) (err error) {
-	if err = db.Table(APIGroupTableName()).Where("id =  ?", id).Delete(a).Error; err != nil {
+	if err = DB.Table(APIGroupTableName()).Where("id =  ?", id).Delete(a).Error; err != nil {
 		logModel.Errorln("[DeleteAPIGroup] err: ", err)
 		err = utils.ErrDeleteDataFailed
 		return err
@@ -51,20 +56,42 @@ func (a *APIGroup) DeleteAPIGroup(id int64) (err error) {
 
 // GetAPIGroup 获取api数据
 func (a *APIGroup) GetAPIGroup(id int64) (err error) {
-	if err = db.Table(APIGroupTableName()).Where("id = ?", id).Error; err != nil {
+	if err = DB.First(a, "id = ?", id).Error; err != nil {
 		logModel.Errorln("[GetAPIGroup] err: ", err)
 		err = utils.ErrGetDataFailed
-		return err
+		return
 	}
 	return
 }
 
 // GetAPIGroupList 获取api列表
-func GetAPIGroupList(q *query.Query) (ret []*APIGroup, err error) {
-	if err = db.Table(APIGroupTableName()).Where(q.Cond, q.Values).Find(&ret).Error; err != nil {
+func GetAPIGroupList() (ret []*APIGroup, err error) {
+	if err = DB.Table(APIGroupTableName()).Where("id > ?", 0).Find(&ret).Error; err != nil {
 		logModel.Errorln("[GetAPIGroupList] err: ", err)
 		err = utils.ErrGetDataFailed
 		return nil, err
+	}
+	return
+}
+
+// BatchInsertAPIGroup
+func BatchInsertAPIGroup(datas []*APIGroup) (err error) {
+	var buffer bytes.Buffer
+	sql := "insert into `api_groups` (`path`,`description`,`api_group`,`method`) values"
+	if _, err := buffer.WriteString(sql); err != nil {
+		return err
+	}
+	for i, v := range datas {
+		if i == len(datas)-1 {
+			buffer.WriteString(fmt.Sprintf("('%s','%s',%s,%s);", v.Path, v.Description, v.ApiGroup, v.Method))
+		} else {
+			buffer.WriteString(fmt.Sprintf("('%s','%s',%s,%s),", v.Path, v.Description, v.ApiGroup, v.Method))
+		}
+	}
+	if err = DB.Exec(buffer.String()).Error; err != nil {
+		logModel.Errorln("[BatchInsertAPIGroup] err: ", err)
+		err = utils.ErrInsertDataFailed
+		return
 	}
 	return
 }

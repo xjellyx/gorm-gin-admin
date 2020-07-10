@@ -65,9 +65,9 @@ func VerifyCaptcha(c *gin.Context) {
 	id := c.Query("captchaId")
 	verify := captcha.VerifyString(id, digits)
 	if verify {
-		app.NewGin(c).Response(200, gin.H{"verify": verify})
+		app.NewResponse(c).Response(200, gin.H{"verify": verify})
 	} else {
-		app.NewGin(c).Response(200, gin.H{"verify": verify})
+		app.NewResponse(c).Response(200, gin.H{"verify": verify})
 	}
 
 }
