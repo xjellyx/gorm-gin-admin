@@ -72,7 +72,7 @@ func (f *FormEditUser) Valid() (ret map[string]interface{}, err error) {
 		err = ErrFormParamInvalid
 		return
 	} else if f.Email != nil && len(*f.Email) != 0 {
-		if len(RegPhoneNum.FindString(*f.Email)) == 0 {
+		if len(RegEmail.FindString(*f.Email)) == 0 {
 			err = ErrEmailInvalid
 			return
 		}
