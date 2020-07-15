@@ -2,6 +2,7 @@ package v1
 
 import (
 	"bytes"
+	"encoding/base32"
 	"github.com/dchest/captcha"
 	"github.com/gin-gonic/gin"
 	"github.com/olongfen/user_base/pkg/app"
@@ -13,8 +14,8 @@ import (
 // Captcha
 func Captcha(ctx *gin.Context) {
 	var d = struct {
-		Ext        string `json:"ext" form:"ext" binding:"required"`
-		Lang       string `json:"lang" form:"lang" binding:"required"`
+		Ext        string `json:"ext" form:"ext" `
+		Lang       string `json:"lang" form:"lang" `
 		IsDownload bool   `json:"isDownload" form:"isDownload"`
 	}{}
 	if err := ctx.BindQuery(&d); err != nil {
@@ -22,6 +23,12 @@ func Captcha(ctx *gin.Context) {
 			"err": err.Error(),
 		})
 		return
+	}
+	if len(d.Ext) == 0 {
+		d.Ext = "png"
+	}
+	if len(d.Lang) == 0 {
+		d.Lang = "en"
 	}
 	l := captcha.DefaultLen
 	id := captcha.NewLen(l)
@@ -32,10 +39,10 @@ func Captcha(ctx *gin.Context) {
 	var content bytes.Buffer
 	switch d.Ext {
 	case "png":
-		ctx.Header("Content-Type", "image/png")
+		//ctx.Header("Content-Type", "image/png")
 		_ = captcha.WriteImage(&content, id, captcha.StdWidth, captcha.StdHeight)
 	case "wav":
-		ctx.Header("Content-Type", "audio/x-wav")
+		//ctx.Header("Content-Type", "audio/x-wav")
 		_ = captcha.WriteAudio(&content, id, d.Lang)
 	default:
 
@@ -52,8 +59,11 @@ func Captcha(ctx *gin.Context) {
 	if d.IsDownload {
 		ctx.Header("Content-Type", "application/octet-stream")
 	}
-	ctx.Data(200, ctx.GetHeader("Content-Type"), content.Bytes())
-
+	data := make(map[string]interface{})
+	data["id"] = id
+	data["img"] = base32.StdEncoding.EncodeToString(content.Bytes())
+	app.NewResponse(ctx).Response(200, data)
+	// ctx.Data(200, ctx.GetHeader("Content-Type"), content.Bytes())
 	//http.ServeContent(ctx.Writer, ctx.Request, id+"."+d.Ext, time.Time{}, bytes.NewReader(content.Bytes()))
 
 }
