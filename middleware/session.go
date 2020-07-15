@@ -65,17 +65,15 @@ func CheckUserAuth(isAdmin bool) gin.HandlerFunc {
 		} else {
 			// 验证用户,管理员和普通用户的密钥对不一样，所以验证两次,管理员token可以使用与普通界面
 			if s, err = models.UserKey.SessionDecode(tokenStr); err != nil {
-				if s, err = models.AdminKey.SessionDecode(tokenStr); err != nil {
-					c.JSON(http.StatusOK, app.Response{
-						Meta: app.Meta{
-							Status: 500,
-							Error:  contrib.ErrTokenInvalid,
-						},
-						Data: nil,
-					})
-					c.Abort()
-					return
-				}
+				c.JSON(http.StatusOK, app.Response{
+					Meta: app.Meta{
+						Status: 500,
+						Error:  contrib.ErrTokenInvalid,
+					},
+					Data: nil,
+				})
+				c.Abort()
+				return
 			}
 		}
 		// 不是同一个ip地址
