@@ -56,8 +56,7 @@ func UserRegister(c *gin.Context) {
 // @tags 用户
 // @Summary 用户登录
 // @Produce json
-// @Param username body string true "用户名"
-// @Param password body string true "密码"
+// @Param {} body utils.LoginForm true "form"
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
 // @router /api/v1/user/login [post]

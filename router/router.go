@@ -44,7 +44,7 @@ func InitRouter() (ret *gin.Engine) {
 		})
 		// 获取验证码
 		api.GET("captcha", v1.Captcha)
-		api.GET("captcha/verify/", v1.VerifyCaptcha)
+		// api.GET("captcha/verify/", v1.VerifyCaptcha)
 		api.POST("register", v1.UserRegister)
 		userRouterAPI(api)
 		adminRouterAPI(api)

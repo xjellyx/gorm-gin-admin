@@ -47,4 +47,5 @@ var (
 	ErrPhoneInvalid        = contrib.NewError(20, "phone number invalid", prefix)
 	ErrEmailInvalid        = contrib.NewError(21, "email invalid", prefix)
 	ErrIDCardInvalid       = contrib.NewError(22, "id card number invalid", prefix)
+	ErrCaptchaVerifyFail  =contrib.NewError(23,"captcha verify failed ",prefix)
 )

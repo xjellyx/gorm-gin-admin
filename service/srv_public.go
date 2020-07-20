@@ -1,8 +1,10 @@
 package service
 
 import (
+	"github.com/dchest/captcha"
 	"github.com/olongfen/contrib/session"
 	"github.com/olongfen/user_base/models"
+	"github.com/olongfen/user_base/pkg/setting"
 	"github.com/olongfen/user_base/utils"
 	"golang.org/x/crypto/bcrypt"
 	"time"
@@ -17,6 +19,13 @@ func UserLogin(f *utils.LoginForm, isAdmin bool) (token string, err error) {
 		data = &models.UserBase{}
 		s    = new(session.Session)
 	)
+	if setting.ProjectSetting.IsProduct{
+		verify := captcha.VerifyString(f.CaptchaId, f.Digits)
+		if !verify{
+			err = utils.ErrCaptchaVerifyFail
+			return
+		}
+	}
 	if err = data.GetUserByUsername(f.Username); err != nil {
 		return
 	}

@@ -10,7 +10,7 @@ adminkeydir: ./conf/admin.key
 adminpubdir: ./conf/admin.pub
 db:
   host: 0.0.0.0
-  port: "5432"
+  port: "65433"
   driver: postgres
   databasename: business
   username: business
