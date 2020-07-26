@@ -96,7 +96,7 @@ func (am *GinRbac) RequiresPermissions(permissions []string, opts ...Option) gin
 		// Look up current subject.
 		sub := am.SubjectFn(c)
 		if sub == "" {
-			app.NewResponse(c).Response(401, "casbnin check failed")
+			app.NewGinResponse(c).Response(401, "casbnin check failed")
 			c.Abort()
 			return
 		}
@@ -109,13 +109,13 @@ func (am *GinRbac) RequiresPermissions(permissions []string, opts ...Option) gin
 				if obj == "" || act == "" {
 					// Can not handle any illegal permission strings.
 					log.Println("illegal permission string: ", permission)
-					app.NewResponse(c).Response(500, "illegal permission")
+					app.NewGinResponse(c).Response(500, "illegal permission")
 					c.Abort()
 					return
 				}
 
 				if ok, err := am.Enforce(sub, obj, act); !ok || err != nil {
-					app.NewResponse(c).Response(401, "casbnin check failed")
+					app.NewGinResponse(c).Response(401, "casbnin check failed")
 					c.Abort()
 					return
 				}
@@ -127,7 +127,7 @@ func (am *GinRbac) RequiresPermissions(permissions []string, opts ...Option) gin
 				obj, act := parsePermissionStrings(permission)
 				if obj == "" || act == "" {
 					log.Println("illegal permission string: ", permission)
-					app.NewResponse(c).Response(500, "illegal permission")
+					app.NewGinResponse(c).Response(500, "illegal permission")
 					c.Abort()
 					continue
 				}
@@ -137,7 +137,7 @@ func (am *GinRbac) RequiresPermissions(permissions []string, opts ...Option) gin
 					return
 				}
 			}
-			app.NewResponse(c).Response(401, "casbnin check failed")
+			app.NewGinResponse(c).Response(401, "casbnin check failed")
 			c.Abort()
 		}
 	}
@@ -164,7 +164,7 @@ func (am *GinRbac) RequiresRoles(requiredRoles []string, opts ...Option) gin.Han
 		// Look up current subject.
 		sub := am.SubjectFn(c)
 		if sub == "" {
-			app.NewResponse(c).Response(401, "casbnin check failed")
+			app.NewGinResponse(c).Response(401, "casbnin check failed")
 			return
 		}
 
@@ -180,7 +180,7 @@ func (am *GinRbac) RequiresRoles(requiredRoles []string, opts ...Option) gin.Han
 		actualRoles, err := am.GetRolesForUser(sub)
 		if err != nil {
 			log.Println("couldn't get roles of subject: ", err)
-			app.NewResponse(c).Response(500, "illegal permission")
+			app.NewGinResponse(c).Response(500, "illegal permission")
 			return
 		}
 
@@ -190,7 +190,7 @@ func (am *GinRbac) RequiresRoles(requiredRoles []string, opts ...Option) gin.Han
 		if actualOptions.logic == AND {
 			// Must have all required roles.
 			if !reflect.DeepEqual(requiredRoles, actualRoles) {
-				app.NewResponse(c).Response(401, "casbnin check failed")
+				app.NewGinResponse(c).Response(401, "casbnin check failed")
 			} else {
 				c.Next()
 			}
@@ -204,7 +204,7 @@ func (am *GinRbac) RequiresRoles(requiredRoles []string, opts ...Option) gin.Han
 					return
 				}
 			}
-			app.NewResponse(c).Response(401, "casbnin check failed")
+			app.NewGinResponse(c).Response(401, "casbnin check failed")
 		}
 	}
 }

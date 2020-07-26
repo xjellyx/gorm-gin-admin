@@ -37,9 +37,9 @@ func UserRegister(c *gin.Context) {
 
 	defer func() {
 		if err != nil {
-			app.NewResponse(c).Response(httpCode, err.Error())
+			app.NewGinResponse(c).SetCodeAndMessage(httpCode,err.Error()).Response()
 		} else {
-			app.NewResponse(c).Response(200, data)
+			app.NewGinResponse(c).SetCodeAndMessage(httpCode,"success").SetData(data).Response()
 		}
 	}()
 	if err = c.Bind(form); err != nil {
@@ -64,14 +64,14 @@ func UserLogin(c *gin.Context) {
 	var (
 		form     = &utils.LoginForm{}
 		err      error
-		httpCode = http.StatusInternalServerError
+		httpCode = 500
 		token    string
 	)
 	defer func() {
 		if err != nil {
-			app.NewResponse(c).Response(httpCode, err.Error())
+			app.NewGinResponse(c).SetCodeAndMessage(httpCode,err.Error()).Response()
 		} else {
-			app.NewResponse(c).Response(200, map[string]string{"token": token})
+			app.NewGinResponse(c).SetCodeAndMessage(200,"success").SetData(map[string]string{"token": token}).Response()
 		}
 	}()
 	form.IP = c.ClientIP()
@@ -100,9 +100,9 @@ func UserLogout(c *gin.Context) {
 	)
 	defer func() {
 		if err != nil {
-			app.NewResponse(c).Response(httpCode, err.Error())
+			app.NewGinResponse(c).SetCodeAndMessage(httpCode,err.Error()).Response()
 		} else {
-			app.NewResponse(c).Response(200, map[string]string{})
+			app.NewGinResponse(c).SetCodeAndMessage(200,"success").Response()
 		}
 	}()
 	if s, err = GetSession(c); err != nil {
@@ -135,9 +135,9 @@ func ModifyProfile(c *gin.Context) {
 	)
 	defer func() {
 		if err != nil {
-			app.NewResponse(c).Response(httpCode, err.Error())
+			app.NewGinResponse(c).SetCodeAndMessage(httpCode,err.Error()).Response()
 		} else {
-			app.NewResponse(c).Response(200, data)
+			app.NewGinResponse(c).SetCodeAndMessage(httpCode,"success").SetData(data).Response()
 		}
 	}()
 	if s, err = GetSession(c); err != nil {
@@ -170,9 +170,9 @@ func GetUserProfile(c *gin.Context) {
 	)
 	defer func() {
 		if err != nil {
-			app.NewResponse(c).Response(httpCode, err.Error())
+			app.NewGinResponse(c).SetCodeAndMessage(httpCode,err.Error()).Response()
 		} else {
-			app.NewResponse(c).Response(200, data)
+			app.NewGinResponse(c).SetCodeAndMessage(httpCode,"success").SetData(data).Response()
 		}
 	}()
 	if s, err = GetSession(c); err != nil {
@@ -206,9 +206,9 @@ func ModifyLoginPwd(c *gin.Context) {
 	)
 	defer func() {
 		if err != nil {
-			app.NewResponse(c).Response(httpCode, err.Error())
+			app.NewGinResponse(c).SetCodeAndMessage(httpCode,err.Error()).Response()
 		} else {
-			app.NewResponse(c).Response(200, "")
+			app.NewGinResponse(c).SetCodeAndMessage(200,"message").Response()
 		}
 	}()
 	if err = c.ShouldBind(&f); err != nil {
@@ -245,9 +245,9 @@ func ModifyPayPwd(c *gin.Context) {
 	)
 	defer func() {
 		if err != nil {
-			app.NewResponse(c).Response(httpCode, err.Error())
+			app.NewGinResponse(c).SetCodeAndMessage(httpCode,err.Error()).Response()
 		} else {
-			app.NewResponse(c).Response(200, "")
+			app.NewGinResponse(c).SetCodeAndMessage(200,"message").Response()
 		}
 	}()
 	if err = c.ShouldBind(&f); err != nil {
@@ -283,11 +283,11 @@ func ModifyHeadIcon(c *gin.Context) {
 	)
 	defer func() {
 		if err != nil {
-			app.NewResponse(c).Response(httpCode, err.Error())
+			app.NewGinResponse(c).SetCodeAndMessage(httpCode,err.Error()).Response()
 		} else {
-			app.NewResponse(c).Response(200, gin.H{
+			app.NewGinResponse(c).SetCodeAndMessage(200,"message").SetData(gin.H{
 				"headIcon": d.HeadIcon,
-			})
+			}).Response()
 		}
 	}()
 	if headIcon, err = c.FormFile("headIcon"); err != nil {
@@ -343,13 +343,15 @@ func GetHeadIcon(c *gin.Context) {
 		err  error
 		s    *session.Session
 		data = new(models.UserBase)
+		httpCode =500
 	)
 	defer func() {
 		if err != nil {
-			app.NewResponse(c).Response(500, err.Error())
+			app.NewGinResponse(c).SetCodeAndMessage(httpCode,err.Error()).Response()
 		}
 	}()
 	if s, err = GetSession(c); err != nil {
+		httpCode =401
 		return
 	}
 	if err = data.GetUserByUId(s.UID); err != nil {
@@ -377,7 +379,7 @@ func SetPayPwd(c *gin.Context) {
 	)
 	defer func() {
 		if err != nil {
-			app.NewResponse(c).Response(httpCode, err.Error())
+			app.NewGinResponse(c).SetCodeAndMessage(httpCode,err.Error()).Response()
 		}
 	}()
 	if pwd = c.PostForm("pwd"); len(pwd) == 0 {
@@ -391,5 +393,5 @@ func SetPayPwd(c *gin.Context) {
 	if err = service.SetUserPayPwd(sess.UID, pwd); err != nil {
 		return
 	}
-	app.NewResponse(c).Response(200, nil)
+	app.NewGinResponse(c).SetCodeAndMessage(200,"success").Response()
 }

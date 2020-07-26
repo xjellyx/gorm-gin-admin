@@ -2,11 +2,11 @@ package app
 
 import (
 	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 type Gin struct {
-	C *gin.Context
+	C    *gin.Context
+	resp *Response
 }
 
 type Response struct {
@@ -15,37 +15,33 @@ type Response struct {
 }
 
 type Meta struct {
-	Status int         `json:"status"`
-	Msg    string      `json:"msg"`
-	Error  interface{} `json:"error"`
+	Code    int         `json:"code"`
+	Message string      `json:"message"`
 }
 
-// NewResponse
-func NewResponse(c *gin.Context) *Gin {
+// NewGinResponse
+func NewGinResponse(c *gin.Context) *Gin {
 	return &Gin{
 		c,
+		&Response{},
 	}
+}
+
+
+func (g *Gin) SetCodeAndMessage(code int,message string)*Gin  {
+	g.resp.Meta.Code=code
+	g.resp.Meta.Message=message
+	return g
+}
+
+func (g *Gin)SetData(data interface{})*Gin  {
+	g.resp.Data=data
+	return g
 }
 
 // Response setting gin.JSON
-func (g *Gin) Response(httpCode int, data interface{}) {
-	if httpCode != http.StatusOK {
-		g.C.JSON(httpCode, Response{
-			Meta: Meta{
-				Status: httpCode,
-				Msg:    "fail",
-				Error:  data,
-			},
-		})
-	} else {
-		g.C.JSON(httpCode, Response{
-			Meta: Meta{
-				Status: httpCode,
-				Msg:    "success",
-			},
-			Data: data,
-		})
-	}
+func (g *Gin) Response() {
+	g.C.JSON(g.resp.Meta.Code, g.resp)
 	g.C.Abort()
 	return
 }

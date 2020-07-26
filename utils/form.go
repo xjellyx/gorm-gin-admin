@@ -224,6 +224,7 @@ func (f *FormUserOnline) Valid() (err error) {
 
 // AddUserForm
 type AddUserForm struct {
+	Username string `form:"username" binding:"required"`
 	Phone    string `form:"phone" binding:"required"`
 	Password string `form:"password" binding:"required"`
 	Code     string `form:"code"`

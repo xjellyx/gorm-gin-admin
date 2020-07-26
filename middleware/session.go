@@ -36,8 +36,8 @@ func CheckUserAuth(isAdmin bool) gin.HandlerFunc {
 		if tokenStr == "" {
 			c.JSON(http.StatusOK, app.Response{
 				Meta: app.Meta{
-					Status: 500,
-					Error:  contrib.ErrTokenUndefined,
+					Code: 500,
+					Message:  contrib.ErrTokenUndefined.Error(),
 				},
 				Data: nil,
 			})
@@ -54,8 +54,8 @@ func CheckUserAuth(isAdmin bool) gin.HandlerFunc {
 			if s, err = models.AdminKey.SessionDecode(tokenStr); err != nil {
 				c.JSON(http.StatusOK, app.Response{
 					Meta: app.Meta{
-						Status: 500,
-						Error:  contrib.ErrTokenInvalid,
+						Code: 401,
+						Message:  contrib.ErrTokenInvalid.Error(),
 					},
 					Data: nil,
 				})
@@ -67,8 +67,8 @@ func CheckUserAuth(isAdmin bool) gin.HandlerFunc {
 			if s, err = models.UserKey.SessionDecode(tokenStr); err != nil {
 				c.JSON(http.StatusOK, app.Response{
 					Meta: app.Meta{
-						Status: 500,
-						Error:  contrib.ErrTokenInvalid,
+						Code: 401,
+						Message:  contrib.ErrTokenInvalid.Error(),
 					},
 					Data: nil,
 				})
@@ -80,8 +80,8 @@ func CheckUserAuth(isAdmin bool) gin.HandlerFunc {
 		if s.IP != c.ClientIP() {
 			c.JSON(http.StatusOK, app.Response{
 				Meta: app.Meta{
-					Status: 500,
-					Error:  utils.ErrIPAddressInvalid,
+					Code: 500,
+					Message:  utils.ErrIPAddressInvalid.Error(),
 				},
 				Data: nil,
 			})

@@ -30,10 +30,10 @@ func GetSession(c *gin.Context) (ret *session.Session, err error) {
 func GetSessionAndBindingForm(form interface{}, c *gin.Context) (ret *session.Session, code int, err error) {
 	code = 500
 	if ret, err = GetSession(c); err != nil {
-		return nil, 500, err
+		return nil, 401, err
 	}
 	if err = c.ShouldBind(form); err != nil {
-		return nil, 404, err
+		return nil, 400, err
 	}
 	return
 }

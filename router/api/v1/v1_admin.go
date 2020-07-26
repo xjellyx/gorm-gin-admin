@@ -30,9 +30,9 @@ func AdminLogin(c *gin.Context) {
 	)
 	defer func() {
 		if err != nil {
-			app.NewResponse(c).Response(httpCode, err.Error())
+			app.NewGinResponse(c).SetCodeAndMessage(httpCode,err.Error()).Response()
 		} else {
-			app.NewResponse(c).Response(200, map[string]string{"token": token})
+			app.NewGinResponse(c).SetCodeAndMessage(200, "success").SetData(map[string]string{"token": token}).Response()
 		}
 	}()
 
@@ -61,9 +61,9 @@ func AdminLogout(c *gin.Context) {
 	)
 	defer func() {
 		if err != nil {
-			app.NewResponse(c).Response(httpCode, err.Error())
+			app.NewGinResponse(c).SetCodeAndMessage(httpCode,err.Error()).Response()
 		} else {
-			app.NewResponse(c).Response(200, map[string]string{})
+			app.NewGinResponse(c).SetCodeAndMessage(200,"success").Response()
 		}
 	}()
 	if s, err = GetSession(c); err != nil {
@@ -94,7 +94,7 @@ func ListUser(c *gin.Context) {
 	)
 	defer func() {
 		if err != nil {
-			app.NewResponse(c).Response(httpCode, err.Error())
+			app.NewGinResponse(c).SetCodeAndMessage(httpCode,err.Error()).Response()
 		}
 	}()
 
@@ -107,7 +107,7 @@ func ListUser(c *gin.Context) {
 	if data, err = service.GetUserList(form); err != nil {
 		return
 	}
-	app.NewResponse(c).Response(200, data)
+	app.NewGinResponse(c).SetCodeAndMessage(httpCode,"success").SetData(data).Response()
 }
 
 // @tags 管理员
@@ -131,7 +131,7 @@ func EditUser(c *gin.Context) {
 	)
 	defer func() {
 		if err != nil {
-			app.NewResponse(c).Response(code, err.Error())
+			app.NewGinResponse(c).SetCodeAndMessage(code, err.Error()).Response()
 		}
 	}()
 	if _, code, err = GetSessionAndBindingForm(form, c); err != nil {
@@ -163,7 +163,7 @@ func AddRoleAPIPerm(c *gin.Context) {
 	)
 	defer func() {
 		if err != nil {
-			app.NewResponse(c).Response(code, err.Error())
+			app.NewGinResponse(c).SetCodeAndMessage(code, err.Error()).Response()
 		}
 	}()
 	if s, code, err = GetSessionAndBindingForm(f, c); err != nil {
@@ -177,7 +177,7 @@ func AddRoleAPIPerm(c *gin.Context) {
 		code = 500
 		return
 	}
-	app.NewResponse(c).Response(200, ret)
+app.NewGinResponse(c).SetCodeAndMessage(200,"success").SetData(ret).Response()
 }
 
 // @tags 管理员
@@ -200,7 +200,7 @@ func RemoveRolePermAPI(c *gin.Context) {
 	)
 	defer func() {
 		if err != nil {
-			app.NewResponse(c).Response(code, err.Error())
+			app.NewGinResponse(c).SetCodeAndMessage(code, err.Error()).Response()
 		}
 	}()
 	if s, code, err = GetSessionAndBindingForm(f, c); err != nil {
@@ -214,7 +214,7 @@ func RemoveRolePermAPI(c *gin.Context) {
 		code = 500
 		return
 	}
-	app.NewResponse(c).Response(200, ret)
+app.NewGinResponse(c).SetCodeAndMessage(200,"success").SetData(ret).Response()
 }
 
 // @tags 管理员
@@ -230,7 +230,7 @@ func RemoveRolePermAPI(c *gin.Context) {
 func GetRoleApiList(c *gin.Context) {
 	var (
 		err  error
-		code = 404
+		code = 500
 		s    *session.Session
 		uid  string
 		data []struct {
@@ -240,10 +240,11 @@ func GetRoleApiList(c *gin.Context) {
 	)
 	defer func() {
 		if err != nil {
-			app.NewResponse(c).Response(code, err.Error())
+			app.NewGinResponse(c).SetCodeAndMessage(code, err.Error()).Response()
 		}
 	}()
 	if s, err = GetSession(c); err != nil {
+		code = 401
 		return
 	}
 	uid = c.Query("uid")
@@ -253,7 +254,7 @@ func GetRoleApiList(c *gin.Context) {
 	if data, err = service.GetRuleApiList(uid); err != nil {
 		return
 	}
-	app.NewResponse(c).Response(200, data)
+	app.NewGinResponse(c).SetCodeAndMessage(200,"success").SetData(data).Response()
 
 }
 
@@ -270,16 +271,21 @@ func GetAllAPIGroup(c *gin.Context) {
 	var (
 		err error
 		ret []*models.APIGroup
+		code =500
 	)
 	defer func() {
 		if err != nil {
-			app.NewResponse(c).Response(500, err.Error())
+			app.NewGinResponse(c).SetCodeAndMessage(code,err.Error()).Response()
 		}
 	}()
+	if _, err = GetSession(c); err != nil {
+		code = 401
+		return
+	}
 	if ret, err = service.GetAPIGroupList(); err != nil {
 		return
 	}
-	app.NewResponse(c).Response(200, ret)
+app.NewGinResponse(c).SetCodeAndMessage(200,"success").SetData(ret).Response()
 }
 
 // @tags 管理员
@@ -301,7 +307,7 @@ func AddApiGroup(c *gin.Context) {
 	)
 	defer func() {
 		if err != nil {
-			app.NewResponse(c).Response(code, err.Error())
+			app.NewGinResponse(c).SetCodeAndMessage(code, err.Error()).Response()
 		}
 	}()
 	if _, code, err = GetSessionAndBindingForm(f, c); err != nil {
@@ -311,7 +317,7 @@ func AddApiGroup(c *gin.Context) {
 		code = 500
 		return
 	}
-	app.NewResponse(c).Response(200, ret)
+app.NewGinResponse(c).SetCodeAndMessage(200,"success").SetData(ret).Response()
 }
 
 // @tags 管理员
@@ -332,7 +338,7 @@ func RemoveApiGroup(c *gin.Context) {
 	)
 	defer func() {
 		if err != nil {
-			app.NewResponse(c).Response(code, err.Error())
+			app.NewGinResponse(c).SetCodeAndMessage(code, err.Error()).Response()
 		}
 	}()
 	id = c.Query("id")
@@ -346,7 +352,7 @@ func RemoveApiGroup(c *gin.Context) {
 		code = 500
 		return
 	}
-	app.NewResponse(c).Response(200, "")
+	app.NewGinResponse(c).SetCodeAndMessage(200,"success").Response()
 }
 
 // @tags 管理员
@@ -368,7 +374,7 @@ func EditApiGroup(c *gin.Context) {
 	)
 	defer func() {
 		if err != nil {
-			app.NewResponse(c).Response(code, err.Error())
+			app.NewGinResponse(c).SetCodeAndMessage(code, err.Error()).Response()
 		}
 	}()
 	if _, code, err = GetSessionAndBindingForm(f, c); err != nil {
@@ -379,6 +385,6 @@ func EditApiGroup(c *gin.Context) {
 		code = 500
 		return
 	}
-	app.NewResponse(c).Response(200, ret)
+app.NewGinResponse(c).SetCodeAndMessage(200,"success").SetData(ret).Response()
 
 }

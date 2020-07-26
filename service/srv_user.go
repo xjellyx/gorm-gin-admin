@@ -19,7 +19,7 @@ func AddUser(form *utils.AddUserForm) (ret *models.UserBase, err error) {
 		return
 	}
 	u.Phone = form.Phone
-	u.Username = form.Phone
+	u.Username = form.Username
 	if _d, _err := bcrypt.GenerateFromPassword([]byte(form.Password), bcrypt.DefaultCost); _err != nil {
 		err = _err
 		return
