@@ -16,11 +16,11 @@ func AddIDCard(uid string, f *utils.FormIDCard) (ret *models.UserCard, err error
 		u    = new(models.UserBase)
 		data = new(models.UserCard)
 	)
-	if err = u.GetUserByUId(uid); err != nil {
+	if err = u.GetByUId(uid); err != nil {
 		return
 	}
 	// 已经实名认证，返回
-	if err = data.GetIDCardByUid(uid); err == nil && data.ID != 0 {
+	if err = data.GetByUid(uid); err == nil && data.ID != 0 {
 		err = utils.ErrUserIsVerified
 		return
 	} else if err != nil {
@@ -36,7 +36,7 @@ func AddIDCard(uid string, f *utils.FormIDCard) (ret *models.UserCard, err error
 	data.CardId = f.CardId
 	data.Nation = f.Nation
 	data.ValidPeriod = f.ValidPeriod
-	if err = data.InsertIDCard(); err != nil {
+	if err = data.Insert(); err != nil {
 		return
 	}
 

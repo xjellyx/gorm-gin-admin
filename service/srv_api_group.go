@@ -33,7 +33,7 @@ func EditAPIGroup(f *utils.FormAPIGroupEdit) (ret *models.APIGroup, err error) {
 		dataCasbin = new(models.RuleAPI)
 		m          = map[string]interface{}{}
 	)
-	if err = data.GetAPIGroup(f.Id); err != nil {
+	if err = data.Get(f.Id); err != nil {
 		return nil, err
 	}
 	path := data.Path
@@ -53,11 +53,11 @@ func EditAPIGroup(f *utils.FormAPIGroupEdit) (ret *models.APIGroup, err error) {
 		m["v2"] = f.Method
 	}
 	if len(m) > 0 {
-		if err = dataCasbin.UpdateRuleAPI(path, method, m); err != nil {
+		if err = dataCasbin.Update(path, method, m); err != nil {
 			return nil, err
 		}
 	}
-	if err = data.UpdateAPIGroup(f.Id, data); err != nil {
+	if err = data.Update(f.Id, data); err != nil {
 		return nil, err
 	}
 
@@ -70,15 +70,15 @@ func DelAPIGroup(id int64) (err error) {
 		data       = new(models.APIGroup)
 		dataCasbin = new(models.RuleAPI)
 	)
-	if err = data.GetAPIGroup(id); err != nil {
+	if err = data.Get(id); err != nil {
 		return
 	}
 
-	if err = dataCasbin.DeleteRuleAPIData(data.Path, data.Method); err != nil {
+	if err = dataCasbin.DeleteByPathAndMethod(data.Path, data.Method); err != nil {
 		return err
 	}
 
-	return data.DeleteAPIGroup(id)
+	return data.Delete(id)
 }
 
 // GetAPIGroupList

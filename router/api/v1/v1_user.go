@@ -178,7 +178,7 @@ func GetUserProfile(c *gin.Context) {
 	if s, err = GetSession(c); err != nil {
 		return
 	}
-	if err = data.GetUserByUId(s.UID); err != nil {
+	if err = data.GetByUId(s.UID); err != nil {
 		return
 	}
 
@@ -312,7 +312,7 @@ func ModifyHeadIcon(c *gin.Context) {
 	if s, err = GetSession(c); err != nil {
 		return
 	}
-	if err = d.GetUserByUId(s.UID); err != nil {
+	if err = d.GetByUId(s.UID); err != nil {
 		return
 	}
 	oldDst := d.HeadIcon
@@ -323,7 +323,7 @@ func ModifyHeadIcon(c *gin.Context) {
 		return
 	}
 
-	if err = d.UpdateUserOne(s.UID, "head_icon", dst); err != nil {
+	if err = d.UpdateOne(s.UID, "head_icon", dst); err != nil {
 		return
 	}
 	os.Remove(oldDst)
@@ -354,7 +354,7 @@ func GetHeadIcon(c *gin.Context) {
 		httpCode =401
 		return
 	}
-	if err = data.GetUserByUId(s.UID); err != nil {
+	if err = data.GetByUId(s.UID); err != nil {
 		return
 	}
 	c.File(data.HeadIcon)

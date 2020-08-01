@@ -24,40 +24,40 @@ func NewAPIGroup() *APIGroup {
 	return new(APIGroup)
 }
 
-// InsertAPIGroup 插入数据
-func (a *APIGroup) InsertAPIGroup() (err error) {
+// Insert 插入数据
+func (a *APIGroup) Insert() (err error) {
 	if err = DB.Model(&APIGroup{}).Create(a).Error; err != nil {
-		logModel.Errorln("[InsertAPIGroup] err: ", err)
+		logModel.Errorln(err)
 		err = utils.ErrInsertDataFailed
 		return
 	}
 	return
 }
 
-// UpdateAPIGroup 更新数据
-func (a *APIGroup) UpdateAPIGroup(id int64, m interface{}) (err error) {
+// Update 更新数据
+func (a *APIGroup) Update(id int64, m interface{}) (err error) {
 	if err = DB.Table(APIGroupTableName()).Where("id = ?", id).Updates(m).Error; err != nil {
-		logModel.Errorln("[UpdateAPIGroup] err: ", err)
+		logModel.Errorln(err)
 		err = utils.ErrUpdateDataFailed
 		return err
 	}
 	return
 }
 
-// DeleteAPIGroup 删除api数据
-func (a *APIGroup) DeleteAPIGroup(id int64) (err error) {
+// Delete 删除api数据
+func (a *APIGroup) Delete(id int64) (err error) {
 	if err = DB.Table(APIGroupTableName()).Where("id =  ?", id).Delete(a).Error; err != nil {
-		logModel.Errorln("[DeleteAPIGroup] err: ", err)
+		logModel.Errorln(err)
 		err = utils.ErrDeleteDataFailed
 		return err
 	}
 	return
 }
 
-// GetAPIGroup 获取api数据
-func (a *APIGroup) GetAPIGroup(id int64) (err error) {
+// Get 获取api数据
+func (a *APIGroup) Get(id int64) (err error) {
 	if err = DB.First(a, "id = ?", id).Error; err != nil {
-		logModel.Errorln("[GetAPIGroup] err: ", err)
+		logModel.Errorln(err)
 		err = utils.ErrGetDataFailed
 		return
 	}
@@ -67,7 +67,7 @@ func (a *APIGroup) GetAPIGroup(id int64) (err error) {
 // GetAPIGroupList 获取api列表
 func GetAPIGroupList() (ret []*APIGroup, err error) {
 	if err = DB.Table(APIGroupTableName()).Where("id > ?", 0).Find(&ret).Error; err != nil {
-		logModel.Errorln("[GetAPIGroupList] err: ", err)
+		logModel.Errorln(err)
 		err = utils.ErrGetDataFailed
 		return nil, err
 	}
@@ -89,7 +89,7 @@ func BatchInsertAPIGroup(datas []*APIGroup) (err error) {
 		}
 	}
 	if err = DB.Exec(buffer.String()).Error; err != nil {
-		logModel.Errorln("[BatchInsertAPIGroup] err: ", err)
+		logModel.Errorln(err)
 		err = utils.ErrInsertDataFailed
 		return
 	}

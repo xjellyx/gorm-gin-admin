@@ -37,19 +37,19 @@ func NewUserBase() *UserBase {
 	return new(UserBase)
 }
 
-// InsertUserData 插入一条数据
-func (u *UserBase) InsertUserData() (err error) {
+// Insert 插入一条数据
+func (u *UserBase) Insert() (err error) {
 	if err = DB.Create(u).Error; err != nil {
-		logModel.Errorln("[InsertUserData] err: ", err)
+		logModel.Errorln(err)
 		err = utils.ErrInsertDataFailed
 		return
 	}
 	return
 }
 
-func (u *UserBase) UpdateUserInterface(uid string, data interface{}) (err error) {
+func (u *UserBase) Update(uid string, data interface{}) (err error) {
 	if err = DB.Model(u).Where("uid = ?", uid).Updates(data).Error; err != nil {
-		logModel.Errorln("[UpdateUserInterface] err: ", err)
+		logModel.Errorln(err)
 		err = utils.ErrInsertDataFailed
 		return
 	}
@@ -59,57 +59,57 @@ func (u *UserBase) UpdateUserInterface(uid string, data interface{}) (err error)
 // UpdateUser 更新数据
 func (u *UserBase) UpdateUser(uid string) (err error) {
 	if err = DB.Model(u).Where("uid = ?", uid).Updates(u).Error; err != nil {
-		logModel.Errorln("[UpdateUser] err: ", err)
+		logModel.Errorln(err)
 		err = utils.ErrUpdateDataFailed
 		return
 	}
 	return
 }
 
-// UpdateUserOne 更新一个字段
-func (u *UserBase) UpdateUserOne(uid string, column string, val interface{}) (err error) {
+// UpdateOne 更新一个字段
+func (u *UserBase) UpdateOne(uid string, column string, val interface{}) (err error) {
 	if err = DB.Model(u).Where("uid = ?", uid).Update(column, val).Error; err != nil {
-		logModel.Errorln("[UpdateUserOne] err: ", err)
+		logModel.Errorln(err)
 		err = utils.ErrUpdateDataFailed
 		return
 	}
 	return
 }
 
-// GetUserById 通过id获取数据
-func (u *UserBase) GetUserById(id int64) (err error) {
+// GetById 通过id获取数据
+func (u *UserBase) GetById(id int64) (err error) {
 	if err = DB.First(u, "id = ?", id).Error; err != nil {
-		logModel.Errorln("[GetUserById] err: ", err)
+		logModel.Errorln(err)
 		err = utils.ErrGetDataFailed
 		return
 	}
 	return
 }
 
-// GetUserByUId 通过id获取数据
-func (u *UserBase) GetUserByUId(uid string) (err error) {
+// GetByUId 通过id获取数据
+func (u *UserBase) GetByUId(uid string) (err error) {
 	if err = DB.First(u, "uid = ?", uid).Error; err != nil {
-		logModel.Errorln("[GetUserById] err: ", err)
+		logModel.Errorln(err)
 		err = utils.ErrGetDataFailed
 		return
 	}
 	return
 }
 
-// GetUserByUsername 通过username获取用户信息
-func (u *UserBase) GetUserByUsername(username string) (err error) {
+// GetByUsername 通过username获取用户信息
+func (u *UserBase) GetByUsername(username string) (err error) {
 	if err = DB.Find(u, "username = ?", username).Error; err != nil {
-		logModel.Errorln("[GetUserByUsername] err: ", err)
+		logModel.Errorln(err)
 		err = utils.ErrGetDataFailed
 		return
 	}
 	return
 }
 
-// GetUserByPhone 通过phone获取信息
-func (u *UserBase) GetUserByPhone(phone string) (err error) {
+// GetByPhone 通过phone获取信息
+func (u *UserBase) GetByPhone(phone string) (err error) {
 	if err = DB.First(u, "phone = ?", phone).Error; err != nil {
-		logModel.Errorln("[GetUserByPhone] err: ", err)
+		logModel.Errorln(err)
 		err = utils.ErrGetDataFailed
 		return
 	}
@@ -119,7 +119,7 @@ func (u *UserBase) GetUserByPhone(phone string) (err error) {
 // GetUserList 获取用户列表
 func GetUserList(q *query.Query) (ret []*UserBase, err error) {
 	if err = DB.Model(&UserBase{}).Where(q.Cond, q.Values...).Offset(q.PageNum).Limit(q.PageSize).Find(&ret).Error; err != nil {
-		logModel.Errorln("[GetUserList] err: ", err)
+		logModel.Errorln(err)
 		err = utils.ErrGetDataFailed
 		return
 	}
@@ -130,7 +130,7 @@ func GetUserList(q *query.Query) (ret []*UserBase, err error) {
 func GetUserTotal(cond interface{}) (ret int64, err error) {
 	var count int64
 	if err = DB.Model(&UserBase{}).Where(cond).Count(&count).Error; err != nil {
-		logModel.Errorln("[GetUserTotal] err: ", err)
+		logModel.Errorln(err)
 		err = utils.ErrGetDataFailed
 		return 0, err
 	}

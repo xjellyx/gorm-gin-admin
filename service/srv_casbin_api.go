@@ -17,12 +17,12 @@ func AddRuleAPI(f *utils.FormRoleAPIPerm) (ret []int64, err error) {
 	if e, err = casbin.NewEnforcer(setting.ProjectSetting.RBACModelDir, models.Adapter); err != nil {
 		return
 	}
-	if err = user.GetUserByUId(f.Uid); err != nil {
+	if err = user.GetByUId(f.Uid); err != nil {
 		return
 	}
 	for _, v := range f.GroupID {
 		dataGroup := new(models.APIGroup)
-		if err = dataGroup.GetAPIGroup(v); err != nil {
+		if err = dataGroup.Get(v); err != nil {
 			return
 		}
 		if _, err = e.AddPolicy(f.Uid, dataGroup.Path, dataGroup.Method); err != nil {
@@ -45,12 +45,12 @@ func RemoveRuleAPI(f *utils.FormRoleAPIPerm) (ret []int64, err error) {
 	if e, err = casbin.NewEnforcer(setting.ProjectSetting.RBACModelDir, models.Adapter); err != nil {
 		return
 	}
-	if err = user.GetUserByUId(f.Uid); err != nil {
+	if err = user.GetByUId(f.Uid); err != nil {
 		return
 	}
 	for _, v := range f.GroupID {
 		dataGroup := new(models.APIGroup)
-		if err = dataGroup.GetAPIGroup(v); err != nil {
+		if err = dataGroup.Get(v); err != nil {
 			return
 		}
 		if _, err = e.RemovePolicy(f.Uid, dataGroup.Path, dataGroup.Method); err != nil {

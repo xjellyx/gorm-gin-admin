@@ -21,61 +21,61 @@ type UserCard struct {
 	Nation      string `json:"nation" `
 }
 
-// InsertIDCard 插入一条数据
-func (u *UserCard) InsertIDCard() (err error) {
+// Insert 插入一条数据
+func (u *UserCard) Insert() (err error) {
 	if err = DB.Create(u).Error; err != nil {
-		logModel.Errorln("[InsertIDCard] err: ", err)
+		logModel.Errorln(err)
 		err = utils.ErrInsertDataFailed
 		return
 	}
 	return
 }
 
-// UpdateIDCard 更新数据
-func (u *UserCard) UpdateIDCard(uid string) (err error) {
+// Update 更新数据
+func (u *UserCard) Update(uid string) (err error) {
 	if err = DB.Model(u).Where("uid = ?", uid).Updates(u).Error; err != nil {
-		logModel.Errorln("[UpdateIDCard] err: ", err)
+		logModel.Errorln(err)
 		err = utils.ErrUpdateDataFailed
 		return
 	}
 	return
 }
 
-// UpdateIDCardOne 更新一个字段
-func (u *UserCard) UpdateIDCardOne(uid string, column string, value interface{}) (err error) {
+// UpdateOne 更新一个字段
+func (u *UserCard) UpdateOne(uid string, column string, value interface{}) (err error) {
 	if err = DB.Model(u).Where("uid = ?", uid).Update(column, value).Error; err != nil {
-		logModel.Errorln("[UpdateIDCardOne] err: ", err)
+		logModel.Errorln(err)
 		err = utils.ErrUpdateDataFailed
 		return err
 	}
 	return
 }
 
-// GetIDCardById
-func (u *UserCard) GetIDCardById(id int64) (err error) {
+// GetById
+func (u *UserCard) GetById(id int64) (err error) {
 	if err = DB.Model(u).Where("id = ?", id).Find(&u).Error; err != nil {
-		logModel.Errorln("[GetIDCardById] err: ", err)
+		logModel.Errorln(err)
 		err = utils.ErrGetDataFailed
 		return err
 	}
 	return
 }
 
-// GetIDCardByUid
-func (u *UserCard) GetIDCardByUid(uid string) (err error) {
+// GetByUid
+func (u *UserCard) GetByUid(uid string) (err error) {
 
 	if err = DB.Model(u).Where("uid = ?", uid).Find(u).Error; err != nil {
-		logModel.Errorln("[GetIDCardByUid] err: ", err)
+		logModel.Errorln(err)
 		err = utils.ErrGetDataFailed
 		return
 	}
 	return
 }
 
-// GetIDCardByCardID
-func (u *UserCard) GetIDCardByCardID(cardId string) (err error) {
+// GetByIDCard
+func (u *UserCard) GetByIDCard(cardId string) (err error) {
 	if err = DB.Model(u).Where("card_id = ?", cardId).Find(u).Error; err != nil {
-		logModel.Errorln("[GetIDCarsByCardID] err: ", err)
+		logModel.Errorln(err)
 		err = utils.ErrGetDataFailed
 		return
 	}
@@ -85,7 +85,7 @@ func (u *UserCard) GetIDCardByCardID(cardId string) (err error) {
 // GetIDCardList
 func GetIDCardList(q *query.Query) (ret []*UserCard, err error) {
 	if err = DB.Model(&UserCard{}).Where(q.Cond, q.Values...).Offset(q.PageNum).Limit(q.PageSize).Find(&ret).Error; err != nil {
-		logModel.Errorln("[GetIDCardList] err: ", err)
+		logModel.Errorln(err)
 		err = utils.ErrGetDataFailed
 		return
 	}
@@ -96,7 +96,7 @@ func GetIDCardList(q *query.Query) (ret []*UserCard, err error) {
 func GetUserIDCardTotal(cond interface{}) (ret int64, err error) {
 	var count int64
 	if err = DB.Model(&UserCard{}).Where(cond).Count(&count).Error; err != nil {
-		logModel.Errorln("[GetUserIDCardTotal] err: ", err)
+		logModel.Errorln(err)
 		err = utils.ErrGetDataFailed
 		return 0, err
 	}

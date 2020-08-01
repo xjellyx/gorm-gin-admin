@@ -27,7 +27,7 @@ func AddUser(form *utils.AddUserForm) (ret *models.UserBase, err error) {
 		u.LoginPwd = string(_d)
 	}
 	u.Uid = uuid.NewV4().String()
-	if err = u.InsertUserData(); err != nil {
+	if err = u.Insert(); err != nil {
 		return
 	}
 	return u, nil
@@ -43,14 +43,14 @@ func EditUser(form *utils.FormEditUser) (ret *models.UserBase, err error) {
 		return
 	}
 
-	if err = data.GetUserByUId(form.Uid); err != nil {
+	if err = data.GetByUId(form.Uid); err != nil {
 		return
 	}
 	if data.IsAdmin {
 		err = utils.ErrActionNotAllow
 		return
 	}
-	if err = data.UpdateUserInterface(form.Uid, dataMap); err != nil {
+	if err = data.Update(form.Uid, dataMap); err != nil {
 		return nil, err
 	}
 
@@ -68,7 +68,7 @@ func ChangePwd(uid string, oldPasswd, newPasswd string) (err error) {
 		err = utils.ErrFormParamInvalid
 		return
 	}
-	if err = data.GetUserByUId(uid); err != nil {
+	if err = data.GetByUId(uid); err != nil {
 		return
 	}
 	if err = bcrypt.CompareHashAndPassword([]byte(data.LoginPwd), []byte(oldPasswd)); err != nil {
@@ -78,7 +78,7 @@ func ChangePwd(uid string, oldPasswd, newPasswd string) (err error) {
 		err = _err
 		return
 	} else {
-		return data.UpdateUserOne(uid, "login_pwd", string(_d))
+		return data.UpdateOne(uid, "login_pwd", string(_d))
 	}
 }
 
@@ -91,7 +91,7 @@ func ChangePayPwd(uid string, oldPasswd, newPasswd string) (err error) {
 		err = utils.ErrFormParamInvalid
 		return
 	}
-	if err = data.GetUserByUId(uid); err != nil {
+	if err = data.GetByUId(uid); err != nil {
 		return
 	}
 	if len(data.PayPwd) == 0 {
@@ -105,14 +105,14 @@ func ChangePayPwd(uid string, oldPasswd, newPasswd string) (err error) {
 		err = _err
 		return
 	} else {
-		return data.UpdateUserOne(uid, "pay_pwd", string(_d))
+		return data.UpdateOne(uid, "pay_pwd", string(_d))
 	}
 }
 
 // SetUserPayPwd
 func SetUserPayPwd(uid string, pwd string) (err error) {
 	u := new(models.UserBase)
-	if err = u.GetUserByUId(uid); err != nil {
+	if err = u.GetByUId(uid); err != nil {
 		return
 	}
 	if len(u.PayPwd) > 0 {
@@ -123,7 +123,7 @@ func SetUserPayPwd(uid string, pwd string) (err error) {
 		err = _err
 		return
 	} else {
-		return u.UpdateUserOne(uid, "pay_pwd", string(_d))
+		return u.UpdateOne(uid, "pay_pwd", string(_d))
 	}
 }
 

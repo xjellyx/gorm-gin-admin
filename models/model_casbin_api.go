@@ -14,27 +14,27 @@ func RuleAPITableName() string {
 	return "casbin_rule"
 }
 
-func (c *RuleAPI) InsertRuleAPI() (err error) {
+func (c *RuleAPI) Insert() (err error) {
 	if err = DB.Table(RuleAPITableName()).Create(c).Error; err != nil {
-		logModel.Errorln("[InsertRuleAPI] err: ", err)
+		logModel.Errorln(err)
 		err = utils.ErrGetDataFailed
 		return err
 	}
 	return
 }
 
-func (c *RuleAPI) UpdateRuleAPI(path string, method string, m map[string]interface{}) (err error) {
+func (c *RuleAPI) Update(path string, method string, m map[string]interface{}) (err error) {
 	if err = DB.Table(RuleAPITableName()).Updates(m).Where("v1 = ? and v2 = ?", path, method).Error; err != nil {
-		logModel.Errorln("[UpdateRuleAPI] err: ", err)
+		logModel.Errorln(err)
 		err = utils.ErrUpdateDataFailed
 		return err
 	}
 	return
 }
 
-func (c *RuleAPI) DeleteRuleAPI(id int64) (err error) {
+func (c *RuleAPI) Delete(id int64) (err error) {
 	if err = DB.Table(RuleAPITableName()).Delete(c, "id = ?", id).Error; err != nil {
-		logModel.Errorln("[DeleteRuleAPI] err: ", err)
+		logModel.Errorln(err)
 		err = utils.ErrDeleteDataFailed
 		return err
 	}
@@ -43,7 +43,7 @@ func (c *RuleAPI) DeleteRuleAPI(id int64) (err error) {
 
 func GetRuleAPIListByUID(uid string) (ret []*RuleAPI, err error) {
 	if err = DB.Table(RuleAPITableName()).Where("uid = ?", uid).Find(&ret).Order("id asc").Error; err != nil {
-		logModel.Errorln("[GetRuleAPIListByUID] err: ", err)
+		logModel.Errorln(err)
 		err = utils.ErrGetDataFailed
 		return nil, err
 	}
@@ -52,9 +52,9 @@ func GetRuleAPIListByUID(uid string) (ret []*RuleAPI, err error) {
 
 //
 
-func (c *RuleAPI) DeleteRuleAPIData(path string, method string) (err error) {
+func (c *RuleAPI) DeleteByPathAndMethod(path string, method string) (err error) {
 	if err = DB.Table(RuleAPITableName()).Delete(c, "v1 = ? and v2 = ?", path, method).Error; err != nil {
-		logModel.Errorln("[DeleteRuleAPIData] err: ", err)
+		logModel.Errorln(err)
 		err = utils.ErrDeleteDataFailed
 		return err
 	}

@@ -26,7 +26,7 @@ func UserLogin(f *utils.LoginForm, isAdmin bool) (token string, err error) {
 			return
 		}
 	}
-	if err = data.GetUserByUsername(f.Username); err != nil {
+	if err = data.GetByUsername(f.Username); err != nil {
 		return
 	}
 	if data.Status == models.UserStatusLock {
@@ -62,7 +62,7 @@ func UserLogin(f *utils.LoginForm, isAdmin bool) (token string, err error) {
 			return
 		}
 	}
-	if err = data.UpdateUserOne(s.UID, "status", models.UserStatusLogin); err != nil {
+	if err = data.UpdateOne(s.UID, "status", models.UserStatusLogin); err != nil {
 		return
 	}
 	//var (
@@ -111,12 +111,12 @@ func UserLogout(uid string) (err error) {
 	var (
 		data = new(models.UserBase)
 	)
-	if err = data.GetUserByUId(uid); err != nil {
+	if err = data.GetByUId(uid); err != nil {
 		return err
 	}
 	if data.Status != models.UserStatusLogin {
 		err = utils.ErrActionNotAllow
 		return
 	}
-	return data.UpdateUserOne(uid, "status", models.UserStatusLogout)
+	return data.UpdateOne(uid, "status", models.UserStatusLogout)
 }
