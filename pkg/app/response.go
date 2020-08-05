@@ -5,7 +5,7 @@ import (
 )
 
 type Gin struct {
-	C    *gin.Context
+	c    *gin.Context
 	resp *Response
 }
 
@@ -15,8 +15,8 @@ type Response struct {
 }
 
 type Meta struct {
-	Code    int         `json:"code"`
-	Message string      `json:"message"`
+	Code    int    `json:"code"`
+	Message string `json:"message"`
 }
 
 // NewGinResponse
@@ -27,21 +27,22 @@ func NewGinResponse(c *gin.Context) *Gin {
 	}
 }
 
-
-func (g *Gin) SetCodeAndMessage(code int,message string)*Gin  {
-	g.resp.Meta.Code=code
-	g.resp.Meta.Message=message
+func (g *Gin) Fail(code int, message string) *Gin {
+	g.resp.Meta.Code = code
+	g.resp.Meta.Message = message
 	return g
 }
 
-func (g *Gin)SetData(data interface{})*Gin  {
-	g.resp.Data=data
+func (g *Gin) Success(data interface{}) *Gin {
+	g.resp.Meta.Code = 200
+	g.resp.Meta.Message = "success"
+	g.resp.Data = data
 	return g
 }
 
 // Response setting gin.JSON
 func (g *Gin) Response() {
-	g.C.JSON(g.resp.Meta.Code, g.resp)
-	g.C.Abort()
+	g.c.JSON(g.resp.Meta.Code, g.resp)
+	g.c.Abort()
 	return
 }

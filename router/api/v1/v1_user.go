@@ -37,9 +37,9 @@ func UserRegister(c *gin.Context) {
 
 	defer func() {
 		if err != nil {
-			app.NewGinResponse(c).SetCodeAndMessage(httpCode,err.Error()).Response()
+			app.NewGinResponse(c).Fail(httpCode, err.Error()).Response()
 		} else {
-			app.NewGinResponse(c).SetCodeAndMessage(httpCode,"success").SetData(data).Response()
+			app.NewGinResponse(c).Success(data).Response()
 		}
 	}()
 	if err = c.Bind(form); err != nil {
@@ -69,9 +69,9 @@ func UserLogin(c *gin.Context) {
 	)
 	defer func() {
 		if err != nil {
-			app.NewGinResponse(c).SetCodeAndMessage(httpCode,err.Error()).Response()
+			app.NewGinResponse(c).Fail(httpCode, err.Error()).Response()
 		} else {
-			app.NewGinResponse(c).SetCodeAndMessage(200,"success").SetData(map[string]string{"token": token}).Response()
+			app.NewGinResponse(c).Success(map[string]string{"token": token}).Response()
 		}
 	}()
 	form.IP = c.ClientIP()
@@ -100,9 +100,9 @@ func UserLogout(c *gin.Context) {
 	)
 	defer func() {
 		if err != nil {
-			app.NewGinResponse(c).SetCodeAndMessage(httpCode,err.Error()).Response()
+			app.NewGinResponse(c).Fail(httpCode, err.Error()).Response()
 		} else {
-			app.NewGinResponse(c).SetCodeAndMessage(200,"success").Response()
+			app.NewGinResponse(c).Success(nil).Response()
 		}
 	}()
 	if s, err = GetSession(c); err != nil {
@@ -135,9 +135,9 @@ func ModifyProfile(c *gin.Context) {
 	)
 	defer func() {
 		if err != nil {
-			app.NewGinResponse(c).SetCodeAndMessage(httpCode,err.Error()).Response()
+			app.NewGinResponse(c).Fail(httpCode, err.Error()).Response()
 		} else {
-			app.NewGinResponse(c).SetCodeAndMessage(httpCode,"success").SetData(data).Response()
+			app.NewGinResponse(c).Success(data).Response()
 		}
 	}()
 	if s, err = GetSession(c); err != nil {
@@ -170,9 +170,9 @@ func GetUserProfile(c *gin.Context) {
 	)
 	defer func() {
 		if err != nil {
-			app.NewGinResponse(c).SetCodeAndMessage(httpCode,err.Error()).Response()
+			app.NewGinResponse(c).Fail(httpCode, err.Error()).Response()
 		} else {
-			app.NewGinResponse(c).SetCodeAndMessage(httpCode,"success").SetData(data).Response()
+			app.NewGinResponse(c).Success(data).Response()
 		}
 	}()
 	if s, err = GetSession(c); err != nil {
@@ -206,9 +206,9 @@ func ModifyLoginPwd(c *gin.Context) {
 	)
 	defer func() {
 		if err != nil {
-			app.NewGinResponse(c).SetCodeAndMessage(httpCode,err.Error()).Response()
+			app.NewGinResponse(c).Fail(httpCode, err.Error()).Response()
 		} else {
-			app.NewGinResponse(c).SetCodeAndMessage(200,"message").Response()
+			app.NewGinResponse(c).Success(nil).Response()
 		}
 	}()
 	if err = c.ShouldBind(&f); err != nil {
@@ -245,9 +245,9 @@ func ModifyPayPwd(c *gin.Context) {
 	)
 	defer func() {
 		if err != nil {
-			app.NewGinResponse(c).SetCodeAndMessage(httpCode,err.Error()).Response()
+			app.NewGinResponse(c).Fail(httpCode, err.Error()).Response()
 		} else {
-			app.NewGinResponse(c).SetCodeAndMessage(200,"message").Response()
+			app.NewGinResponse(c).Success(nil).Response()
 		}
 	}()
 	if err = c.ShouldBind(&f); err != nil {
@@ -283,9 +283,9 @@ func ModifyHeadIcon(c *gin.Context) {
 	)
 	defer func() {
 		if err != nil {
-			app.NewGinResponse(c).SetCodeAndMessage(httpCode,err.Error()).Response()
+			app.NewGinResponse(c).Fail(httpCode, err.Error()).Response()
 		} else {
-			app.NewGinResponse(c).SetCodeAndMessage(200,"message").SetData(gin.H{
+			app.NewGinResponse(c).Success(gin.H{
 				"headIcon": d.HeadIcon,
 			}).Response()
 		}
@@ -340,18 +340,18 @@ func ModifyHeadIcon(c *gin.Context) {
 // @Router /api/v1/user/getHeadIcon [get]
 func GetHeadIcon(c *gin.Context) {
 	var (
-		err  error
-		s    *session.Session
-		data = new(models.UserBase)
-		httpCode =500
+		err      error
+		s        *session.Session
+		data     = new(models.UserBase)
+		httpCode = 500
 	)
 	defer func() {
 		if err != nil {
-			app.NewGinResponse(c).SetCodeAndMessage(httpCode,err.Error()).Response()
+			app.NewGinResponse(c).Fail(httpCode, err.Error()).Response()
 		}
 	}()
 	if s, err = GetSession(c); err != nil {
-		httpCode =401
+		httpCode = 401
 		return
 	}
 	if err = data.GetByUId(s.UID); err != nil {
@@ -379,7 +379,7 @@ func SetPayPwd(c *gin.Context) {
 	)
 	defer func() {
 		if err != nil {
-			app.NewGinResponse(c).SetCodeAndMessage(httpCode,err.Error()).Response()
+			app.NewGinResponse(c).Fail(httpCode, err.Error()).Response()
 		}
 	}()
 	if pwd = c.PostForm("pwd"); len(pwd) == 0 {
@@ -393,5 +393,5 @@ func SetPayPwd(c *gin.Context) {
 	if err = service.SetUserPayPwd(sess.UID, pwd); err != nil {
 		return
 	}
-	app.NewGinResponse(c).SetCodeAndMessage(200,"success").Response()
+	app.NewGinResponse(c).Success(nil).Response()
 }

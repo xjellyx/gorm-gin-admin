@@ -1,12 +1,10 @@
 definitions:
   app.Meta:
     properties:
-      error:
-        type: object
-      msg:
-        type: string
-      status:
+      code:
         type: integer
+      message:
+        type: string
     type: object
   app.Response:
     properties:
@@ -58,6 +56,22 @@ definitions:
     - id
     - method
     - path
+    type: object
+  utils.FormAddMenu:
+    properties:
+      icon:
+        type: string
+      name:
+        type: string
+      parentId:
+        type: integer
+      router:
+        type: string
+    required:
+    - icon
+    - name
+    - parentId
+    - router
     type: object
   utils.FormEditUser:
     properties:
@@ -135,6 +149,22 @@ definitions:
         description: 用户名
         type: string
     type: object
+  utils.LoginForm:
+    properties:
+      captchaId:
+        type: string
+      deviceId:
+        type: string
+      digits:
+        type: string
+      password:
+        type: string
+      username:
+        type: string
+    required:
+    - password
+    - username
+    type: object
 info:
   contact: {}
   license: {}
@@ -162,6 +192,29 @@ paths:
           schema:
             $ref: '#/definitions/app.Response'
       summary: 创建api
+      tags:
+      - 管理员
+  /api/v1/admin/addMenu:
+    post:
+      parameters:
+      - description: 菜单form
+        in: body
+        name: '{}'
+        required: true
+        schema:
+          $ref: '#/definitions/utils.FormAddMenu'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 添加菜单
       tags:
       - 管理员
   /api/v1/admin/addRoleAPIPerm:
@@ -485,18 +538,12 @@ paths:
   /api/v1/user/login:
     post:
       parameters:
-      - description: 用户名
+      - description: form
         in: body
-        name: username
+        name: '{}'
         required: true
         schema:
-          type: string
-      - description: 密码
-        in: body
-        name: password
-        required: true
-        schema:
-          type: string
+          $ref: '#/definitions/utils.LoginForm'
       produces:
       - application/json
       responses:

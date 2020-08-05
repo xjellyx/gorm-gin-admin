@@ -64,6 +64,42 @@ var doc = `{
                 }
             }
         },
+        "/api/v1/admin/addMenu": {
+            "post": {
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "管理员"
+                ],
+                "summary": "添加菜单",
+                "parameters": [
+                    {
+                        "description": "菜单form",
+                        "name": "{}",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/utils.FormAddMenu"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
         "/api/v1/admin/addRoleAPIPerm": {
             "post": {
                 "description": "添加角色接口权限",
@@ -566,21 +602,12 @@ var doc = `{
                 "summary": "用户登录",
                 "parameters": [
                     {
-                        "description": "用户名",
-                        "name": "username",
+                        "description": "form",
+                        "name": "{}",
                         "in": "body",
                         "required": true,
                         "schema": {
-                            "type": "string"
-                        }
-                    },
-                    {
-                        "description": "密码",
-                        "name": "password",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
+                            "$ref": "#/definitions/utils.LoginForm"
                         }
                     }
                 ],
@@ -903,14 +930,11 @@ var doc = `{
         "app.Meta": {
             "type": "object",
             "properties": {
-                "error": {
-                    "type": "object"
-                },
-                "msg": {
-                    "type": "string"
-                },
-                "status": {
+                "code": {
                     "type": "integer"
+                },
+                "message": {
+                    "type": "string"
                 }
             }
         },
@@ -980,6 +1004,29 @@ var doc = `{
                 },
                 "path": {
                     "description": "api路径",
+                    "type": "string"
+                }
+            }
+        },
+        "utils.FormAddMenu": {
+            "type": "object",
+            "required": [
+                "icon",
+                "name",
+                "parentId",
+                "router"
+            ],
+            "properties": {
+                "icon": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "parentId": {
+                    "type": "integer"
+                },
+                "router": {
                     "type": "string"
                 }
             }
@@ -1087,6 +1134,30 @@ var doc = `{
                 },
                 "username": {
                     "description": "用户名",
+                    "type": "string"
+                }
+            }
+        },
+        "utils.LoginForm": {
+            "type": "object",
+            "required": [
+                "password",
+                "username"
+            ],
+            "properties": {
+                "captchaId": {
+                    "type": "string"
+                },
+                "deviceId": {
+                    "type": "string"
+                },
+                "digits": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "username": {
                     "type": "string"
                 }
             }

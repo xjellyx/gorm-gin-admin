@@ -45,7 +45,7 @@ func Captcha(ctx *gin.Context) {
 		//ctx.Header("Content-Type", "audio/x-wav")
 		_ = captcha.WriteAudio(&content, id, d.Lang)
 	default:
-		app.NewGinResponse(ctx).SetCodeAndMessage(500,captcha.ErrNotFound.Error()).Response()
+		app.NewGinResponse(ctx).Fail(500, captcha.ErrNotFound.Error()).Response()
 	}
 
 	if d.IsDownload {
@@ -54,7 +54,7 @@ func Captcha(ctx *gin.Context) {
 	data := make(map[string]interface{})
 	data["id"] = id
 	data["img"] = base64.StdEncoding.EncodeToString(content.Bytes())
-	app.NewGinResponse(ctx).SetCodeAndMessage(200,"success").SetData(data).Response()
+	app.NewGinResponse(ctx).Success(data).Response()
 	// ctx.Data(200, ctx.GetHeader("Content-Type"), content.Bytes())
 	//http.ServeContent(ctx.Writer, ctx.Request, id+"."+d.Ext, time.Time{}, bytes.NewReader(content.Bytes()))
 
@@ -66,6 +66,6 @@ func VerifyCaptcha(c *gin.Context) {
 	digits := c.Query("digits")
 	id := c.Query("captchaId")
 	verify := captcha.VerifyString(id, digits)
-	app.NewGinResponse(c).SetCodeAndMessage(200,"success").SetData( gin.H{"verify": verify}).Response()
+	app.NewGinResponse(c).Success(gin.H{"verify": verify}).Response()
 
 }

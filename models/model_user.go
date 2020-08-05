@@ -38,8 +38,8 @@ func NewUserBase() *UserBase {
 }
 
 // Insert 插入一条数据
-func (u *UserBase) Insert() (err error) {
-	if err = DB.Create(u).Error; err != nil {
+func (u *UserBase) Insert(options ...*gorm.DB) (err error) {
+	if err = getDB(options...).Create(u).Error; err != nil {
 		logModel.Errorln(err)
 		err = utils.ErrInsertDataFailed
 		return
@@ -47,8 +47,8 @@ func (u *UserBase) Insert() (err error) {
 	return
 }
 
-func (u *UserBase) Update(uid string, data interface{}) (err error) {
-	if err = DB.Model(u).Where("uid = ?", uid).Updates(data).Error; err != nil {
+func (u *UserBase) Update(uid string, data interface{}, options ...*gorm.DB) (err error) {
+	if err = getDB(options...).Model(u).Where("uid = ?", uid).Updates(data).Error; err != nil {
 		logModel.Errorln(err)
 		err = utils.ErrInsertDataFailed
 		return
@@ -57,8 +57,8 @@ func (u *UserBase) Update(uid string, data interface{}) (err error) {
 }
 
 // UpdateUser 更新数据
-func (u *UserBase) UpdateUser(uid string) (err error) {
-	if err = DB.Model(u).Where("uid = ?", uid).Updates(u).Error; err != nil {
+func (u *UserBase) UpdateUser(uid string, options ...*gorm.DB) (err error) {
+	if err = getDB(options...).Model(u).Where("uid = ?", uid).Updates(u).Error; err != nil {
 		logModel.Errorln(err)
 		err = utils.ErrUpdateDataFailed
 		return
@@ -67,8 +67,8 @@ func (u *UserBase) UpdateUser(uid string) (err error) {
 }
 
 // UpdateOne 更新一个字段
-func (u *UserBase) UpdateOne(uid string, column string, val interface{}) (err error) {
-	if err = DB.Model(u).Where("uid = ?", uid).Update(column, val).Error; err != nil {
+func (u *UserBase) UpdateOne(uid string, column string, val interface{}, options ...*gorm.DB) (err error) {
+	if err = getDB(options...).Model(u).Where("uid = ?", uid).Update(column, val).Error; err != nil {
 		logModel.Errorln(err)
 		err = utils.ErrUpdateDataFailed
 		return

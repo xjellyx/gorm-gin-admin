@@ -22,8 +22,8 @@ type UserCard struct {
 }
 
 // Insert 插入一条数据
-func (u *UserCard) Insert() (err error) {
-	if err = DB.Create(u).Error; err != nil {
+func (u *UserCard) Insert(options ...*gorm.DB) (err error) {
+	if err = getDB(options...).Create(u).Error; err != nil {
 		logModel.Errorln(err)
 		err = utils.ErrInsertDataFailed
 		return
@@ -32,8 +32,8 @@ func (u *UserCard) Insert() (err error) {
 }
 
 // Update 更新数据
-func (u *UserCard) Update(uid string) (err error) {
-	if err = DB.Model(u).Where("uid = ?", uid).Updates(u).Error; err != nil {
+func (u *UserCard) Update(uid string, options ...*gorm.DB) (err error) {
+	if err = getDB(options...).Model(u).Where("uid = ?", uid).Updates(u).Error; err != nil {
 		logModel.Errorln(err)
 		err = utils.ErrUpdateDataFailed
 		return
@@ -42,8 +42,8 @@ func (u *UserCard) Update(uid string) (err error) {
 }
 
 // UpdateOne 更新一个字段
-func (u *UserCard) UpdateOne(uid string, column string, value interface{}) (err error) {
-	if err = DB.Model(u).Where("uid = ?", uid).Update(column, value).Error; err != nil {
+func (u *UserCard) UpdateOne(uid string, column string, value interface{}, options ...*gorm.DB) (err error) {
+	if err = getDB(options...).Model(u).Where("uid = ?", uid).Update(column, value).Error; err != nil {
 		logModel.Errorln(err)
 		err = utils.ErrUpdateDataFailed
 		return err

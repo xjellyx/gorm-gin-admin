@@ -84,6 +84,8 @@ func adminRouterAPI(r *gin.RouterGroup) {
 	apiAdmin.DELETE("removeApiGroup", v1.RemoveApiGroup)
 	apiAdmin.PUT("editApiGroup", v1.EditApiGroup)
 	apiAdmin.GET("getRoleApiList", v1.GetRoleApiList)
+	apiAdmin.POST("addMenu", v1.AddMenu)
+	apiAdmin.GET("getMenu", v1.GetMenu)
 	// apiAdmin.GET("/profile", auth.RequiresPermissions([]string{"profile:admin"}), api.GetUserProfile)
 
 }

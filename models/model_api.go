@@ -25,8 +25,8 @@ func NewAPIGroup() *APIGroup {
 }
 
 // Insert 插入数据
-func (a *APIGroup) Insert() (err error) {
-	if err = DB.Model(&APIGroup{}).Create(a).Error; err != nil {
+func (a *APIGroup) Insert(options ...*gorm.DB) (err error) {
+	if err = getDB(options...).Model(&APIGroup{}).Create(a).Error; err != nil {
 		logModel.Errorln(err)
 		err = utils.ErrInsertDataFailed
 		return
@@ -35,8 +35,8 @@ func (a *APIGroup) Insert() (err error) {
 }
 
 // Update 更新数据
-func (a *APIGroup) Update(id int64, m interface{}) (err error) {
-	if err = DB.Table(APIGroupTableName()).Where("id = ?", id).Updates(m).Error; err != nil {
+func (a *APIGroup) Update(id int64, m interface{}, options ...*gorm.DB) (err error) {
+	if err = getDB(options...).Table(APIGroupTableName()).Where("id = ?", id).Updates(m).Error; err != nil {
 		logModel.Errorln(err)
 		err = utils.ErrUpdateDataFailed
 		return err
@@ -45,8 +45,8 @@ func (a *APIGroup) Update(id int64, m interface{}) (err error) {
 }
 
 // Delete 删除api数据
-func (a *APIGroup) Delete(id int64) (err error) {
-	if err = DB.Table(APIGroupTableName()).Where("id =  ?", id).Delete(a).Error; err != nil {
+func (a *APIGroup) Delete(id int64, options ...*gorm.DB) (err error) {
+	if err = getDB(options...).Table(APIGroupTableName()).Where("id =  ?", id).Delete(a).Error; err != nil {
 		logModel.Errorln(err)
 		err = utils.ErrDeleteDataFailed
 		return err

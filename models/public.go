@@ -2,7 +2,20 @@ package models
 
 import (
 	"github.com/olongfen/contrib/session"
+	"gorm.io/gorm"
 )
+
+func getDB(options ...*gorm.DB) *gorm.DB {
+	var (
+		db *gorm.DB
+	)
+	if len(options) > 0 {
+		db = options[0]
+	} else {
+		db = DB
+	}
+	return db
+}
 
 // SessionCheck
 func SessionCheck(s *session.Session) (err error) {

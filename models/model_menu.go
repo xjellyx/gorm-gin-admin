@@ -7,25 +7,25 @@ import (
 
 type Menu struct {
 	gorm.Model
-	Name string `json:"name" gorm:"type:varchar(36)"`
-	ParentId uint `json:"parentId"`
-	Router  string `json:"router" gorm:"type:varchar(24)"`
-	Icon  string `json:"icon" gorm:"type:varchar(36)"`
-	Sorts int64 `json:"sorts"`
-	Children []Menu `json:"children"`
+	Name     string `json:"name" gorm:"type:varchar(36)"`
+	ParentId uint   `json:"parentId"`
+	Router   string `json:"router" gorm:"type:varchar(24)"`
+	Icon     string `json:"icon" gorm:"type:varchar(36)"`
+	Sorts    int64  `json:"sorts"`
+	Children []Menu `json:"children" gorm:"-"`
 }
 
-func (m *Menu)Insert()(err error)  {
-	if err = DB.Create(m).Error; err != nil {
+func (m *Menu) Insert(options ...*gorm.DB) (err error) {
+	if err = getDB(options...).Create(m).Error; err != nil {
 		logModel.Errorln(err)
 		err = utils.ErrInsertDataFailed
 		return
 	}
-		return
+	return
 }
 
-func (m *Menu)Update(id int)(err error)  {
-	if err = DB.Model(m).Where("id = ?",id).Updates(m).Error; err != nil {
+func (m *Menu) Update(id int, options ...*gorm.DB) (err error) {
+	if err = getDB(options...).Model(m).Where("id = ?", id).Updates(m).Error; err != nil {
 		logModel.Errorln(err)
 		err = utils.ErrUpdateDataFailed
 		return
@@ -33,13 +33,13 @@ func (m *Menu)Update(id int)(err error)  {
 	return
 }
 
-func (m *Menu)Get(id int)(err error)  {
-	if err = DB.Model(m).Where("id = ?",id).First(m).Error; err != nil {
+func (m *Menu) Get(id int) (err error) {
+	if err = DB.Model(m).Where("id = ?", id).First(m).Error; err != nil {
 		logModel.Errorln(err)
 		err = utils.ErrGetDataFailed
 		return
 	}
-	if err = DB.Model(m).Where("parent_id = ?",m.ID).Find(&m.Children).Error;err!=nil && err!=gorm.ErrRecordNotFound{
+	if err = DB.Model(m).Where("parent_id = ?", m.ID).Find(&m.Children).Error; err != nil && err != gorm.ErrRecordNotFound {
 		logModel.Errorln(err)
 		err = utils.ErrGetDataFailed
 		return err
@@ -47,8 +47,8 @@ func (m *Menu)Get(id int)(err error)  {
 	return
 }
 
-func (m *Menu)Delete(id int)(err error)  {
-	if err = DB.Model(m).Where("id = ?",id).Delete(m).Error; err != nil {
+func (m *Menu) Delete(id int, options ...*gorm.DB) (err error) {
+	if err = getDB(options...).Model(m).Where("id = ?", id).Delete(m).Error; err != nil {
 		logModel.Errorln(err)
 		err = utils.ErrGetDataFailed
 		return
