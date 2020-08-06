@@ -1,7 +1,7 @@
 serveraddr: 127.0.0.1
-serverport: "8060"
+serverport: "8050"
 rpchost: 0.0.0.0
-rpcport: "9060"
+rpcport: "9050"
 sync: true
 isproduct: false
 userkeydir: ./conf/user.key

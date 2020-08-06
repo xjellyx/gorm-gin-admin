@@ -60,9 +60,9 @@ type Database struct {
 var (
 	ProjectSetting = &ProjectConfig{
 		ServerAddr: utils.PubGetEnvString("SERVER_ADDR", "127.0.0.1"),
-		ServerPort: utils.PubGetEnvString("SERVER_PORT", "8060"),
+		ServerPort: utils.PubGetEnvString("SERVER_PORT", "8050"),
 		RpcHost:    utils.PubGetEnvString("RPC_HOST", "127.0.0.1"),
-		RpcPort:    utils.PubGetEnvString("RPC_PORT", "9060"),
+		RpcPort:    utils.PubGetEnvString("RPC_PORT", "9050"),
 		Sync:       false,
 		IsProduct:  false,
 		IsTLS:      false,
