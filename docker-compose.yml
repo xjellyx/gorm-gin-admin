@@ -16,6 +16,7 @@ services:
 
   phadmin:
     image: dpage/pgadmin4
+    container_name: pgadmin
     restart: always
     ports:
       - "8001:80"
