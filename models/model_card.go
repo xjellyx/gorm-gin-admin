@@ -8,7 +8,7 @@ import (
 
 // UserCard
 type UserCard struct {
-	gorm.Model
+	Model
 	Uid string `json:"uid" gorm:"type:varchar(36); unique_index"`
 	//
 	Name        string `json:"name" `

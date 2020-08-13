@@ -3,7 +3,7 @@ serverport: "8050"
 rpchost: 0.0.0.0
 rpcport: "9050"
 sync: true
-isproduct: false
+isproduct: true
 userkeydir: ./conf/user.key
 userpubdir: ./conf/user.pub
 adminkeydir: ./conf/admin.key

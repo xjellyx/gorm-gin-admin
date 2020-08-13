@@ -6,13 +6,13 @@ import (
 	"github.com/olongfen/contrib/session"
 	"github.com/olongfen/user_base/models"
 	"github.com/olongfen/user_base/pkg/app"
+	"github.com/olongfen/user_base/pkg/codes"
 	"github.com/olongfen/user_base/pkg/setting"
 	"github.com/olongfen/user_base/service"
 	"github.com/olongfen/user_base/utils"
 	uuid "github.com/satori/go.uuid"
 	"image"
 	"mime/multipart"
-	"net/http"
 	"os"
 	"strings"
 )
@@ -23,27 +23,27 @@ import (
 // @Produce json
 // @Param phone body string true "Phone"
 // @Param password body string true "Password"
-// @Param code body string  false "Code"
+// @Param codes body string  false "Code"
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
 // @router /api/v1/register [post]
 func UserRegister(c *gin.Context) {
 	var (
-		form     = new(utils.AddUserForm)
-		data     *models.UserBase
-		httpCode = http.StatusInternalServerError
-		err      error
+		form = new(utils.AddUserForm)
+		data *models.UserBase
+		code = codes.CodeProcessingFailed
+		err  error
 	)
 
 	defer func() {
 		if err != nil {
-			app.NewGinResponse(c).Fail(httpCode, err.Error()).Response()
+			app.NewGinResponse(c).Fail(code, err.Error()).Response()
 		} else {
 			app.NewGinResponse(c).Success(data).Response()
 		}
 	}()
 	if err = c.Bind(form); err != nil {
-		httpCode = http.StatusBadRequest
+		code = codes.CodeParamInvalid
 		err = contrib.ErrParamInvalid
 		return
 	}
@@ -62,20 +62,21 @@ func UserRegister(c *gin.Context) {
 // @router /api/v1/user/login [post]
 func UserLogin(c *gin.Context) {
 	var (
-		form     = &utils.LoginForm{}
-		err      error
-		httpCode = 500
-		token    string
+		form  = &utils.LoginForm{}
+		err   error
+		code  = codes.CodeProcessingFailed
+		token string
 	)
 	defer func() {
 		if err != nil {
-			app.NewGinResponse(c).Fail(httpCode, err.Error()).Response()
+			app.NewGinResponse(c).Fail(code, err.Error()).Response()
 		} else {
 			app.NewGinResponse(c).Success(map[string]string{"token": token}).Response()
 		}
 	}()
 	form.IP = c.ClientIP()
 	if err = c.ShouldBind(form); err != nil {
+		code = codes.CodeParamInvalid
 		return
 	}
 	if token, err = service.UserLogin(form, false); err != nil {
@@ -94,13 +95,13 @@ func UserLogin(c *gin.Context) {
 // @router /api/v1/user/logout [post]
 func UserLogout(c *gin.Context) {
 	var (
-		err      error
-		httpCode = http.StatusInternalServerError
-		s        *session.Session
+		err  error
+		code = codes.CodeProcessingFailed
+		s    *session.Session
 	)
 	defer func() {
 		if err != nil {
-			app.NewGinResponse(c).Fail(httpCode, err.Error()).Response()
+			app.NewGinResponse(c).Fail(code, err.Error()).Response()
 		} else {
 			app.NewGinResponse(c).Success(nil).Response()
 		}
@@ -127,15 +128,15 @@ func UserLogout(c *gin.Context) {
 // @router /api/v1/user/modifyProfile [put]
 func ModifyProfile(c *gin.Context) {
 	var (
-		err      error
-		form     = new(utils.FormEditUser)
-		data     *models.UserBase
-		httpCode = http.StatusInternalServerError
-		s        *session.Session
+		err  error
+		form = new(utils.FormEditUser)
+		data *models.UserBase
+		code = codes.CodeProcessingFailed
+		s    *session.Session
 	)
 	defer func() {
 		if err != nil {
-			app.NewGinResponse(c).Fail(httpCode, err.Error()).Response()
+			app.NewGinResponse(c).Fail(code, err.Error()).Response()
 		} else {
 			app.NewGinResponse(c).Success(data).Response()
 		}
@@ -144,7 +145,7 @@ func ModifyProfile(c *gin.Context) {
 		return
 	}
 	if err = c.ShouldBind(form); err != nil {
-		httpCode = http.StatusBadRequest
+		code = codes.CodeParamInvalid
 		err = contrib.ErrParamInvalid
 		return
 	}
@@ -163,14 +164,14 @@ func ModifyProfile(c *gin.Context) {
 // @router /api/v1/user/getUserProfile [get]
 func GetUserProfile(c *gin.Context) {
 	var (
-		err      error
-		data     = new(models.UserBase)
-		httpCode = http.StatusInternalServerError
-		s        *session.Session
+		err  error
+		data = new(models.UserBase)
+		code = codes.CodeProcessingFailed
+		s    *session.Session
 	)
 	defer func() {
 		if err != nil {
-			app.NewGinResponse(c).Fail(httpCode, err.Error()).Response()
+			app.NewGinResponse(c).Fail(code, err.Error()).Response()
 		} else {
 			app.NewGinResponse(c).Success(data).Response()
 		}
@@ -196,23 +197,23 @@ func GetUserProfile(c *gin.Context) {
 // @router /api/v1/user/modifyLoginPwd [put]
 func ModifyLoginPwd(c *gin.Context) {
 	var (
-		err      error
-		httpCode = http.StatusInternalServerError
-		s        *session.Session
-		f        struct {
+		err  error
+		code = codes.CodeProcessingFailed
+		s    *session.Session
+		f    struct {
 			OldPwd string `form:"oldPwd" binding:"required"`
 			NewPwd string `form:"newPwd" binding:"required"`
 		}
 	)
 	defer func() {
 		if err != nil {
-			app.NewGinResponse(c).Fail(httpCode, err.Error()).Response()
+			app.NewGinResponse(c).Fail(code, err.Error()).Response()
 		} else {
 			app.NewGinResponse(c).Success(nil).Response()
 		}
 	}()
 	if err = c.ShouldBind(&f); err != nil {
-		httpCode = 400
+		code = codes.CodeParamInvalid
 		return
 	}
 	if s, err = GetSession(c); err != nil {
@@ -235,23 +236,23 @@ func ModifyLoginPwd(c *gin.Context) {
 // @router /api/v1/user/modifyPayPwd [put]
 func ModifyPayPwd(c *gin.Context) {
 	var (
-		err      error
-		httpCode = http.StatusInternalServerError
-		s        *session.Session
-		f        struct {
+		err  error
+		code = codes.CodeProcessingFailed
+		s    *session.Session
+		f    struct {
 			OldPwd string `form:"oldPwd" binding:"required"`
 			NewPwd string `form:"newPwd" binding:"required"`
 		}
 	)
 	defer func() {
 		if err != nil {
-			app.NewGinResponse(c).Fail(httpCode, err.Error()).Response()
+			app.NewGinResponse(c).Fail(code, err.Error()).Response()
 		} else {
 			app.NewGinResponse(c).Success(nil).Response()
 		}
 	}()
 	if err = c.ShouldBind(&f); err != nil {
-		httpCode = 400
+		code = codes.CodeParamInvalid
 		return
 	}
 	if s, err = GetSession(c); err != nil {
@@ -277,13 +278,13 @@ func ModifyHeadIcon(c *gin.Context) {
 		err      error
 		s        *session.Session
 		headIcon *multipart.FileHeader
-		httpCode = http.StatusInternalServerError
+		code     = codes.CodeProcessingFailed
 		d        = new(models.UserBase)
 		img      image.Image
 	)
 	defer func() {
 		if err != nil {
-			app.NewGinResponse(c).Fail(httpCode, err.Error()).Response()
+			app.NewGinResponse(c).Fail(code, err.Error()).Response()
 		} else {
 			app.NewGinResponse(c).Success(gin.H{
 				"headIcon": d.HeadIcon,
@@ -291,7 +292,7 @@ func ModifyHeadIcon(c *gin.Context) {
 		}
 	}()
 	if headIcon, err = c.FormFile("headIcon"); err != nil {
-		httpCode = http.StatusBadRequest
+		code = codes.CodeParamInvalid
 		return
 	}
 	_f, _ := headIcon.Open()
@@ -340,18 +341,18 @@ func ModifyHeadIcon(c *gin.Context) {
 // @Router /api/v1/user/getHeadIcon [get]
 func GetHeadIcon(c *gin.Context) {
 	var (
-		err      error
-		s        *session.Session
-		data     = new(models.UserBase)
-		httpCode = 500
+		err  error
+		s    *session.Session
+		data = new(models.UserBase)
+		code = codes.CodeProcessingFailed
 	)
 	defer func() {
 		if err != nil {
-			app.NewGinResponse(c).Fail(httpCode, err.Error()).Response()
+			app.NewGinResponse(c).Fail(code, err.Error()).Response()
 		}
 	}()
 	if s, err = GetSession(c); err != nil {
-		httpCode = 401
+		code = 401
 		return
 	}
 	if err = data.GetByUId(s.UID); err != nil {
@@ -372,18 +373,18 @@ func GetHeadIcon(c *gin.Context) {
 // @Router /api/v1/user/setPayPwd/ [post]
 func SetPayPwd(c *gin.Context) {
 	var (
-		sess     *session.Session
-		err      error
-		httpCode = 500
-		pwd      string
+		sess *session.Session
+		err  error
+		code = codes.CodeProcessingFailed
+		pwd  string
 	)
 	defer func() {
 		if err != nil {
-			app.NewGinResponse(c).Fail(httpCode, err.Error()).Response()
+			app.NewGinResponse(c).Fail(code, err.Error()).Response()
 		}
 	}()
 	if pwd = c.PostForm("pwd"); len(pwd) == 0 {
-		httpCode = 400
+		code = codes.CodeParamInvalid
 		err = contrib.ErrParamInvalid
 		return
 	}

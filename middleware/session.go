@@ -6,8 +6,8 @@ import (
 	"github.com/olongfen/contrib/session"
 	"github.com/olongfen/user_base/models"
 	"github.com/olongfen/user_base/pkg/app"
+	"github.com/olongfen/user_base/pkg/setting"
 	"github.com/olongfen/user_base/utils"
-	"net/http"
 	"strings"
 )
 
@@ -34,10 +34,10 @@ func CheckUserAuth(isAdmin bool) gin.HandlerFunc {
 		}
 
 		if tokenStr == "" {
-			c.JSON(http.StatusOK, app.Response{
+			c.JSON(500, app.Response{
 				Meta: app.Meta{
-					Code: 500,
-					Message:  contrib.ErrTokenUndefined.Error(),
+					Code:    500,
+					Message: contrib.ErrTokenUndefined.Error(),
 				},
 				Data: nil,
 			})
@@ -49,13 +49,12 @@ func CheckUserAuth(isAdmin bool) gin.HandlerFunc {
 			s   *session.Session
 			err error
 		)
-
 		if isAdmin {
 			if s, err = models.AdminKey.SessionDecode(tokenStr); err != nil {
-				c.JSON(http.StatusOK, app.Response{
+				c.JSON(401, app.Response{
 					Meta: app.Meta{
-						Code: 401,
-						Message:  contrib.ErrTokenInvalid.Error(),
+						Code:    401,
+						Message: contrib.ErrTokenInvalid.Error(),
 					},
 					Data: nil,
 				})
@@ -65,23 +64,25 @@ func CheckUserAuth(isAdmin bool) gin.HandlerFunc {
 		} else {
 			// 验证用户,管理员和普通用户的密钥对不一样，所以验证两次,管理员token可以使用与普通界面
 			if s, err = models.UserKey.SessionDecode(tokenStr); err != nil {
-				c.JSON(http.StatusOK, app.Response{
-					Meta: app.Meta{
-						Code: 401,
-						Message:  contrib.ErrTokenInvalid.Error(),
-					},
-					Data: nil,
-				})
-				c.Abort()
-				return
+				if s, err = models.AdminKey.SessionDecode(tokenStr); err != nil {
+					c.JSON(401, app.Response{
+						Meta: app.Meta{
+							Code:    401,
+							Message: contrib.ErrTokenInvalid.Error(),
+						},
+						Data: nil,
+					})
+					c.Abort()
+					return
+				}
 			}
 		}
 		// 不是同一个ip地址
-		if s.IP != c.ClientIP() {
-			c.JSON(http.StatusOK, app.Response{
+		if s.IP != c.ClientIP() && setting.ProjectSetting.IsProduct {
+			c.JSON(403, app.Response{
 				Meta: app.Meta{
-					Code: 500,
-					Message:  utils.ErrIPAddressInvalid.Error(),
+					Code:    403,
+					Message: utils.ErrIPAddressInvalid.Error(),
 				},
 				Data: nil,
 			})

@@ -515,7 +515,7 @@ var doc = `{
                     },
                     {
                         "description": "Code",
-                        "name": "code",
+                        "name": "codes",
                         "in": "body",
                         "schema": {
                             "type": "string"
@@ -930,7 +930,7 @@ var doc = `{
         "app.Meta": {
             "type": "object",
             "properties": {
-                "code": {
+                "codes": {
                     "type": "integer"
                 },
                 "message": {

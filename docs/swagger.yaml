@@ -484,7 +484,7 @@ paths:
           type: string
       - description: Code
         in: body
-        name: code
+        name: codes
         schema:
           type: string
       produces:

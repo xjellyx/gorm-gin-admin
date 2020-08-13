@@ -5,9 +5,9 @@ import (
 	"github.com/olongfen/contrib/session"
 	"github.com/olongfen/user_base/models"
 	"github.com/olongfen/user_base/pkg/app"
+	"github.com/olongfen/user_base/pkg/codes"
 	"github.com/olongfen/user_base/service"
 	"github.com/olongfen/user_base/utils"
-	"net/http"
 	"strconv"
 )
 
@@ -23,14 +23,14 @@ import (
 // AdminLogin
 func AdminLogin(c *gin.Context) {
 	var (
-		form     = &utils.LoginForm{}
-		err      error
-		httpCode = http.StatusInternalServerError
-		token    string
+		form  = &utils.LoginForm{}
+		err   error
+		code  = codes.CodeProcessingFailed
+		token string
 	)
 	defer func() {
 		if err != nil {
-			app.NewGinResponse(c).Fail(httpCode, err.Error()).Response()
+			app.NewGinResponse(c).Fail(code, err.Error()).Response()
 		} else {
 			app.NewGinResponse(c).Success(map[string]string{"token": token}).Response()
 		}
@@ -38,6 +38,7 @@ func AdminLogin(c *gin.Context) {
 
 	form.IP = c.ClientIP()
 	if err = c.ShouldBind(form); err != nil {
+		code = codes.CodeParamInvalid
 		return
 	}
 	if token, err = service.UserLogin(form, true); err != nil {
@@ -55,13 +56,13 @@ func AdminLogin(c *gin.Context) {
 // @router /api/v1/admin/logout [post]
 func AdminLogout(c *gin.Context) {
 	var (
-		err      error
-		httpCode = http.StatusInternalServerError
-		s        *session.Session
+		err  error
+		code = codes.CodeProcessingFailed
+		s    *session.Session
 	)
 	defer func() {
 		if err != nil {
-			app.NewGinResponse(c).Fail(httpCode, err.Error()).Response()
+			app.NewGinResponse(c).Fail(code, err.Error()).Response()
 		} else {
 			app.NewGinResponse(c).Success(nil).Response()
 		}
@@ -87,14 +88,14 @@ func AdminLogout(c *gin.Context) {
 // @Router /api/v1/admin/listUser [get]
 func ListUser(c *gin.Context) {
 	var (
-		err      error
-		httpCode = http.StatusInternalServerError
-		form     = new(utils.FormUserList)
-		data     []*models.UserBase
+		err  error
+		code = codes.CodeProcessingFailed
+		form = new(utils.FormUserList)
+		data []*models.UserBase
 	)
 	defer func() {
 		if err != nil {
-			app.NewGinResponse(c).Fail(httpCode, err.Error()).Response()
+			app.NewGinResponse(c).Fail(code, err.Error()).Response()
 		}
 	}()
 
@@ -102,6 +103,7 @@ func ListUser(c *gin.Context) {
 		return
 	}
 	if err = c.ShouldBindQuery(form); err != nil {
+		code = codes.CodeParamInvalid
 		return
 	}
 	if data, err = service.GetUserList(form); err != nil {
@@ -127,7 +129,7 @@ func EditUser(c *gin.Context) {
 		form = new(utils.FormEditUser)
 		// s    *session.Session
 
-		code int
+		code = codes.CodeProcessingFailed
 	)
 	defer func() {
 		if err != nil {
@@ -138,7 +140,6 @@ func EditUser(c *gin.Context) {
 		return
 	}
 	if _, err = service.EditUser(form); err != nil {
-		code = 500
 		return
 	}
 }
@@ -157,7 +158,7 @@ func AddRoleAPIPerm(c *gin.Context) {
 	var (
 		f    = &utils.FormRoleAPIPerm{}
 		err  error
-		code int
+		code = codes.CodeProcessingFailed
 		ret  []int64
 		s    *session.Session
 	)
@@ -174,7 +175,6 @@ func AddRoleAPIPerm(c *gin.Context) {
 		return
 	}
 	if ret, err = service.AddRuleAPI(f); err != nil {
-		code = 500
 		return
 	}
 	app.NewGinResponse(c).Success(ret).Response()
@@ -194,7 +194,7 @@ func RemoveRolePermAPI(c *gin.Context) {
 	var (
 		f    = &utils.FormRoleAPIPerm{}
 		err  error
-		code int
+		code = codes.CodeProcessingFailed
 		ret  []int64
 		s    *session.Session
 	)
@@ -211,7 +211,6 @@ func RemoveRolePermAPI(c *gin.Context) {
 		return
 	}
 	if ret, err = service.RemoveRuleAPI(f); err != nil {
-		code = 500
 		return
 	}
 	app.NewGinResponse(c).Success(ret).Response()
@@ -230,7 +229,7 @@ func RemoveRolePermAPI(c *gin.Context) {
 func GetRoleApiList(c *gin.Context) {
 	var (
 		err  error
-		code = 500
+		code = codes.CodeProcessingFailed
 		s    *session.Session
 		uid  string
 		data []struct {
@@ -244,7 +243,6 @@ func GetRoleApiList(c *gin.Context) {
 		}
 	}()
 	if s, err = GetSession(c); err != nil {
-		code = 401
 		return
 	}
 	uid = c.Query("uid")
@@ -270,8 +268,8 @@ func GetRoleApiList(c *gin.Context) {
 func GetAllAPIGroup(c *gin.Context) {
 	var (
 		err  error
+		code = codes.CodeProcessingFailed
 		ret  []*models.APIGroup
-		code = 500
 	)
 	defer func() {
 		if err != nil {
@@ -301,7 +299,7 @@ func GetAllAPIGroup(c *gin.Context) {
 func AddApiGroup(c *gin.Context) {
 	var (
 		err  error
-		code int
+		code = codes.CodeProcessingFailed
 		f    []*utils.FormAPIGroupAdd
 		ret  []*models.APIGroup
 	)
@@ -314,7 +312,7 @@ func AddApiGroup(c *gin.Context) {
 		return
 	}
 	if ret, err = service.AddAPIGroup(f); err != nil {
-		code = 500
+
 		return
 	}
 	app.NewGinResponse(c).Success(ret).Response()
@@ -333,7 +331,7 @@ func AddApiGroup(c *gin.Context) {
 func RemoveApiGroup(c *gin.Context) {
 	var (
 		err  error
-		code int
+		code = codes.CodeProcessingFailed
 		id   string
 	)
 	defer func() {
@@ -344,12 +342,11 @@ func RemoveApiGroup(c *gin.Context) {
 	id = c.Query("id")
 	_id, err_ := strconv.ParseUint(id, 10, 64)
 	if err_ != nil {
-		code = 404
+		code = codes.CodeParamInvalid
 		err = err_
 		return
 	}
 	if err = service.DelAPIGroup(int64(_id)); err != nil {
-		code = 500
 		return
 	}
 	app.NewGinResponse(c).Success(nil).Response()
@@ -369,7 +366,7 @@ func EditApiGroup(c *gin.Context) {
 	var (
 		f    = &utils.FormAPIGroupEdit{}
 		err  error
-		code int
+		code = codes.CodeProcessingFailed
 		ret  *models.APIGroup
 	)
 	defer func() {
@@ -382,7 +379,7 @@ func EditApiGroup(c *gin.Context) {
 	}
 
 	if ret, err = service.EditAPIGroup(f); err != nil {
-		code = 500
+
 		return
 	}
 	app.NewGinResponse(c).Success(ret).Response()

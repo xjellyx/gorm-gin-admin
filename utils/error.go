@@ -18,7 +18,7 @@ func TransformGORMErr(gormErr error) (err error) {
 	// 唯一错误处理
 	if strings.Contains(gormErr.Error(), GORMPGUniqueErr) {
 		s := strings.Split(gormErr.Error(), " ")
-		err = contrib.NewError(2, fmt.Sprintf(`%s is exist`, s[len(s)-1]), prefix)
+		err = contrib.NewError(0, fmt.Sprintf(`%s is exist`, s[len(s)-1]), prefix)
 		return
 	}
 	return gormErr
@@ -47,5 +47,5 @@ var (
 	ErrPhoneInvalid        = contrib.NewError(20, "phone number invalid", prefix)
 	ErrEmailInvalid        = contrib.NewError(21, "email invalid", prefix)
 	ErrIDCardInvalid       = contrib.NewError(22, "id card number invalid", prefix)
-	ErrCaptchaVerifyFail  =contrib.NewError(23,"captcha verify failed ",prefix)
+	ErrCaptchaVerifyFail   = contrib.NewError(23, "captcha verify failed ", prefix)
 )

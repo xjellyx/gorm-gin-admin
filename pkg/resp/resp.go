@@ -9,7 +9,7 @@ type Gin struct {
 
 // Response
 type Response struct {
-	Code int         `json:"code"`
+	Code int         `json:"codes"`
 	Msg  string      `json:"msg"`
 	Data interface{} `json:"data"`
 }

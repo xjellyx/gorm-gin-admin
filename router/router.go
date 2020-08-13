@@ -57,7 +57,6 @@ func userRouterAPI(r *gin.RouterGroup) {
 	apiUser := r.Group("user")
 	apiUser.POST("login", v1.UserLogin)
 	apiUser.Use(middleware.CheckUserAuth(false))
-
 	apiUser.POST("logout", v1.UserLogout)
 	apiUser.POST("verified", v1.Verified)
 	apiUser.POST("setPayPwd", v1.SetPayPwd)
@@ -72,8 +71,9 @@ func userRouterAPI(r *gin.RouterGroup) {
 func adminRouterAPI(r *gin.RouterGroup) {
 	apiAdmin := r.Group("admin")
 	apiAdmin.POST("login", v1.AdminLogin)
-	apiAdmin.Use(middleware.CheckUserAuth(true)).Use(middleware.CasbinHandler())
+	apiAdmin.Use(middleware.CheckUserAuth(true))
 	apiAdmin.POST("logout", v1.AdminLogout)
+	apiAdmin.Use(middleware.CasbinHandler())
 	// apiAdmin.POST("/editUser", v1.EditUser)
 	apiAdmin.GET("listUser", v1.ListUser)
 	apiAdmin.PUT("editUser", v1.EditUser)

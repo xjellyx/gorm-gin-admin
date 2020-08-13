@@ -12,7 +12,7 @@ func GinAPILog() gin.HandlerFunc {
 	return gin.LoggerWithConfig(gin.LoggerConfig{
 		Formatter: func(param gin.LogFormatterParams) string {
 			// 你的自定义格式
-			return fmt.Sprintf(`address: %s, time: [%s], method: %s,  message: %s `+"\n"+`path: %s, proto: %s, code: %d, latency: %s, agent: %s`+"\n",
+			return fmt.Sprintf(`address: %s, time: [%s], method: %s,  message: %s `+"\n"+`path: %s, proto: %s, codes: %d, latency: %s, agent: %s`+"\n",
 				param.ClientIP,
 				param.TimeStamp.Format(time.RFC1123),
 				param.Method,

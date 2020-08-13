@@ -2,11 +2,13 @@ package app
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/olongfen/user_base/pkg/codes"
 )
 
 type Gin struct {
-	c    *gin.Context
-	resp *Response
+	c      *gin.Context
+	resp   *Response
+	status int
 }
 
 type Response struct {
@@ -24,6 +26,7 @@ func NewGinResponse(c *gin.Context) *Gin {
 	return &Gin{
 		c,
 		&Response{},
+		200,
 	}
 }
 
@@ -33,8 +36,13 @@ func (g *Gin) Fail(code int, message string) *Gin {
 	return g
 }
 
+func (g *Gin) SetStatus(status int) *Gin {
+	g.status = status
+	return g
+}
+
 func (g *Gin) Success(data interface{}) *Gin {
-	g.resp.Meta.Code = 200
+	g.resp.Meta.Code = codes.CodeSuccess
 	g.resp.Meta.Message = "success"
 	g.resp.Data = data
 	return g
@@ -42,7 +50,7 @@ func (g *Gin) Success(data interface{}) *Gin {
 
 // Response setting gin.JSON
 func (g *Gin) Response() {
-	g.c.JSON(g.resp.Meta.Code, g.resp)
+	g.c.JSON(g.status, g.resp)
 	g.c.Abort()
 	return
 }

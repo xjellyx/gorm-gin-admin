@@ -8,7 +8,7 @@ import (
 )
 
 type APIGroup struct {
-	gorm.Model
+	Model
 	Path        string `json:"path" gorm:"type:varchar(100);comment:'api路径'"`
 	Description string `json:"description" gorm:"type:varchar(64);comment:'api中文描述'"`
 	ApiGroup    string `json:"apiGroup" gorm:"type:varchar(36);comment:'api组'"`

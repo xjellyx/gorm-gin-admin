@@ -6,7 +6,7 @@ type FormRegister struct {
 	Phone string ` json:"phone" form:"phone" binding:"required"`
 	// 密码
 	Password string ` json:"password" form:"password" binding:"required"`
-	Code     string `json:"code" form:"code"` // 手机验证码
+	Code     string `json:"codes" form:"codes"` // 手机验证码
 }
 
 func (f *FormRegister) Valid() (err error) {
@@ -28,12 +28,12 @@ func (f *FormRegister) Valid() (err error) {
 
 // LoginForm 登入参数
 type LoginForm struct {
-	Username string  `json:"username" form:"username" binding:"required"`
-	Password string  `json:"password" form:"password" binding:"required"`
-	CaptchaId string `json:"captchaId" form:"captchaId"`
-	Digits  string `json:"digits" form:"digits"`
-	DeviceId *string `json:"deviceId" form:"deviceId"`
-	IP       string `json:"-" form:"-"`
+	Username  string  `json:"username" form:"username" binding:"required"`
+	Password  string  `json:"password" form:"password" binding:"required"`
+	CaptchaId string  `json:"captchaId" form:"captchaId"`
+	Digits    string  `json:"digits" form:"digits"`
+	DeviceId  *string `json:"deviceId" form:"deviceId"`
+	IP        string  `json:"-" form:"-"`
 }
 
 func (f *LoginForm) Valid() (err error) {
@@ -227,7 +227,7 @@ type AddUserForm struct {
 	Username string `form:"username" binding:"required"`
 	Phone    string `form:"phone" binding:"required"`
 	Password string `form:"password" binding:"required"`
-	Code     string `form:"code"`
+	Code     string `form:"codes"`
 }
 
 // FormUserList

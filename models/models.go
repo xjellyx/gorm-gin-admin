@@ -2,6 +2,7 @@ package models
 
 import (
 	"fmt"
+	"time"
 
 	"github.com/olongfen/contrib/log"
 	"github.com/olongfen/contrib/session"
@@ -11,6 +12,13 @@ import (
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
 )
+
+type Model struct {
+	ID        uint           `json:"id" gorm:"primarykey"`
+	CreatedAt time.Time      `json:"createdAt"`
+	UpdatedAt time.Time      `json:"updatedAt"`
+	DeletedAt gorm.DeletedAt `json:"deletedAt,omitempty"gorm:"index"`
+}
 
 var (
 	AdminKey *session.Key

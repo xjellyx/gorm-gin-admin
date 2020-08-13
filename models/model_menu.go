@@ -6,7 +6,7 @@ import (
 )
 
 type Menu struct {
-	gorm.Model
+	Model
 	Name     string `json:"name" gorm:"type:varchar(36)"`
 	ParentId uint   `json:"parentId"`
 	Router   string `json:"router" gorm:"type:varchar(24)"`

@@ -6,12 +6,24 @@ import (
 	"github.com/dchest/captcha"
 	"github.com/gin-gonic/gin"
 	"github.com/olongfen/user_base/pkg/app"
+	"github.com/olongfen/user_base/pkg/codes"
 	"net/http"
 	"strconv"
 	"time"
 )
 
 // Captcha
+// @tags 验证码
+// @Summary 获取验证码
+// @Description
+// @Accept json
+// @Produce json
+// @Param ext query string false "图片格式"
+// @Param lang query string false "语言"
+// @Param isDownload bool string false "true：下载"
+// @Success 200  {object}
+// @Failure 500  {object}
+// @router /api/v1/captcha [GET]
 func Captcha(ctx *gin.Context) {
 	var d = struct {
 		Ext        string `json:"ext" form:"ext" `
@@ -45,7 +57,7 @@ func Captcha(ctx *gin.Context) {
 		//ctx.Header("Content-Type", "audio/x-wav")
 		_ = captcha.WriteAudio(&content, id, d.Lang)
 	default:
-		app.NewGinResponse(ctx).Fail(500, captcha.ErrNotFound.Error()).Response()
+		app.NewGinResponse(ctx).Fail(codes.CodeParamInvalid, captcha.ErrNotFound.Error()).Response()
 	}
 
 	if d.IsDownload {

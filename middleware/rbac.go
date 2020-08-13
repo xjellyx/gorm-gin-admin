@@ -13,7 +13,7 @@ func CasbinHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		e, err := casbin.NewEnforcer(setting.ProjectSetting.RBACModelDir, models.Adapter)
 		if err != nil {
-			app.NewGinResponse(c).Fail(500, err.Error()).Response()
+			app.NewGinResponse(c).Fail(500, err.Error()).SetStatus(500).Response()
 			return
 		}
 		e.LoadPolicy()
@@ -23,11 +23,11 @@ func CasbinHandler() gin.HandlerFunc {
 		s := _d.(*session.Session)
 		sub := s.UID
 		if ok, err := e.Enforce(sub, obj, act); err != nil {
-			app.NewGinResponse(c).Fail(403, "casbnin check failed").Response()
+			app.NewGinResponse(c).Fail(403, "casbnin check failed").SetStatus(403).Response()
 			c.Abort()
 			return
 		} else if !ok && setting.ProjectSetting.IsProduct {
-			app.NewGinResponse(c).Fail(403, "illegal permission").Response()
+			app.NewGinResponse(c).Fail(403, "illegal permission").SetStatus(403).Response()
 			c.Abort()
 			return
 		}

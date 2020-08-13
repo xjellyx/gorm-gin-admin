@@ -5,6 +5,7 @@ import (
 	"github.com/olongfen/contrib"
 	"github.com/olongfen/contrib/log"
 	"github.com/olongfen/contrib/session"
+	"github.com/olongfen/user_base/pkg/codes"
 	"github.com/olongfen/user_base/pkg/setting"
 )
 
@@ -28,12 +29,11 @@ func GetSession(c *gin.Context) (ret *session.Session, err error) {
 }
 
 func GetSessionAndBindingForm(form interface{}, c *gin.Context) (ret *session.Session, code int, err error) {
-	code = 500
 	if ret, err = GetSession(c); err != nil {
 		return nil, 401, err
 	}
 	if err = c.ShouldBind(form); err != nil {
-		return nil, 400, err
+		return nil, codes.CodeParamInvalid, err
 	}
 	return
 }
