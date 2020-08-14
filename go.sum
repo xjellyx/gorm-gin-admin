@@ -277,6 +277,12 @@ github.com/olongfen/contrib v0.0.0-20200628020232-ff50cbf9bd99 h1:64/+oF4fjKuhWL
 github.com/olongfen/contrib v0.0.0-20200628020232-ff50cbf9bd99/go.mod h1:UYTh2wisCjvJh73khhEeOyhOzZYIRisaCNawK/r656E=
 github.com/olongfen/contrib v0.0.0-20200628023202-36d2180ce685 h1:ijtIWjOR5ZIgNqhQqBxObdR7gE95kFQDhuWsNnxJk5c=
 github.com/olongfen/contrib v0.0.0-20200628023202-36d2180ce685/go.mod h1:UYTh2wisCjvJh73khhEeOyhOzZYIRisaCNawK/r656E=
+github.com/olongfen/contrib v0.0.0-20200813075603-f629db3678d9 h1:j/IPJAJ5NOuES+Ao4PbZVC8RgkQqOP3KztPZXZ+xpjM=
+github.com/olongfen/contrib v0.0.0-20200813075603-f629db3678d9/go.mod h1:UYTh2wisCjvJh73khhEeOyhOzZYIRisaCNawK/r656E=
+github.com/olongfen/contrib v0.0.0-20200814025843-225dcfc7cc52 h1:x3JXd+Knbj6Gg19wBW2Pu9uigIT34Dgw7z414wsIAEE=
+github.com/olongfen/contrib v0.0.0-20200814025843-225dcfc7cc52/go.mod h1:UYTh2wisCjvJh73khhEeOyhOzZYIRisaCNawK/r656E=
+github.com/olongfen/contrib v0.0.0-20200814030134-e94d1f18a1d6 h1:3mxmyqqDnH5ZUmop2eSAlOtTvblxD3GoplGeSWVFid0=
+github.com/olongfen/contrib v0.0.0-20200814030134-e94d1f18a1d6/go.mod h1:UYTh2wisCjvJh73khhEeOyhOzZYIRisaCNawK/r656E=
 github.com/olongfen/gen-id v1.0.2-0.20200205020411-aa724763f90c h1:tn1x4gRakTpnY97zuliQ81pHqclQXolnpPar02LWE4Q=
 github.com/olongfen/gen-id v1.0.2-0.20200205020411-aa724763f90c/go.mod h1:C/CUI5OzvtkRtITIOzDw8UkiVcpBamaYlSP7kLq/yoU=
 github.com/olongfen/model.grpc v0.0.0-20200205020547-b36df4fd0c97 h1:6GUWAg7siWCipKq27k7qaPLQxNnGNftK7TBn90JKSEU=

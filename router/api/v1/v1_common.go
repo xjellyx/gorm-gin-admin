@@ -10,7 +10,7 @@ import (
 )
 
 var (
-	logCtl = log.NewLogFile("./log/log_ctrl", setting.ProjectSetting.IsProduct)
+	logCtl = log.NewLogFile("./log/log_ctrl", setting.Setting.IsProduct, setting.Setting.LogPatent)
 )
 
 // GetSession 获取会话信息

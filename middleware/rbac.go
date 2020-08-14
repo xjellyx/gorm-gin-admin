@@ -11,7 +11,7 @@ import (
 
 func CasbinHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		e, err := casbin.NewEnforcer(setting.ProjectSetting.RBACModelDir, models.Adapter)
+		e, err := casbin.NewEnforcer(setting.Setting.RBACModelDir, models.Adapter)
 		if err != nil {
 			app.NewGinResponse(c).Fail(500, err.Error()).SetStatus(500).Response()
 			return
@@ -26,7 +26,7 @@ func CasbinHandler() gin.HandlerFunc {
 			app.NewGinResponse(c).Fail(403, "casbnin check failed").SetStatus(403).Response()
 			c.Abort()
 			return
-		} else if !ok && setting.ProjectSetting.IsProduct {
+		} else if !ok && setting.Setting.IsProduct {
 			app.NewGinResponse(c).Fail(403, "illegal permission").SetStatus(403).Response()
 			c.Abort()
 			return

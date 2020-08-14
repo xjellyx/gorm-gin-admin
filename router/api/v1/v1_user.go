@@ -2,7 +2,6 @@ package v1
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/olongfen/contrib"
 	"github.com/olongfen/contrib/session"
 	"github.com/olongfen/user_base/models"
 	"github.com/olongfen/user_base/pkg/app"
@@ -44,7 +43,7 @@ func UserRegister(c *gin.Context) {
 	}()
 	if err = c.Bind(form); err != nil {
 		code = codes.CodeParamInvalid
-		err = contrib.ErrParamInvalid
+		err = utils.ErrParamInvalid
 		return
 	}
 	if data, err = service.AddUser(form); err != nil {
@@ -146,7 +145,7 @@ func ModifyProfile(c *gin.Context) {
 	}
 	if err = c.ShouldBind(form); err != nil {
 		code = codes.CodeParamInvalid
-		err = contrib.ErrParamInvalid
+		err = utils.ErrParamInvalid
 		return
 	}
 	form.Uid = s.UID
@@ -319,7 +318,7 @@ func ModifyHeadIcon(c *gin.Context) {
 	oldDst := d.HeadIcon
 	//
 	arr := strings.Split(headIcon.Filename, ".")
-	dst := setting.ProjectSetting.HeadIconDir + uuid.NewV4().String() + "." + arr[len(arr)-1]
+	dst := setting.Setting.HeadIconDir + uuid.NewV4().String() + "." + arr[len(arr)-1]
 	if err = c.SaveUploadedFile(headIcon, dst); err != nil {
 		return
 	}
@@ -385,7 +384,7 @@ func SetPayPwd(c *gin.Context) {
 	}()
 	if pwd = c.PostForm("pwd"); len(pwd) == 0 {
 		code = codes.CodeParamInvalid
-		err = contrib.ErrParamInvalid
+		err = utils.ErrParamInvalid
 		return
 	}
 	if sess, err = GetSession(c); err != nil {

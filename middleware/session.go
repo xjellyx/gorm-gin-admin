@@ -37,7 +37,7 @@ func CheckUserAuth(isAdmin bool) gin.HandlerFunc {
 			c.JSON(500, app.Response{
 				Meta: app.Meta{
 					Code:    500,
-					Message: contrib.ErrTokenUndefined.Error(),
+					Message: "token invalid",
 				},
 				Data: nil,
 			})
@@ -78,7 +78,7 @@ func CheckUserAuth(isAdmin bool) gin.HandlerFunc {
 			}
 		}
 		// 不是同一个ip地址
-		if s.IP != c.ClientIP() && setting.ProjectSetting.IsProduct {
+		if s.IP != c.ClientIP() && setting.Setting.IsProduct {
 			c.JSON(403, app.Response{
 				Meta: app.Meta{
 					Code:    403,

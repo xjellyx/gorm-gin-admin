@@ -3,7 +3,7 @@ serverport: "8050"
 rpchost: 0.0.0.0
 rpcport: "9050"
 sync: true
-isproduct: true
+isproduct: false
 userkeydir: ./conf/user.key
 userpubdir: ./conf/user.pub
 adminkeydir: ./conf/admin.key
@@ -26,5 +26,6 @@ istls: false
 tls: null
 iscaptcha: false
 logdir: ./log
+logpatent: _%Y-%m-%d.log
 headicondir: ./public/static/
 rbacmodeldir: ./conf/model_api.conf

@@ -24,9 +24,10 @@ func AddMenu(forms []*utils.FormAddMenu) (ret []*models.Menu, err error) {
 			}
 		}
 		m.ParentId = v.ParentId
-		m.Icon = v.Icon
+		m.Meta.Icon = v.Icon
 		m.Name = v.Name
-		m.Router = v.Router
+		m.Path = v.Router
+		m.Meta.Title = v.Title
 		if err = m.Insert(db); err != nil {
 			return
 		}
@@ -36,11 +37,11 @@ func AddMenu(forms []*utils.FormAddMenu) (ret []*models.Menu, err error) {
 }
 
 // GetMenu
-func GetMenu(id int) (ret *models.Menu, err error) {
+func GetMenu(id int) (ret []*models.Menu, err error) {
 	var data = new(models.Menu)
 	if err = data.Get(id); err != nil {
 		return
 	}
-	ret = data
+	ret = append(ret, data)
 	return
 }

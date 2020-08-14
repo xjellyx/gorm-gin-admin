@@ -15,11 +15,11 @@ func (f *FormRegister) Valid() (err error) {
 		return
 	}
 	if len(f.Phone) == 0 {
-		err = ErrFormParamInvalid.SetVars("phone")
+		err = ErrFormParamInvalid
 		return
 	}
 	if len(f.Password) == 0 {
-		err = ErrFormParamInvalid.SetVars("password")
+		err = ErrFormParamInvalid
 		return
 	}
 

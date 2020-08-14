@@ -14,7 +14,7 @@ func AddRuleAPI(f *utils.FormRoleAPIPerm) (ret []int64, err error) {
 		user = new(models.UserBase)
 	)
 
-	if e, err = casbin.NewEnforcer(setting.ProjectSetting.RBACModelDir, models.Adapter); err != nil {
+	if e, err = casbin.NewEnforcer(setting.Setting.RBACModelDir, models.Adapter); err != nil {
 		return
 	}
 	if err = user.GetByUId(f.Uid); err != nil {
@@ -42,7 +42,7 @@ func RemoveRuleAPI(f *utils.FormRoleAPIPerm) (ret []int64, err error) {
 		user = new(models.UserBase)
 	)
 
-	if e, err = casbin.NewEnforcer(setting.ProjectSetting.RBACModelDir, models.Adapter); err != nil {
+	if e, err = casbin.NewEnforcer(setting.Setting.RBACModelDir, models.Adapter); err != nil {
 		return
 	}
 	if err = user.GetByUId(f.Uid); err != nil {

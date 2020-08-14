@@ -6,4 +6,5 @@ type FormAddMenu struct {
 	ParentId uint   `form:"parentId" binding:"required"`
 	Router   string `form:"router" binding:"required"`
 	Icon     string `form:"icon" binding:"required"`
+	Title    string `form:"title" binding:"required"`
 }

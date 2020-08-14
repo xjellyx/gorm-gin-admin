@@ -19,9 +19,9 @@ func UserLogin(f *utils.LoginForm, isAdmin bool) (token string, err error) {
 		data = &models.UserBase{}
 		s    = new(session.Session)
 	)
-	if setting.ProjectSetting.IsProduct{
+	if setting.Setting.IsProduct {
 		verify := captcha.VerifyString(f.CaptchaId, f.Digits)
-		if !verify{
+		if !verify {
 			err = utils.ErrCaptchaVerifyFail
 			return
 		}

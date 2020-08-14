@@ -38,14 +38,14 @@ func main() {
 	go func() {
 		// 开启服务
 		s := &http.Server{
-			Addr:           setting.ProjectSetting.ServerAddr + ":" + setting.ProjectSetting.ServerPort,
+			Addr:           setting.Setting.ServerAddr + ":" + setting.Setting.ServerPort,
 			Handler:        engine,
 			ReadTimeout:    60 * time.Second,
 			WriteTimeout:   60 * time.Second,
 			MaxHeaderBytes: 1 << 20, // 10M
 		}
 		logrus.Println("server listen on: ", s.Addr)
-		if setting.ProjectSetting.IsTLS { // 开启tls
+		if setting.Setting.IsTLS { // 开启tls
 			TLSConfig := &tls.Config{
 				MinVersion:               tls.VersionTLS11,
 				CurvePreferences:         []tls.CurveID{tls.CurveP521, tls.CurveP384, tls.CurveP256},
@@ -63,7 +63,7 @@ func main() {
 			s.TLSConfig = TLSConfig
 			s.TLSNextProto = TLSProto
 
-			if err := s.ListenAndServeTLS(setting.ProjectSetting.TLS.Cert, setting.ProjectSetting.TLS.Key); err != nil {
+			if err := s.ListenAndServeTLS(setting.Setting.TLS.Cert, setting.Setting.TLS.Key); err != nil {
 				logrus.Fatal(err)
 			}
 		} else {

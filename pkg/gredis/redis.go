@@ -28,8 +28,8 @@ func GetRedisClient() (ret *redis.Client, err error) {
 
 	// 重新连接
 	redisClient = redis.NewClient(&redis.Options{
-		Addr:     setting.ProjectSetting.RDB.Host + ":" + setting.ProjectSetting.RDB.Port,
-		Password: setting.ProjectSetting.RDB.Password,
+		Addr:     setting.Setting.RDB.Host + ":" + setting.Setting.RDB.Port,
+		Password: setting.Setting.RDB.Password,
 	})
 	// 报错直接恐慌
 	if err = redisClient.Ping().Err(); err != nil {

@@ -21,7 +21,7 @@ require (
 	github.com/lib/pq v1.6.0
 	github.com/mailru/easyjson v0.7.1 // indirect
 	github.com/mitchellh/mapstructure v1.3.2
-	github.com/olongfen/contrib v0.0.0-20200628023202-36d2180ce685
+	github.com/olongfen/contrib v0.0.0-20200814030134-e94d1f18a1d6
 	github.com/olongfen/gen-id v1.0.2-0.20200205020411-aa724763f90c
 	github.com/olongfen/model.grpc v0.0.0-20200317063205-6f0f4e4b3caf
 	github.com/pkg/errors v0.9.1 // indirect

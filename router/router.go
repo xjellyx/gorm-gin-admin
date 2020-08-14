@@ -16,7 +16,7 @@ func InitRouter() (ret *gin.Engine) {
 	// 初始化路由
 	var engine = gin.Default()
 
-	if setting.ProjectSetting.IsProduct {
+	if setting.Setting.IsProduct {
 
 		gin.SetMode(gin.ReleaseMode)
 		engine.Use(gin.Logger())

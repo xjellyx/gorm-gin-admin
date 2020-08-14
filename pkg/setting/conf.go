@@ -26,6 +26,7 @@ type ProjectConfig struct {
 	TLS           *TLS
 	IsCaptcha     bool
 	LogDir        string
+	LogPatent     string
 	HeadIconDir   string
 	RBACModelDir  string
 	// RABCPolicyDir string
@@ -58,7 +59,7 @@ type Database struct {
 }
 
 var (
-	ProjectSetting = &ProjectConfig{
+	Setting = &ProjectConfig{
 		ServerAddr: utils.PubGetEnvString("SERVER_ADDR", "127.0.0.1"),
 		ServerPort: utils.PubGetEnvString("SERVER_PORT", "8050"),
 		RpcHost:    utils.PubGetEnvString("RPC_HOST", "127.0.0.1"),
@@ -89,6 +90,7 @@ var (
 		LogDir:       "./log",
 		HeadIconDir:  "./public/static/",
 		RBACModelDir: "./conf/model_api.conf",
+		LogPatent:    "_%Y-%m-%d.log",
 		// RABCPolicyDir: "./conf/policy_api.csv",
 	}
 )
@@ -98,16 +100,16 @@ func InitConfig() {
 	var (
 		err error
 	)
-	if err = config.LoadConfigAndSave("./conf/project.config.yaml", ProjectSetting, ProjectSetting, time.Second*10); err != nil {
+	if err = config.LoadConfigAndSave("./conf/project.config.yaml", Setting, Setting, time.Second*10); err != nil {
 		logrus.Fatal(err)
 	}
-	if ProjectSetting.IsTLS {
-		ProjectSetting.TLS = &TLS{
+	if Setting.IsTLS {
+		Setting.TLS = &TLS{
 			Cert: "./conf/serve.cert",
 			Key:  "./conf/serve.key",
 		}
 	}
-	if err = ProjectSetting.Save(nil); err != nil {
+	if err = Setting.Save(nil); err != nil {
 		logrus.Fatal(err)
 	}
 

@@ -24,7 +24,7 @@ func GinAPILog() gin.HandlerFunc {
 				param.Request.UserAgent(),
 			)
 		},
-		Output: log2.NewLogFile("./log/router", !setting.ProjectSetting.IsProduct).Out,
+		Output: log2.NewLogFile("./log/router", !setting.Setting.IsProduct, setting.Setting.LogPatent).Out,
 	})
 
 }

@@ -45,7 +45,7 @@ func AddMenu(c *gin.Context) {
 // @Description 获取菜单
 // @Accept json
 // @Produce json
-// @Param id int64 true "菜单id"
+// @Param id int64 false "菜单id"
 // @Success 200 {object} app.Response
 // @Failure 500  {object} app.Response
 // @router /api/v1/admin/getMenu [get]
@@ -54,7 +54,7 @@ func GetMenu(c *gin.Context) {
 		err  error
 		id   int
 		code = codes.CodeProcessingFailed
-		data *models.Menu
+		data []*models.Menu
 	)
 	defer func() {
 		if err != nil {
@@ -63,9 +63,12 @@ func GetMenu(c *gin.Context) {
 			app.NewGinResponse(c).Success(data).Response()
 		}
 	}()
-	if id, err = strconv.Atoi(c.Param("id")); err != nil {
+	if id, err = strconv.Atoi(c.Query("id")); err != nil {
 		code = codes.CodeParamInvalid
 		return
+	}
+	if id == 0 {
+		id = 1
 	}
 	if data, err = service.GetMenu(id); err != nil {
 		return
