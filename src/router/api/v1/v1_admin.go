@@ -18,7 +18,7 @@ import (
 // @Param username body string true "用户名"
 // @Param password body string true "密码"
 // @Success 200 {object} app.Response
-// @Failure 200 {object} app.Response
+// @Failure 500 {object} app.Response
 // @router /api/v1/admin/login [post]
 // AdminLogin
 func AdminLogin(c *gin.Context) {
@@ -52,7 +52,7 @@ func AdminLogin(c *gin.Context) {
 // @Produce json
 // @Accept json
 // @Success 200 {object} app.Response
-// @Failure 200 {object} app.Response
+// @Failure 500 {object} app.Response
 // @router /api/v1/admin/logout [post]
 func AdminLogout(c *gin.Context) {
 	var (
@@ -84,7 +84,7 @@ func AdminLogout(c *gin.Context) {
 // @Produce json
 // @Param {} body utils.FormUserList true "查询数据"
 // @Success 200 {object} app.Response
-// @Failure 200 {object} app.Response
+// @Failure 500 {object} app.Response
 // @Router /api/v1/admin/listUser [get]
 func ListUser(c *gin.Context) {
 	var (
@@ -121,7 +121,7 @@ func ListUser(c *gin.Context) {
 // @Param uid path string true "用户uid"
 // @Param {} body utils.FormEditUser true "修改用户信息"
 // @Success 200 {object} app.Response
-// @Failure 200 {object} app.Response
+// @Failure 500 {object} app.Response
 // @Router /api/v1/admin/editUser [post]
 func EditUser(c *gin.Context) {
 	var (
@@ -152,7 +152,7 @@ func EditUser(c *gin.Context) {
 // @Produce json
 // @Param {} body utils.FormRoleAPIPerm true "添加api权限表单"
 // @Success 200 {object} app.Response
-// @Failure 200 {object} app.Response
+// @Failure 500 {object} app.Response
 // @Router /api/v1/admin/addRoleAPIPerm [post]
 func AddRoleAPIPerm(c *gin.Context) {
 	var (
@@ -188,7 +188,7 @@ func AddRoleAPIPerm(c *gin.Context) {
 // @Produce json
 // @Param {} body utils.FormRoleAPIPerm true "删除api权限表单"
 // @Success 200 {object} app.Response
-// @Failure 200 {object} app.Response
+// @Failure 500 {object} app.Response
 // @Router /api/v1/admin/removeRoleAPIPerm [delete]
 func RemoveRolePermAPI(c *gin.Context) {
 	var (
@@ -224,7 +224,7 @@ func RemoveRolePermAPI(c *gin.Context) {
 // @Produce json
 // @Param uid query string false "用户uid,不输入默认返回自己uid"
 // @Success 200 {object} app.Response
-// @Failure 200 {object} app.Response
+// @Failure 500 {object} app.Response
 // @Router /api/v1/getRoleApiList [get]
 func GetRoleApiList(c *gin.Context) {
 	var (
@@ -263,7 +263,7 @@ func GetRoleApiList(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Success 200 {object} app.Response
-// @Failure 200 {object} app.Response
+// @Failure 500 {object} app.Response
 // @Router  /api/v1/admin/getAllApiGroup [get]
 func GetAllAPIGroup(c *gin.Context) {
 	var (
@@ -294,7 +294,7 @@ func GetAllAPIGroup(c *gin.Context) {
 // @Produce json
 // @Param {array} body utils.FormAPIGroupAdd true "api数组"
 // @Success 200 {object} app.Response
-// @Failure 200 {object} app.Response
+// @Failure 500 {object} app.Response
 // @Router /api/v1/admin/addApiGroup [post]
 func AddApiGroup(c *gin.Context) {
 	var (
@@ -326,7 +326,7 @@ func AddApiGroup(c *gin.Context) {
 // @Produce json
 // @Param id query int true "id"
 // @Success 200 {object} app.Response
-// @Failure 200 {object} app.Response
+// @Failure 500 {object} app.Response
 // @Router /api/v1/admin/removeApiGroup [delete]
 func RemoveApiGroup(c *gin.Context) {
 	var (
@@ -360,7 +360,7 @@ func RemoveApiGroup(c *gin.Context) {
 // @Produce json
 // @Param {} body utils.FormAPIGroupEdit true "表单"
 // @Success 200 {object} app.Response
-// @Failure 200 {object} app.Response
+// @Failure 500 {object} app.Response
 // @Router  /api/v1/admin/editApiGroup [put]
 func EditApiGroup(c *gin.Context) {
 	var (

@@ -22,7 +22,7 @@ import (
 // @Param lang query string false "语言"
 // @Param isDownload query bool  false "true：下载"
 // @Success 200 {object}  app.Response
-// @Failure 200 {object}  app.Response
+// @Failure 500 {object}  app.Response
 // @router /api/v1/captcha [GET]
 func Captcha(ctx *gin.Context) {
 	var d = struct {

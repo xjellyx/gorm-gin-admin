@@ -24,7 +24,7 @@ import (
 // @Param password body string true "Password"
 // @Param codes body string  false "Code"
 // @Success 200 {object} app.Response
-// @Failure 200 {object} app.Response
+// @Failure 500 {object} app.Response
 // @router /api/v1/register [post]
 func UserRegister(c *gin.Context) {
 	var (
@@ -57,7 +57,7 @@ func UserRegister(c *gin.Context) {
 // @Produce json
 // @Param {} body utils.LoginForm true "form"
 // @Success 200 {object} app.Response
-// @Failure 200 {object} app.Response
+// @Failure 500 {object} app.Response
 // @router /api/v1/user/login [post]
 func UserLogin(c *gin.Context) {
 	var (
@@ -90,7 +90,7 @@ func UserLogin(c *gin.Context) {
 // @Produce json
 // @Accept json
 // @Success 200 {object} app.Response
-// @Failure 200 {object} app.Response
+// @Failure 500 {object} app.Response
 // @router /api/v1/user/logout [post]
 func UserLogout(c *gin.Context) {
 	var (
@@ -123,7 +123,7 @@ func UserLogout(c *gin.Context) {
 // @Param sign body string false "签名"
 // @Param email body string false "邮箱"
 // @Success 200 {object} app.Response
-// @Failure 200 {object} app.Response
+// @Failure 500 {object} app.Response
 // @router /api/v1/user/modifyProfile [put]
 func ModifyProfile(c *gin.Context) {
 	var (
@@ -159,7 +159,7 @@ func ModifyProfile(c *gin.Context) {
 // @Summary 获取个人信息
 // @Produce json
 // @Success 200 {object} app.Response
-// @Failure 200 {object} app.Response
+// @Failure 500 {object} app.Response
 // @router /api/v1/user/getUserProfile [get]
 func GetUserProfile(c *gin.Context) {
 	var (
@@ -192,7 +192,7 @@ func GetUserProfile(c *gin.Context) {
 // @Param oldPwd body string true "旧密码"
 // @Param newPwd body string true "新密码"
 // @Success 200 {object} app.Response
-// @Failure 200 {object} app.Response
+// @Failure 500 {object} app.Response
 // @router /api/v1/user/modifyLoginPwd [put]
 func ModifyLoginPwd(c *gin.Context) {
 	var (
@@ -231,7 +231,7 @@ func ModifyLoginPwd(c *gin.Context) {
 // @Param oldPwd body string true "旧密码"
 // @Param newPwd body string true "新密码"
 // @Success 200 {object} app.Response
-// @Failure 200 {object} app.Response
+// @Failure 500 {object} app.Response
 // @router /api/v1/user/modifyPayPwd [put]
 func ModifyPayPwd(c *gin.Context) {
 	var (
@@ -269,7 +269,7 @@ func ModifyPayPwd(c *gin.Context) {
 // @Accept  json
 // @Param headIcon body string true "头像"
 // @Success 200 {object} app.Response
-// @Failure 200 {object} app.Response
+// @Failure 500 {object} app.Response
 // @Router /api/v1/user/modifyHeadIcon [put]
 func ModifyHeadIcon(c *gin.Context) {
 
@@ -336,7 +336,7 @@ func ModifyHeadIcon(c *gin.Context) {
 // @Produce json
 // @Accept json
 // @Success 200 {object} app.Response
-// @Failure 200 {object} app.Response
+// @Failure 500 {object} app.Response
 // @Router /api/v1/user/getHeadIcon [get]
 func GetHeadIcon(c *gin.Context) {
 	var (
@@ -368,7 +368,7 @@ func GetHeadIcon(c *gin.Context) {
 // @Produce json
 // @Param pwd body string true "密码"
 // @Success 200 {object} app.Response
-// @Failure 200 {object} app.Response
+// @Failure 500 {object} app.Response
 // @Router /api/v1/user/setPayPwd/ [post]
 func SetPayPwd(c *gin.Context) {
 	var (

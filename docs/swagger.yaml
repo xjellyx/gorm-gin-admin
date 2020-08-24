@@ -190,6 +190,10 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
       summary: 创建api
       tags:
       - 管理员
@@ -207,6 +211,10 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/app.Response'
       summary: 添加菜单
@@ -231,6 +239,10 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
       summary: 添加角色接口权限
       tags:
       - 管理员
@@ -251,6 +263,10 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/app.Response'
       summary: 修改api
@@ -279,6 +295,10 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
       tags:
       - 管理员
   /api/v1/admin/getAllApiGroup:
@@ -291,6 +311,10 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/app.Response'
       summary: 获取全部api
@@ -313,6 +337,10 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
       summary: 获取菜单
       tags:
       - 管理员
@@ -333,6 +361,10 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/app.Response'
       summary: 获取用户列表
@@ -362,6 +394,10 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
       summary: 管理员登录
       tags:
       - 管理员
@@ -374,6 +410,10 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/app.Response'
       summary: 管理员登出
@@ -397,6 +437,10 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
       summary: 删除api
       tags:
       - 管理员
@@ -417,6 +461,10 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/app.Response'
       summary: 删除角色接口权限
@@ -446,6 +494,10 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
       summary: 获取验证码
       tags:
       - 验证码
@@ -464,6 +516,10 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/app.Response'
       summary: 获取用户权限
@@ -496,6 +552,10 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
       summary: 用户注册
       tags:
       - 用户
@@ -510,6 +570,10 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
       summary: 获取用户头像
       tags:
       - 用户
@@ -520,6 +584,10 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/app.Response'
       summary: 获取个人信息
@@ -541,6 +609,10 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
       summary: 用户登录
       tags:
       - 用户
@@ -553,6 +625,10 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/app.Response'
       summary: 用户登出
@@ -574,6 +650,10 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/app.Response'
       summary: 修改用户头像
@@ -603,6 +683,10 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
       summary: 修改用户密码
       tags:
       - 用户
@@ -628,6 +712,10 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/app.Response'
       summary: 修改用户密码
@@ -663,6 +751,10 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
       summary: 更新用户信息
       tags:
       - 用户
@@ -685,6 +777,10 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
       summary: 用户设置支付密码
       tags:
       - 用户
@@ -702,6 +798,10 @@ paths:
       responses:
         "200":
           description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
           schema:
             $ref: '#/definitions/app.Response'
       summary: 用户实名认证

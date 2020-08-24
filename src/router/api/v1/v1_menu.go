@@ -15,7 +15,7 @@ import (
 // @Produce json
 // @Param {} body utils.FormAddMenu true "菜单form"
 // @Success 200 {object} app.Response
-// @Failure 200 {object} app.Response
+// @Failure 500 {object} app.Response
 // @router /api/v1/admin/addMenu [post]
 func AddMenu(c *gin.Context) {
 	var (
@@ -47,7 +47,7 @@ func AddMenu(c *gin.Context) {
 // @Produce json
 // @Param id query int64 false "菜单id"
 // @Success 200 {object} app.Response
-// @Failure 200  {object} app.Response
+// @Failure 500  {object} app.Response
 // @router /api/v1/admin/getMenu [get]
 func GetMenu(c *gin.Context) {
 	var (
