@@ -4,7 +4,7 @@ import (
 	"crypto/tls"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	_ "github.com/olongfen/user_base/src/docs"
+	_ "github.com/olongfen/user_base/docs"
 	"github.com/olongfen/user_base/src/models"
 	"github.com/olongfen/user_base/src/pkg/gredis"
 	"github.com/olongfen/user_base/src/pkg/setting"
