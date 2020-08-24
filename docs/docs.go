@@ -54,12 +54,6 @@ var doc = `{
                         "schema": {
                             "$ref": "#/definitions/app.Response"
                         }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
                     }
                 }
             }
@@ -87,12 +81,6 @@ var doc = `{
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/app.Response"
                         }
@@ -130,12 +118,6 @@ var doc = `{
                         "schema": {
                             "$ref": "#/definitions/app.Response"
                         }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
                     }
                 }
             }
@@ -167,12 +149,6 @@ var doc = `{
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/app.Response"
                         }
@@ -215,12 +191,6 @@ var doc = `{
                         "schema": {
                             "$ref": "#/definitions/app.Response"
                         }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
                     }
                 }
             }
@@ -244,9 +214,34 @@ var doc = `{
                         "schema": {
                             "$ref": "#/definitions/app.Response"
                         }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
+                    }
+                }
+            }
+        },
+        "/api/v1/admin/getMenu": {
+            "get": {
+                "description": "获取菜单",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "管理员"
+                ],
+                "summary": "获取菜单",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "description": "菜单id",
+                        "name": "id",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/app.Response"
                         }
@@ -281,12 +276,6 @@ var doc = `{
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/app.Response"
                         }
@@ -332,12 +321,6 @@ var doc = `{
                         "schema": {
                             "$ref": "#/definitions/app.Response"
                         }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
                     }
                 }
             }
@@ -357,12 +340,6 @@ var doc = `{
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/app.Response"
                         }
@@ -395,12 +372,6 @@ var doc = `{
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/app.Response"
                         }
@@ -438,9 +409,45 @@ var doc = `{
                         "schema": {
                             "$ref": "#/definitions/app.Response"
                         }
+                    }
+                }
+            }
+        },
+        "/api/v1/captcha": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "验证码"
+                ],
+                "summary": "获取验证码",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "图片格式",
+                        "name": "ext",
+                        "in": "query"
                     },
-                    "500": {
-                        "description": "Internal Server Error",
+                    {
+                        "type": "string",
+                        "description": "语言",
+                        "name": "lang",
+                        "in": "query"
+                    },
+                    {
+                        "type": "boolean",
+                        "description": "true：下载",
+                        "name": "isDownload",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/app.Response"
                         }
@@ -472,12 +479,6 @@ var doc = `{
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/app.Response"
                         }
@@ -528,12 +529,6 @@ var doc = `{
                         "schema": {
                             "$ref": "#/definitions/app.Response"
                         }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
                     }
                 }
             }
@@ -556,12 +551,6 @@ var doc = `{
                         "schema": {
                             "$ref": "#/definitions/app.Response"
                         }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
                     }
                 }
             }
@@ -578,12 +567,6 @@ var doc = `{
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/app.Response"
                         }
@@ -617,12 +600,6 @@ var doc = `{
                         "schema": {
                             "$ref": "#/definitions/app.Response"
                         }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
                     }
                 }
             }
@@ -642,12 +619,6 @@ var doc = `{
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/app.Response"
                         }
@@ -681,12 +652,6 @@ var doc = `{
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/app.Response"
                         }
@@ -732,12 +697,6 @@ var doc = `{
                         "schema": {
                             "$ref": "#/definitions/app.Response"
                         }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
                     }
                 }
             }
@@ -777,12 +736,6 @@ var doc = `{
                 "responses": {
                     "200": {
                         "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
                         "schema": {
                             "$ref": "#/definitions/app.Response"
                         }
@@ -839,12 +792,6 @@ var doc = `{
                         "schema": {
                             "$ref": "#/definitions/app.Response"
                         }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
                     }
                 }
             }
@@ -879,12 +826,6 @@ var doc = `{
                         "schema": {
                             "$ref": "#/definitions/app.Response"
                         }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
                     }
                 }
             }
@@ -915,12 +856,6 @@ var doc = `{
                         "schema": {
                             "$ref": "#/definitions/app.Response"
                         }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
                     }
                 }
             }
@@ -930,7 +865,7 @@ var doc = `{
         "app.Meta": {
             "type": "object",
             "properties": {
-                "codes": {
+                "code": {
                     "type": "integer"
                 },
                 "message": {
@@ -1014,7 +949,8 @@ var doc = `{
                 "icon",
                 "name",
                 "parentId",
-                "router"
+                "router",
+                "title"
             ],
             "properties": {
                 "icon": {
@@ -1027,6 +963,9 @@ var doc = `{
                     "type": "integer"
                 },
                 "router": {
+                    "type": "string"
+                },
+                "title": {
                     "type": "string"
                 }
             }
