@@ -4,4 +4,4 @@ serve
 var
 public
 main
-conf
+conf/project.config.yaml
