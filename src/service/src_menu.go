@@ -37,11 +37,22 @@ func AddMenu(forms []*utils.FormAddMenu) (ret []*models.Menu, err error) {
 }
 
 // GetMenu
-func GetMenu(id int) (ret []*models.Menu, err error) {
+func GetMenu(id int) (ret *models.Menu, err error) {
 	var data = new(models.Menu)
 	if err = data.Get(id); err != nil {
 		return
 	}
-	ret = append(ret, data)
+	ret = data
+	return
+}
+
+// GetMenuList
+func GetMenuList() (ret []*models.Menu, err error) {
+	if ret, err = models.GetMenuList(); err != nil {
+		return
+	}
+	for _, v := range ret {
+		_ = models.GetChildren(v.Children)
+	}
 	return
 }

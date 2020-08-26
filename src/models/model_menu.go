@@ -89,3 +89,12 @@ func (m *Menu) Delete(id int, options ...*gorm.DB) (err error) {
 	}
 	return
 }
+
+func GetMenuList(options ...*gorm.DB) (ret []*Menu, err error) {
+	if err = getDB(options...).Model(&Menu{}).Where("id > 0").Find(&ret).Error; err != nil {
+		logModel.Errorln(err)
+		err = utils.ErrGetDataFailed
+		return
+	}
+	return
+}

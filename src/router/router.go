@@ -86,6 +86,7 @@ func adminRouterAPI(r *gin.RouterGroup) {
 	apiAdmin.GET("getRoleApiList", v1.GetRoleApiList)
 	apiAdmin.POST("addMenu", v1.AddMenu)
 	apiAdmin.GET("getMenu", v1.GetMenu)
+	apiAdmin.GET("getMenuList", v1.GetMenuList)
 	// apiAdmin.GET("/profile", auth.RequiresPermissions([]string{"profile:admin"}), api.GetUserProfile)
 
 }
