@@ -52,7 +52,7 @@ func GetMenuList() (ret []*models.Menu, err error) {
 		return
 	}
 	for _, v := range ret {
-		_ = models.GetChildren(v.Children)
+		_ = v.Get(int(v.ID))
 	}
 	return
 }

@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"encoding/base64"
 	"github.com/gin-gonic/gin"
 	"github.com/olongfen/contrib/session"
 	"github.com/olongfen/user_base/src/models"
@@ -11,6 +12,7 @@ import (
 	"github.com/olongfen/user_base/src/utils"
 	uuid "github.com/satori/go.uuid"
 	"image"
+	"io/ioutil"
 	"mime/multipart"
 	"os"
 	"strings"
@@ -160,7 +162,7 @@ func ModifyProfile(c *gin.Context) {
 // @Produce json
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
-// @router /api/v1/user/getUserProfile [get]
+// @router /api/v1/user/profile [get]
 func GetUserProfile(c *gin.Context) {
 	var (
 		err  error
@@ -172,6 +174,8 @@ func GetUserProfile(c *gin.Context) {
 		if err != nil {
 			app.NewGinResponse(c).Fail(code, err.Error()).Response()
 		} else {
+			_d, _ := ioutil.ReadFile(data.HeadIcon)
+			data.HeadIcon = base64.StdEncoding.EncodeToString(_d)
 			app.NewGinResponse(c).Success(data).Response()
 		}
 	}()
