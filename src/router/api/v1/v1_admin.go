@@ -92,6 +92,7 @@ func ListUser(c *gin.Context) {
 		code = codes.CodeProcessingFailed
 		form = new(utils.FormUserList)
 		data []*models.UserBase
+		s *session.Session
 	)
 	defer func() {
 		if err != nil {
@@ -99,14 +100,14 @@ func ListUser(c *gin.Context) {
 		}
 	}()
 
-	if _, code,err = GetSession(c); err != nil {
+	if s, code,err = GetSession(c); err != nil {
 		return
 	}
 	if err = c.ShouldBindQuery(form); err != nil {
 		code = codes.CodeParamInvalid
 		return
 	}
-	if data, err = service.GetUserList(form); err != nil {
+	if data, err = service.GetUserList(s.UID,form); err != nil {
 		return
 	}
 	app.NewGinResponse(c).Success(data).Response()

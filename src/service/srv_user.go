@@ -157,8 +157,13 @@ func SetUserPayPwd(uid string, pwd string) (err error) {
 }
 
 // GetUserList
-func GetUserList(form *utils.FormUserList) (ret []*models.UserBase, err error) {
+func GetUserList(uid string,form *utils.FormUserList) (ret []*models.UserBase, err error) {
+	data:=new(models.UserBase)
+	if err = data.GetByUId(uid);err!=nil{
+		return
+	}
 	cond := map[string]interface{}{}
+	cond["role$lt$"] = data.Role
 	if form.Username != "" {
 		cond["$and$username"] = utils.SpiltInterfaceList(form.Username, ",")
 	}
