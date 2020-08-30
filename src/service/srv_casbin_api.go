@@ -20,6 +20,10 @@ func AddRuleAPI(f *utils.FormRoleAPIPerm) (ret []int64, err error) {
 	if err = user.GetByUId(f.Uid); err != nil {
 		return
 	}
+	if user.Role<models.UserRoleSuperAdmin{
+		err = utils.ErrActionNotAllow
+		return
+	}
 	for _, v := range f.GroupID {
 		dataGroup := new(models.APIGroup)
 		if err = dataGroup.Get(v); err != nil {
@@ -48,6 +52,10 @@ func RemoveRuleAPI(f *utils.FormRoleAPIPerm) (ret []int64, err error) {
 	if err = user.GetByUId(f.Uid); err != nil {
 		return
 	}
+	if user.Role<models.UserRoleSuperAdmin{
+		err = utils.ErrActionNotAllow
+		return
+	}
 	for _, v := range f.GroupID {
 		dataGroup := new(models.APIGroup)
 		if err = dataGroup.Get(v); err != nil {
@@ -67,7 +75,7 @@ func GetRuleApiList(uid string) (ret []struct {
 	Path   string
 	Method string
 }, err error) {
-	d := []*models.RuleAPI{}
+	var d []*models.RuleAPI
 	if d, err = models.GetRuleAPIListByUID(uid); err != nil {
 		return nil, err
 	}

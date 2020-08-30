@@ -1,6 +1,7 @@
 package service
 
 import (
+	"fmt"
 	"github.com/olongfen/user_base/src/models"
 	"github.com/olongfen/user_base/src/pkg/query"
 	"github.com/olongfen/user_base/src/utils"
@@ -33,8 +34,8 @@ func AddUser(form *utils.AddUserForm) (ret *models.UserBase, err error) {
 	return u, nil
 }
 
-// EditUser 修改用户信息
-func EditUser(form *utils.FormEditUser) (ret *models.UserBase, err error) {
+// EditUserBySelf 修改用户信息
+func EditUserBySelf(uid string,form *utils.FormEditUser) (ret *models.UserBase, err error) {
 	var (
 		dataMap map[string]interface{}
 		data    = &models.UserBase{}
@@ -42,11 +43,39 @@ func EditUser(form *utils.FormEditUser) (ret *models.UserBase, err error) {
 	if dataMap, err = form.Valid(); err != nil {
 		return
 	}
+	if err = data.GetByUId(uid);err!=nil{
+		return
+	}
+
+	if err = data.Update(form.Uid, dataMap); err != nil {
+		return nil, err
+	}
+
+	//
+	ret = data
+	return
+}
+
+
+
+// EditUserByRole 修改用户信息
+func EditUserByRole(uid string,form *utils.FormEditUser) (ret *models.UserBase, err error) {
+	var (
+		dataMap map[string]interface{}
+		role = new(models.UserBase)
+		data    = &models.UserBase{}
+	)
+	if dataMap, err = form.Valid(); err != nil {
+		return
+	}
+	if err = role.GetByUId(uid);err!=nil{
+		return
+	}
 
 	if err = data.GetByUId(form.Uid); err != nil {
 		return
 	}
-	if data.IsAdmin {
+	if data.Role >= role.Role{
 		err = utils.ErrActionNotAllow
 		return
 	}
@@ -154,4 +183,12 @@ func GetUserList(form *utils.FormUserList) (ret []*models.UserBase, err error) {
 		return
 	}
 	return models.GetUserList(q)
+}
+
+func GetUserCount(uid string)(ret int64,err error)  {
+	data:=new(models.UserBase)
+	if err = data.GetByUId(uid);err!=nil{
+		return
+	}
+	return models.GetUserTotal(fmt.Sprintf(`role< %v`,data.Role))
 }

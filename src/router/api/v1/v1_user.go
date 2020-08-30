@@ -107,7 +107,7 @@ func UserLogout(c *gin.Context) {
 			app.NewGinResponse(c).Success(nil).Response()
 		}
 	}()
-	if s, err = GetSession(c); err != nil {
+	if s,code, err = GetSession(c); err != nil {
 		return
 	}
 	if err = service.UserLogout(s.UID); err != nil {
@@ -142,7 +142,7 @@ func ModifyProfile(c *gin.Context) {
 			app.NewGinResponse(c).Success(data).Response()
 		}
 	}()
-	if s, err = GetSession(c); err != nil {
+	if s,code, err = GetSession(c); err != nil {
 		return
 	}
 	if err = c.ShouldBind(form); err != nil {
@@ -150,8 +150,7 @@ func ModifyProfile(c *gin.Context) {
 		err = utils.ErrParamInvalid
 		return
 	}
-	form.Uid = s.UID
-	if data, err = service.EditUser(form); err != nil {
+	if data, err = service.EditUserBySelf(s.UID,form); err != nil {
 		return
 	}
 }
@@ -179,7 +178,7 @@ func GetUserProfile(c *gin.Context) {
 			app.NewGinResponse(c).Success(data).Response()
 		}
 	}()
-	if s, err = GetSession(c); err != nil {
+	if s,code, err = GetSession(c); err != nil {
 		return
 	}
 	if err = data.GetByUId(s.UID); err != nil {
@@ -219,7 +218,7 @@ func ModifyLoginPwd(c *gin.Context) {
 		code = codes.CodeParamInvalid
 		return
 	}
-	if s, err = GetSession(c); err != nil {
+	if s,code, err = GetSession(c); err != nil {
 		return
 	}
 	if err = service.ChangePwd(s.UID, f.OldPwd, f.NewPwd); err != nil {
@@ -258,7 +257,7 @@ func ModifyPayPwd(c *gin.Context) {
 		code = codes.CodeParamInvalid
 		return
 	}
-	if s, err = GetSession(c); err != nil {
+	if s,code, err = GetSession(c); err != nil {
 		return
 	}
 	if err = service.ChangePayPwd(s.UID, f.OldPwd, f.NewPwd); err != nil {
@@ -274,7 +273,7 @@ func ModifyPayPwd(c *gin.Context) {
 // @Param headIcon body string true "头像"
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
-// @Router /api/v1/user/modifyHeadIcon [put]
+// @Path /api/v1/user/modifyHeadIcon [put]
 func ModifyHeadIcon(c *gin.Context) {
 
 	var (
@@ -313,7 +312,7 @@ func ModifyHeadIcon(c *gin.Context) {
 		return
 	}
 
-	if s, err = GetSession(c); err != nil {
+	if s,code, err = GetSession(c); err != nil {
 		return
 	}
 	if err = d.GetByUId(s.UID); err != nil {
@@ -341,7 +340,7 @@ func ModifyHeadIcon(c *gin.Context) {
 // @Accept json
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
-// @Router /api/v1/user/getHeadIcon [get]
+// @Path /api/v1/user/getHeadIcon [get]
 func GetHeadIcon(c *gin.Context) {
 	var (
 		err  error
@@ -354,8 +353,8 @@ func GetHeadIcon(c *gin.Context) {
 			app.NewGinResponse(c).Fail(code, err.Error()).Response()
 		}
 	}()
-	if s, err = GetSession(c); err != nil {
-		code = 401
+	if s,code, err = GetSession(c); err != nil {
+
 		return
 	}
 	if err = data.GetByUId(s.UID); err != nil {
@@ -373,7 +372,7 @@ func GetHeadIcon(c *gin.Context) {
 // @Param pwd body string true "密码"
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
-// @Router /api/v1/user/setPayPwd/ [post]
+// @Path /api/v1/user/setPayPwd/ [post]
 func SetPayPwd(c *gin.Context) {
 	var (
 		sess *session.Session
@@ -391,7 +390,7 @@ func SetPayPwd(c *gin.Context) {
 		err = utils.ErrParamInvalid
 		return
 	}
-	if sess, err = GetSession(c); err != nil {
+	if sess,code, err = GetSession(c); err != nil {
 		return
 	}
 	if err = service.SetUserPayPwd(sess.UID, pwd); err != nil {

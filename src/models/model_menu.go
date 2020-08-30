@@ -13,16 +13,16 @@ type Menu struct {
 	ParentId  uint     `json:"parentId"`
 	Path      string   `json:"path" gorm:"type:varchar(24)"`
 	Component string   `json:"component" gorm:"type:varchar(36)"`
-	Sorts     int64    `json:"sorts"`
+	Sort      int   `json:"sort"`
 	Hidden    bool     `json:"hidden"`
 	Meta      MenuMate `json:"meta" gorm:"type:json"`
 	Children  []*Menu  `json:"children" gorm:"-"`
 }
 
 type MenuMate struct {
-	Icon  string `json:"icon"`
-	Title string `json:"title"`
-	Affix string `json:"affix"`
+	Icon  string `json:"icon" form:"icon" binding:"required"`
+	Title string `json:"title" form:"title" binding:"required"`
+	Affix string `json:"affix" form:"affix"`
 }
 
 func (m MenuMate) Value() (driver.Value, error) {
@@ -42,8 +42,8 @@ func (m *Menu) Insert(options ...*gorm.DB) (err error) {
 	return
 }
 
-func (m *Menu) Update(id int, options ...*gorm.DB) (err error) {
-	if err = getDB(options...).Model(m).Where("id = ?", id).Updates(m).Error; err != nil {
+func (m *Menu) Update(id int, values interface{}, options ...*gorm.DB) (err error) {
+	if err = getDB(options...).Model(m).Where("id = ?", id).Updates(values).Error; err != nil {
 		logModel.Errorln(err)
 		err = utils.ErrUpdateDataFailed
 		return
@@ -89,11 +89,12 @@ func (m *Menu) Delete(id int, options ...*gorm.DB) (err error) {
 		err = utils.ErrGetDataFailed
 		return
 	}
+	getDB().Delete(id,"parent_id = ?",id)
 	return
 }
 
 func GetMenuList(options ...*gorm.DB) (ret []*Menu, err error) {
-	if err = getDB(options...).Model(&Menu{}).Where("parent_id = 0").Find(&ret).Error; err != nil {
+	if err = getDB(options...).Model(&Menu{}).Where("parent_id = 0").Order("sort asc").Find(&ret).Error; err != nil {
 		logModel.Errorln(err)
 		err = utils.ErrGetDataFailed
 		return

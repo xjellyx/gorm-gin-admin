@@ -2,10 +2,10 @@ package middleware
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/olongfen/contrib"
 	"github.com/olongfen/contrib/session"
 	"github.com/olongfen/user_base/src/models"
 	"github.com/olongfen/user_base/src/pkg/app"
+	"github.com/olongfen/user_base/src/pkg/codes"
 	"github.com/olongfen/user_base/src/pkg/setting"
 	"github.com/olongfen/user_base/src/utils"
 	"strings"
@@ -34,14 +34,7 @@ func CheckUserAuth(isAdmin bool) gin.HandlerFunc {
 		}
 
 		if tokenStr == "" {
-			c.JSON(500, app.Response{
-				Meta: app.Meta{
-					Code:    500,
-					Message: "token invalid",
-				},
-				Data: nil,
-			})
-			c.Abort()
+			app.NewGinResponse(c).Fail(codes.CodeTokenInvalid,"token invalid").Response()
 			return
 		}
 
@@ -51,42 +44,21 @@ func CheckUserAuth(isAdmin bool) gin.HandlerFunc {
 		)
 		if isAdmin {
 			if s, err = models.AdminKey.SessionDecode(tokenStr); err != nil {
-				c.JSON(401, app.Response{
-					Meta: app.Meta{
-						Code:    401,
-						Message: contrib.ErrTokenInvalid.Error(),
-					},
-					Data: nil,
-				})
-				c.Abort()
+				app.NewGinResponse(c).Fail(codes.CodeTokenInvalid,"token invalid").Response()
 				return
 			}
 		} else {
 			// 验证用户,管理员和普通用户的密钥对不一样，所以验证两次,管理员token可以使用与普通界面
 			if s, err = models.UserKey.SessionDecode(tokenStr); err != nil {
 				if s, err = models.AdminKey.SessionDecode(tokenStr); err != nil {
-					c.JSON(401, app.Response{
-						Meta: app.Meta{
-							Code:    401,
-							Message: contrib.ErrTokenInvalid.Error(),
-						},
-						Data: nil,
-					})
-					c.Abort()
+					app.NewGinResponse(c).Fail(codes.CodeTokenInvalid,"token invalid").Response()
 					return
 				}
 			}
 		}
 		// 不是同一个ip地址
 		if s.IP != c.ClientIP() && setting.Setting.IsProduct {
-			c.JSON(403, app.Response{
-				Meta: app.Meta{
-					Code:    403,
-					Message: utils.ErrIPAddressInvalid.Error(),
-				},
-				Data: nil,
-			})
-			c.Abort()
+			app.NewGinResponse(c).Fail(codes.CodeIPAddressInvalid, utils.ErrIPAddressInvalid.Error()).Response()
 			return
 		}
 		c.Set("sessionTag", s)

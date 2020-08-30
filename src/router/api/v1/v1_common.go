@@ -14,13 +14,14 @@ var (
 )
 
 // GetSession 获取会话信息
-func GetSession(c *gin.Context) (ret *session.Session, err error) {
+func GetSession(c *gin.Context) (ret *session.Session,code int, err error) {
 	var (
 		ok bool
 		s  interface{}
 	)
 	if s, ok = c.Get("sessionTag"); !ok {
 		err = contrib.ErrSessionUndefined
+		code = codes.CodeTokenInvalid
 		return
 	}
 
@@ -29,8 +30,8 @@ func GetSession(c *gin.Context) (ret *session.Session, err error) {
 }
 
 func GetSessionAndBindingForm(form interface{}, c *gin.Context) (ret *session.Session, code int, err error) {
-	if ret, err = GetSession(c); err != nil {
-		return nil, 401, err
+	if ret,code, err = GetSession(c); err != nil {
+		return
 	}
 	if err = c.ShouldBind(form); err != nil {
 		return nil, codes.CodeParamInvalid, err

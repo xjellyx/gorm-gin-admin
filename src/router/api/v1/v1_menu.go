@@ -2,6 +2,7 @@ package v1
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/olongfen/contrib/session"
 	"github.com/olongfen/user_base/src/models"
 	"github.com/olongfen/user_base/src/pkg/app"
 	"github.com/olongfen/user_base/src/pkg/codes"
@@ -10,7 +11,7 @@ import (
 	"strconv"
 )
 
-// @tags 管理员
+// @tags 超级管理员
 // @Summary 添加菜单
 // @Produce json
 // @Param {} body utils.FormAddMenu true "菜单form"
@@ -22,6 +23,8 @@ func AddMenu(c *gin.Context) {
 		err  error
 		data []*models.Menu
 		form []*utils.FormAddMenu
+		s *session.Session
+		role = &models.UserBase{}
 		code = codes.CodeProcessingFailed
 	)
 	defer func() {
@@ -31,8 +34,14 @@ func AddMenu(c *gin.Context) {
 			app.NewGinResponse(c).Success(data).Response()
 		}
 	}()
-	if err = c.ShouldBind(&form); err != nil {
-		code = codes.CodeParamInvalid
+	if s,code,err = GetSessionAndBindingForm(&form,c); err != nil {
+		return
+	}
+	if err = role.GetByUId(s.UID);err!=nil{
+		return
+	}
+	if role.Role<models.UserRoleSuperAdmin{
+		err = utils.ErrActionNotAllow
 		return
 	}
 	if data, err = service.AddMenu(form); err != nil {
@@ -104,4 +113,93 @@ func GetMenuList(c *gin.Context) {
 		return
 	}
 
+}
+
+// @tags 超级管理员
+// @Title 删除菜单
+// @Summary 删除菜单
+// @Description 删除菜单
+// @Accept json
+// @Produce json
+// @Param id param int true "id"
+// @Success 200 {object} app.Response
+// @Failure 500 {object} app.Response
+// @Path /api/v1/admin/delMenu [delete]
+func DelMenu(c *gin.Context)  {
+	var (
+		_id int
+		err  error
+		s *session.Session
+		code = codes.CodeProcessingFailed
+		role = new(models.UserBase)
+	)
+	id :=c.Query("id")
+	defer func() {
+		if err != nil {
+			app.NewGinResponse(c).Fail(code, err.Error()).Response()
+		} else {
+			app.NewGinResponse(c).Success(nil).Response()
+		}
+	}()
+	if s,code,err = GetSession(c);err!=nil{
+		return
+	}
+	if err = role.GetByUId(s.UID);err!=nil{
+		return
+	}
+	if role.Role<models.UserRoleSuperAdmin{
+		err = utils.ErrActionNotAllow
+		return
+	}
+	if _id,err =strconv.Atoi(id);err!=nil{
+		code = codes.CodeParamInvalid
+		err = utils.ErrParamInvalid
+		return
+	}
+	if err = service.DelMenu(_id); err != nil {
+		return
+	}
+}
+
+// @tags 超级管理员
+// @Title 更新菜单
+// @Summary 更新菜单
+// @Description 更新菜单
+// @Accept json
+// @Produce json
+// @Param {} body utils.FormUpdateMenu true "菜单form"
+// @Success 200 {object} app.Response
+// @Failure 500 {object} app.Response
+// @Path  /api/v1/admin/editMenu [put]
+func EditMenu(c *gin.Context)  {
+	var (
+
+		err  error
+		code = codes.CodeProcessingFailed
+		s *session.Session
+		data *models.Menu
+		role =new(models.UserBase)
+		form = new(utils.FormUpdateMenu)
+	)
+
+	defer func() {
+		if err != nil {
+			app.NewGinResponse(c).Fail(code, err.Error()).Response()
+		} else {
+			app.NewGinResponse(c).Success(data).Response()
+		}
+	}()
+	if s,code,err = GetSessionAndBindingForm(form,c); err != nil {
+		return
+	}
+	if err = role.GetByUId(s.UID);err!=nil{
+		return
+	}
+	if role.Role<models.UserRoleSuperAdmin{
+		err = utils.ErrActionNotAllow
+		return
+	}
+	if data,err = service.UpdateMenu(form);err!=nil{
+		return
+	}
 }

@@ -13,6 +13,12 @@ const (
 	UserStatusLock            // 3 封锁状态
 )
 
+const (
+	UserRoleNormal = iota // 普通用户
+	UserRoleAdmin   // 普通管理员
+	UserRoleSuperAdmin // 超级管理员
+)
+
 // UserBase 用户信息
 type UserBase struct {
 	Model
@@ -27,7 +33,7 @@ type UserBase struct {
 	Sign     string `json:"sign" gorm:"type:varchar(256)"`
 	Status   int    `json:"status"`
 	//
-	IsAdmin bool `json:"isAdmin"  gorm:"default:false"`
+	Role int `json:"role"  gorm:"default:false"` // 0 普通用户，1 普通管理员， 2 超级管理员或者开发人员
 
 	// 外键
 	// UserCard UserCard `json:"userCard" gorm:"foreignkey:ID"`
@@ -118,7 +124,7 @@ func (u *UserBase) GetByPhone(phone string) (err error) {
 
 // GetUserList 获取用户列表
 func GetUserList(q *query.Query) (ret []*UserBase, err error) {
-	if err = DB.Model(&UserBase{}).Where(q.Cond, q.Values...).Offset(q.PageNum).Limit(q.PageSize).Find(&ret).Error; err != nil {
+	if err = DB.Model(&UserBase{}).Where(q.Cond, q.Values...).Offset(q.PageNum).Limit(q.PageSize).Order("id asc").Find(&ret).Error; err != nil {
 		logModel.Errorln(err)
 		err = utils.ErrGetDataFailed
 		return

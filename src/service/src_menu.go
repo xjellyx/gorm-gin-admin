@@ -1,6 +1,7 @@
 package service
 
 import (
+	"github.com/mitchellh/mapstructure"
 	"github.com/olongfen/user_base/src/models"
 	"github.com/olongfen/user_base/src/utils"
 )
@@ -23,11 +24,12 @@ func AddMenu(forms []*utils.FormAddMenu) (ret []*models.Menu, err error) {
 				return
 			}
 		}
-		m.ParentId = v.ParentId
-		m.Meta.Icon = v.Icon
+		m.ParentId = uint(v.ParentId)
 		m.Name = v.Name
-		m.Path = v.Router
-		m.Meta.Title = v.Title
+		m.Path = v.Path
+		m.Component = v.Component
+		m.Sort = v.Sort
+		mapstructure.Decode(v.Meta,&m.Meta)
 		if err = m.Insert(db); err != nil {
 			return
 		}
@@ -53,6 +55,20 @@ func GetMenuList() (ret []*models.Menu, err error) {
 	}
 	for _, v := range ret {
 		_ = v.Get(int(v.ID))
+	}
+	return
+}
+
+// DelMenu
+func DelMenu(id int)(err error){
+	var data =new(models.Menu)
+	return data.Delete(id)
+}
+
+func UpdateMenu(f *utils.FormUpdateMenu)(ret *models.Menu,err error)  {
+	data :=new(models.Menu)
+	if err =data.Update(f.Id,f.ToMap());err!=nil{
+		return
 	}
 	return
 }

@@ -224,7 +224,7 @@ func SessionCheck(s *session.Session) (err error) {
 //	s.Level = session.SessionLevelSecure
 //
 //	//
-//	if data.IsAdmin {
+//	if data.Role {
 //		if token, err = AdminKey.SessionEncodeAuto(s); err != nil {
 //			return
 //		}

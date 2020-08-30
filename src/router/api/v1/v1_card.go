@@ -29,7 +29,7 @@ func Verified(c *gin.Context) {
 			app.NewGinResponse(c).Fail(code, err.Error()).Response()
 		}
 	}()
-	if s, err = GetSession(c); err != nil {
+	if s,code, err = GetSession(c); err != nil {
 		return
 	}
 	if err = c.ShouldBind(form); err != nil {

@@ -54,7 +54,7 @@ func UserLogin(f *utils.LoginForm, isAdmin bool) (token string, err error) {
 			return
 		}
 	} else {
-		if !data.IsAdmin {
+		if data.Role==0 {
 			err = utils.ErrActionNotAllow
 			return
 		}
