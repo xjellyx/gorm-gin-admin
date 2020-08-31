@@ -35,7 +35,7 @@ func AddUser(form *utils.AddUserForm) (ret *models.UserBase, err error) {
 }
 
 // EditUserBySelf 修改用户信息
-func EditUserBySelf(uid string,form *utils.FormEditUser) (ret *models.UserBase, err error) {
+func EditUserBySelf(uid string, form *utils.FormEditUser) (ret *models.UserBase, err error) {
 	var (
 		dataMap map[string]interface{}
 		data    = &models.UserBase{}
@@ -43,7 +43,7 @@ func EditUserBySelf(uid string,form *utils.FormEditUser) (ret *models.UserBase, 
 	if dataMap, err = form.Valid(); err != nil {
 		return
 	}
-	if err = data.GetByUId(uid);err!=nil{
+	if err = data.GetByUId(uid); err != nil {
 		return
 	}
 
@@ -56,26 +56,25 @@ func EditUserBySelf(uid string,form *utils.FormEditUser) (ret *models.UserBase, 
 	return
 }
 
-
-
 // EditUserByRole 修改用户信息
-func EditUserByRole(uid string,form *utils.FormEditUser) (ret *models.UserBase, err error) {
+func EditUserByRole(uid string, form *utils.FormEditUser) (ret *models.UserBase, err error) {
 	var (
 		dataMap map[string]interface{}
-		role = new(models.UserBase)
+		role    = new(models.UserBase)
 		data    = &models.UserBase{}
 	)
 	if dataMap, err = form.Valid(); err != nil {
 		return
 	}
-	if err = role.GetByUId(uid);err!=nil{
+	if err = role.GetByUId(uid); err != nil {
 		return
 	}
 
 	if err = data.GetByUId(form.Uid); err != nil {
 		return
 	}
-	if data.Role >= role.Role{
+	// 只能修改比自己权限底的角色
+	if data.Role > role.Role && uid != form.Uid {
 		err = utils.ErrActionNotAllow
 		return
 	}
@@ -157,13 +156,13 @@ func SetUserPayPwd(uid string, pwd string) (err error) {
 }
 
 // GetUserList
-func GetUserList(uid string,form *utils.FormUserList) (ret []*models.UserBase, err error) {
-	data:=new(models.UserBase)
-	if err = data.GetByUId(uid);err!=nil{
+func GetUserList(uid string, form *utils.FormUserList) (ret []*models.UserBase, err error) {
+	data := new(models.UserBase)
+	if err = data.GetByUId(uid); err != nil {
 		return
 	}
 	cond := map[string]interface{}{}
-	cond["role$lt$"] = data.Role
+	cond["role$lte$"] = data.Role
 	if form.Username != "" {
 		cond["$and$username"] = utils.SpiltInterfaceList(form.Username, ",")
 	}
@@ -190,10 +189,28 @@ func GetUserList(uid string,form *utils.FormUserList) (ret []*models.UserBase, e
 	return models.GetUserList(q)
 }
 
-func GetUserCount(uid string)(ret int64,err error)  {
-	data:=new(models.UserBase)
-	if err = data.GetByUId(uid);err!=nil{
+func GetUserCount(uid string) (ret int64, err error) {
+	data := new(models.UserBase)
+	if err = data.GetByUId(uid); err != nil {
 		return
 	}
-	return models.GetUserTotal(fmt.Sprintf(`role< %v`,data.Role))
+	return models.GetUserTotal(fmt.Sprintf(`role< %v`, data.Role))
+}
+
+func DeleteUser(uid string, delUid string) (err error) {
+	var (
+		role    = new(models.UserBase)
+		delRole = new(models.UserBase)
+	)
+	if err = role.GetByUId(uid); err != nil {
+		return
+	}
+	if err = delRole.GetByUId(delUid); err != nil {
+		return
+	}
+	if role.Role <= delRole.Role {
+		err = utils.ErrActionNotAllow
+		return
+	}
+	return delRole.Delete(delRole.Uid)
 }

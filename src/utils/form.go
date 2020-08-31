@@ -1,5 +1,7 @@
 package utils
 
+import "golang.org/x/crypto/bcrypt"
+
 // FormRegister
 type FormRegister struct {
 	// 手机号
@@ -49,9 +51,12 @@ type FormEditUser struct {
 	Uid      string  `json:"uid" form:"uid" binding:"required"`
 	Nickname *string `json:"nickname" form:"nickname"`
 	// Username *string `json:"username" form:"username"`
-	Email *string `json:"email" form:"email"`
-	Phone *string `json:"phone" form:"phone"`
-	Sign  *string `json:"sign" form:"sign"`
+	Password *string `json:"password" form:"password"`
+	Email    *string `json:"email" form:"email"`
+	Phone    *string `json:"phone" form:"phone"`
+	Sign     *string `json:"sign" form:"sign"`
+	Role     *string `json:"role" form:"role"`
+	Status   *string `json:"status" form:"status"`
 }
 
 func (f *FormEditUser) Valid() (ret map[string]interface{}, err error) {
@@ -60,6 +65,16 @@ func (f *FormEditUser) Valid() (ret map[string]interface{}, err error) {
 		return
 	}
 	ret = map[string]interface{}{}
+	if f.Password != nil && len(*f.Password) == 0 {
+		err = ErrFormParamInvalid
+		return
+	} else if f.Password != nil {
+		var d []byte
+		if d, err = bcrypt.GenerateFromPassword([]byte(*f.Password), bcrypt.DefaultCost); err != nil {
+			return
+		}
+		ret["login_pwd"] = string(d)
+	}
 	if f.Phone != nil && len(*f.Phone) == 0 {
 		err = ErrFormParamInvalid
 		return
@@ -91,6 +106,12 @@ func (f *FormEditUser) Valid() (ret map[string]interface{}, err error) {
 		return
 	} else if f.Nickname != nil {
 		ret["nickname"] = *f.Nickname
+	}
+	if f.Role != nil {
+		ret["role"] = *f.Role
+	}
+	if f.Status != nil {
+		ret["status"] = *f.Status
 	}
 
 	if f.Sign != nil {

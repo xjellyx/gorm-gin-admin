@@ -15,9 +15,6 @@ const (
 
 // NewQuery
 func NewQuery(pageNum int, pageSize int) *Query {
-	if pageSize == 0 {
-		pageSize = DEFAULT_LIMIT
-	}
 	if pageNum == 0 {
 		pageNum = 1
 	}
@@ -27,7 +24,9 @@ func NewQuery(pageNum int, pageSize int) *Query {
 		Total:    0,
 	}
 
-	q.PageNum = (q.PageNum - 1) * q.PageSize
+	if pageNum > 0 {
+		q.PageNum = (q.PageNum - 1) * q.PageSize
+	}
 	return q
 }
 

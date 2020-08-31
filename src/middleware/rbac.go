@@ -7,6 +7,7 @@ import (
 	"github.com/olongfen/user_base/src/models"
 	"github.com/olongfen/user_base/src/pkg/app"
 	"github.com/olongfen/user_base/src/pkg/setting"
+	"github.com/olongfen/user_base/src/utils"
 )
 
 func CasbinHandler() gin.HandlerFunc {
@@ -22,6 +23,15 @@ func CasbinHandler() gin.HandlerFunc {
 		_d, _ := c.Get("sessionTag")
 		s := _d.(*session.Session)
 		sub := s.UID
+		d := &models.UserBase{}
+		if err = d.GetByUId(s.UID); err != nil {
+			err = utils.ErrUserNotExist
+			return
+		}
+		if d.Role == models.UserRoleSuperAdmin {
+			c.Next()
+			return
+		}
 		if ok, err := e.Enforce(sub, obj, act); err != nil {
 			app.NewGinResponse(c).Fail(403, "casbnin check failed").SetStatus(403).Response()
 			c.Abort()

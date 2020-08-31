@@ -14,9 +14,9 @@ const (
 )
 
 const (
-	UserRoleNormal = iota // 普通用户
-	UserRoleAdmin   // 普通管理员
-	UserRoleSuperAdmin // 超级管理员
+	UserRoleNormal     = iota // 普通用户
+	UserRoleAdmin             // 普通管理员
+	UserRoleSuperAdmin        // 超级管理员
 )
 
 // UserBase 用户信息
@@ -33,7 +33,7 @@ type UserBase struct {
 	Sign     string `json:"sign" gorm:"type:varchar(256)"`
 	Status   int    `json:"status"`
 	//
-	Role int `json:"role"  gorm:"default:false"` // 0 普通用户，1 普通管理员， 2 超级管理员或者开发人员
+	Role int `json:"role"  gorm:"default:0; index"` // 0 普通用户，1 普通管理员， 2 超级管理员或者开发人员
 
 	// 外键
 	// UserCard UserCard `json:"userCard" gorm:"foreignkey:ID"`
@@ -87,6 +87,16 @@ func (u *UserBase) GetById(id int64) (err error) {
 	if err = DB.First(u, "id = ?", id).Error; err != nil {
 		logModel.Errorln(err)
 		err = utils.ErrGetDataFailed
+		return
+	}
+	return
+}
+
+// Delete 删除数据
+func (u *UserBase) Delete(uid string, options ...*gorm.DB) (err error) {
+	if err = getDB(options...).Model(u).Where("uid = ?", uid).Delete(u).Error; err != nil {
+		logModel.Errorln(err)
+		err = utils.ErrDeleteDataFailed
 		return
 	}
 	return

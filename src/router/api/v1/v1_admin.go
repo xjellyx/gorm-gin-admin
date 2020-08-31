@@ -67,7 +67,7 @@ func AdminLogout(c *gin.Context) {
 			app.NewGinResponse(c).Success(nil).Response()
 		}
 	}()
-	if s,code, err = GetSession(c); err != nil {
+	if s, code, err = GetSession(c); err != nil {
 		return
 	}
 	if err = service.UserLogout(s.UID); err != nil {
@@ -92,7 +92,7 @@ func ListUser(c *gin.Context) {
 		code = codes.CodeProcessingFailed
 		form = new(utils.FormUserList)
 		data []*models.UserBase
-		s *session.Session
+		s    *session.Session
 	)
 	defer func() {
 		if err != nil {
@@ -100,14 +100,14 @@ func ListUser(c *gin.Context) {
 		}
 	}()
 
-	if s, code,err = GetSession(c); err != nil {
+	if s, code, err = GetSession(c); err != nil {
 		return
 	}
 	if err = c.ShouldBindQuery(form); err != nil {
 		code = codes.CodeParamInvalid
 		return
 	}
-	if data, err = service.GetUserList(s.UID,form); err != nil {
+	if data, err = service.GetUserList(s.UID, form); err != nil {
 		return
 	}
 	app.NewGinResponse(c).Success(data).Response()
@@ -122,12 +122,12 @@ func ListUser(c *gin.Context) {
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
 // @Path   /api/v1/admin/userTotal  []
-func UserTotal(c *gin.Context)  {
+func UserTotal(c *gin.Context) {
 	var (
 		err  error
 		code = codes.CodeProcessingFailed
 		data int64
-		 s *session.Session
+		s    *session.Session
 	)
 	defer func() {
 		if err != nil {
@@ -135,7 +135,7 @@ func UserTotal(c *gin.Context)  {
 		}
 	}()
 
-	if s, code,err = GetSession(c); err != nil {
+	if s, code, err = GetSession(c); err != nil {
 		return
 	}
 
@@ -160,7 +160,7 @@ func EditUser(c *gin.Context) {
 	var (
 		err  error
 		form = new(utils.FormEditUser)
-		 s    *session.Session
+		s    *session.Session
 
 		code = codes.CodeProcessingFailed
 	)
@@ -172,7 +172,39 @@ func EditUser(c *gin.Context) {
 	if s, code, err = GetSessionAndBindingForm(form, c); err != nil {
 		return
 	}
-	if _, err = service.EditUserByRole(s.UID,form); err != nil {
+	if _, err = service.EditUserByRole(s.UID, form); err != nil {
+		return
+	}
+}
+
+// @tags 管理员
+// @Summary 删除用户
+// @Description 删除用户
+// @Accept json
+// @Produce json
+// @Param uid query string true "用户UID"
+// @Success 200  {object}
+// @Failure 500  {object}
+// @router /api/v1/admin/deleteUser [delete]
+func DeleteUser(c *gin.Context) {
+	var (
+		err error
+		uid string
+		s   *session.Session
+
+		code = codes.CodeProcessingFailed
+	)
+	defer func() {
+		if err != nil {
+			app.NewGinResponse(c).Fail(code, err.Error()).Response()
+		} else {
+			app.NewGinResponse(c).Success(nil).Response()
+		}
+	}()
+	if s, code, err = GetSession(c); err != nil {
+		return
+	}
+	if err = service.DeleteUser(s.UID, uid); err != nil {
 		return
 	}
 }
@@ -275,7 +307,7 @@ func GetRoleApiList(c *gin.Context) {
 			app.NewGinResponse(c).Fail(code, err.Error()).Response()
 		}
 	}()
-	if s,code, err = GetSession(c); err != nil {
+	if s, code, err = GetSession(c); err != nil {
 		return
 	}
 	uid = c.Query("uid")
@@ -309,7 +341,7 @@ func GetAllAPIGroup(c *gin.Context) {
 			app.NewGinResponse(c).Fail(code, err.Error()).Response()
 		}
 	}()
-	if _,code, err = GetSession(c); err != nil {
+	if _, code, err = GetSession(c); err != nil {
 		return
 	}
 	if ret, err = service.GetAPIGroupList(); err != nil {
