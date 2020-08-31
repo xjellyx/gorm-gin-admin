@@ -194,6 +194,7 @@ func DeleteUser(c *gin.Context) {
 
 		code = codes.CodeProcessingFailed
 	)
+	uid = c.Query("uid")
 	defer func() {
 		if err != nil {
 			app.NewGinResponse(c).Fail(code, err.Error()).Response()
