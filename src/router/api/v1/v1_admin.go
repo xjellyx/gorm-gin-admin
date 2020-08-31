@@ -205,6 +205,10 @@ func DeleteUser(c *gin.Context) {
 	if s, code, err = GetSession(c); err != nil {
 		return
 	}
+	if s.UID == uid {
+		err = utils.ErrActionNotAllow
+		return
+	}
 	if err = service.DeleteUser(s.UID, uid); err != nil {
 		return
 	}
