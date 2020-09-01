@@ -1,6 +1,6 @@
 ﻿﻿
 <div align=center>
-<img src="https://github.com/olongfen/gorm-gin-admin/docs/go/jpeg" width=300" height="300" />
+<img src="https://github.com/olongfen/gorm-gin-admin/tree/master/docs/go.jpeg" width=300" height="300" />
 </div>
 <div align=center>
 <img src="https://img.shields.io/badge/golang-1.14-blue"/>
