@@ -6,7 +6,7 @@ import (
 	"strings"
 )
 
-const prefix = "user_base"
+const prefix = "gorm-gin-admin"
 
 const (
 	GORMPGUniqueErr  = `pq: duplicate key value violates unique constraint`

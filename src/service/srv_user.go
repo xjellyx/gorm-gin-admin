@@ -2,9 +2,9 @@ package service
 
 import (
 	"fmt"
-	"github.com/olongfen/user_base/src/models"
-	"github.com/olongfen/user_base/src/pkg/query"
-	"github.com/olongfen/user_base/src/utils"
+	"github.com/olongfen/gorm-gin-admin/src/models"
+	"github.com/olongfen/gorm-gin-admin/src/pkg/query"
+	"github.com/olongfen/gorm-gin-admin/src/utils"
 	uuid "github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
 	"strings"

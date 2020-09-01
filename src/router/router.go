@@ -3,9 +3,9 @@ package router
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/olongfen/user_base/src/middleware"
-	"github.com/olongfen/user_base/src/pkg/setting"
-	v1 "github.com/olongfen/user_base/src/router/api/v1"
+	"github.com/olongfen/gorm-gin-admin/src/middleware"
+	"github.com/olongfen/gorm-gin-admin/src/pkg/setting"
+	v1 "github.com/olongfen/gorm-gin-admin/src/router/api/v1"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
 	"net/http"

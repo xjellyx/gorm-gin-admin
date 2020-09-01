@@ -1,8 +1,8 @@
 package models
 
 import (
-	"github.com/olongfen/user_base/src/pkg/query"
-	"github.com/olongfen/user_base/src/utils"
+	"github.com/olongfen/gorm-gin-admin/src/pkg/query"
+	"github.com/olongfen/gorm-gin-admin/src/utils"
 	"gorm.io/gorm"
 )
 

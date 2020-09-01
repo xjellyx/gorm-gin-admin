@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	log2 "github.com/olongfen/contrib/log"
-	"github.com/olongfen/user_base/src/pkg/setting"
+	"github.com/olongfen/gorm-gin-admin/src/pkg/setting"
 	"time"
 )
 

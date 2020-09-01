@@ -3,7 +3,7 @@ package models
 import (
 	"database/sql/driver"
 	"encoding/json"
-	"github.com/olongfen/user_base/src/utils"
+	"github.com/olongfen/gorm-gin-admin/src/utils"
 	"gorm.io/gorm"
 )
 
@@ -13,7 +13,7 @@ type Menu struct {
 	ParentId  uint     `json:"parentId"`
 	Path      string   `json:"path" gorm:"type:varchar(24)"`
 	Component string   `json:"component" gorm:"type:varchar(36)"`
-	Sort      int   `json:"sort"`
+	Sort      int      `json:"sort"`
 	Hidden    bool     `json:"hidden"`
 	Meta      MenuMate `json:"meta" gorm:"type:json"`
 	Children  []*Menu  `json:"children" gorm:"-"`
@@ -89,7 +89,7 @@ func (m *Menu) Delete(id int, options ...*gorm.DB) (err error) {
 		err = utils.ErrGetDataFailed
 		return
 	}
-	getDB().Delete(id,"parent_id = ?",id)
+	getDB().Delete(id, "parent_id = ?", id)
 	return
 }
 

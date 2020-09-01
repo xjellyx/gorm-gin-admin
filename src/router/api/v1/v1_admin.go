@@ -3,11 +3,11 @@ package v1
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/olongfen/contrib/session"
-	"github.com/olongfen/user_base/src/models"
-	"github.com/olongfen/user_base/src/pkg/app"
-	"github.com/olongfen/user_base/src/pkg/codes"
-	"github.com/olongfen/user_base/src/service"
-	"github.com/olongfen/user_base/src/utils"
+	"github.com/olongfen/gorm-gin-admin/src/models"
+	"github.com/olongfen/gorm-gin-admin/src/pkg/app"
+	"github.com/olongfen/gorm-gin-admin/src/pkg/codes"
+	"github.com/olongfen/gorm-gin-admin/src/service"
+	"github.com/olongfen/gorm-gin-admin/src/utils"
 	"strconv"
 )
 

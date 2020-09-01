@@ -1,8 +1,8 @@
 package service
 
 import (
-	"github.com/olongfen/user_base/src/models"
-	"github.com/olongfen/user_base/src/utils"
+	"github.com/olongfen/gorm-gin-admin/src/models"
+	"github.com/olongfen/gorm-gin-admin/src/utils"
 )
 
 // AddAPIGroup

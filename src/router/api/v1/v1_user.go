@@ -4,12 +4,12 @@ import (
 	"encoding/base64"
 	"github.com/gin-gonic/gin"
 	"github.com/olongfen/contrib/session"
-	"github.com/olongfen/user_base/src/models"
-	"github.com/olongfen/user_base/src/pkg/app"
-	"github.com/olongfen/user_base/src/pkg/codes"
-	"github.com/olongfen/user_base/src/pkg/setting"
-	"github.com/olongfen/user_base/src/service"
-	"github.com/olongfen/user_base/src/utils"
+	"github.com/olongfen/gorm-gin-admin/src/models"
+	"github.com/olongfen/gorm-gin-admin/src/pkg/app"
+	"github.com/olongfen/gorm-gin-admin/src/pkg/codes"
+	"github.com/olongfen/gorm-gin-admin/src/pkg/setting"
+	"github.com/olongfen/gorm-gin-admin/src/service"
+	"github.com/olongfen/gorm-gin-admin/src/utils"
 	uuid "github.com/satori/go.uuid"
 	"image"
 	"io/ioutil"
@@ -107,7 +107,7 @@ func UserLogout(c *gin.Context) {
 			app.NewGinResponse(c).Success(nil).Response()
 		}
 	}()
-	if s,code, err = GetSession(c); err != nil {
+	if s, code, err = GetSession(c); err != nil {
 		return
 	}
 	if err = service.UserLogout(s.UID); err != nil {
@@ -142,7 +142,7 @@ func ModifyProfile(c *gin.Context) {
 			app.NewGinResponse(c).Success(data).Response()
 		}
 	}()
-	if s,code, err = GetSession(c); err != nil {
+	if s, code, err = GetSession(c); err != nil {
 		return
 	}
 	if err = c.ShouldBind(form); err != nil {
@@ -150,7 +150,7 @@ func ModifyProfile(c *gin.Context) {
 		err = utils.ErrParamInvalid
 		return
 	}
-	if data, err = service.EditUserBySelf(s.UID,form); err != nil {
+	if data, err = service.EditUserBySelf(s.UID, form); err != nil {
 		return
 	}
 }
@@ -178,7 +178,7 @@ func GetUserProfile(c *gin.Context) {
 			app.NewGinResponse(c).Success(data).Response()
 		}
 	}()
-	if s,code, err = GetSession(c); err != nil {
+	if s, code, err = GetSession(c); err != nil {
 		return
 	}
 	if err = data.GetByUId(s.UID); err != nil {
@@ -218,7 +218,7 @@ func ModifyLoginPwd(c *gin.Context) {
 		code = codes.CodeParamInvalid
 		return
 	}
-	if s,code, err = GetSession(c); err != nil {
+	if s, code, err = GetSession(c); err != nil {
 		return
 	}
 	if err = service.ChangePwd(s.UID, f.OldPwd, f.NewPwd); err != nil {
@@ -257,7 +257,7 @@ func ModifyPayPwd(c *gin.Context) {
 		code = codes.CodeParamInvalid
 		return
 	}
-	if s,code, err = GetSession(c); err != nil {
+	if s, code, err = GetSession(c); err != nil {
 		return
 	}
 	if err = service.ChangePayPwd(s.UID, f.OldPwd, f.NewPwd); err != nil {
@@ -312,7 +312,7 @@ func ModifyHeadIcon(c *gin.Context) {
 		return
 	}
 
-	if s,code, err = GetSession(c); err != nil {
+	if s, code, err = GetSession(c); err != nil {
 		return
 	}
 	if err = d.GetByUId(s.UID); err != nil {
@@ -353,7 +353,7 @@ func GetHeadIcon(c *gin.Context) {
 			app.NewGinResponse(c).Fail(code, err.Error()).Response()
 		}
 	}()
-	if s,code, err = GetSession(c); err != nil {
+	if s, code, err = GetSession(c); err != nil {
 
 		return
 	}
@@ -390,7 +390,7 @@ func SetPayPwd(c *gin.Context) {
 		err = utils.ErrParamInvalid
 		return
 	}
-	if sess,code, err = GetSession(c); err != nil {
+	if sess, code, err = GetSession(c); err != nil {
 		return
 	}
 	if err = service.SetUserPayPwd(sess.UID, pwd); err != nil {

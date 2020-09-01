@@ -6,8 +6,8 @@ import (
 
 	"github.com/olongfen/contrib/log"
 	"github.com/olongfen/contrib/session"
-	"github.com/olongfen/user_base/src/pkg/adapter"
-	"github.com/olongfen/user_base/src/pkg/setting"
+	"github.com/olongfen/gorm-gin-admin/src/pkg/adapter"
+	"github.com/olongfen/gorm-gin-admin/src/pkg/setting"
 	"github.com/sirupsen/logrus"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"

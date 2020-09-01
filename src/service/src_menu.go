@@ -2,8 +2,8 @@ package service
 
 import (
 	"github.com/mitchellh/mapstructure"
-	"github.com/olongfen/user_base/src/models"
-	"github.com/olongfen/user_base/src/utils"
+	"github.com/olongfen/gorm-gin-admin/src/models"
+	"github.com/olongfen/gorm-gin-admin/src/utils"
 )
 
 // AddMenu
@@ -29,7 +29,7 @@ func AddMenu(forms []*utils.FormAddMenu) (ret []*models.Menu, err error) {
 		m.Path = v.Path
 		m.Component = v.Component
 		m.Sort = v.Sort
-		mapstructure.Decode(v.Meta,&m.Meta)
+		mapstructure.Decode(v.Meta, &m.Meta)
 		if err = m.Insert(db); err != nil {
 			return
 		}
@@ -60,14 +60,14 @@ func GetMenuList() (ret []*models.Menu, err error) {
 }
 
 // DelMenu
-func DelMenu(id int)(err error){
-	var data =new(models.Menu)
+func DelMenu(id int) (err error) {
+	var data = new(models.Menu)
 	return data.Delete(id)
 }
 
-func UpdateMenu(f *utils.FormUpdateMenu)(ret *models.Menu,err error)  {
-	data :=new(models.Menu)
-	if err =data.Update(f.Id,f.ToMap());err!=nil{
+func UpdateMenu(f *utils.FormUpdateMenu) (ret *models.Menu, err error) {
+	data := new(models.Menu)
+	if err = data.Update(f.Id, f.ToMap()); err != nil {
 		return
 	}
 	return

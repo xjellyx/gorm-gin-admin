@@ -4,7 +4,7 @@ import (
 	"errors"
 	lcasbin "github.com/casbin/casbin/v2"
 	"github.com/gin-gonic/gin"
-	"github.com/olongfen/user_base/src/pkg/app"
+	"github.com/olongfen/gorm-gin-admin/src/pkg/app"
 	"log"
 	"reflect"
 	"sort"

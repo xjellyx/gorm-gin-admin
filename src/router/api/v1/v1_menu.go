@@ -3,11 +3,11 @@ package v1
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/olongfen/contrib/session"
-	"github.com/olongfen/user_base/src/models"
-	"github.com/olongfen/user_base/src/pkg/app"
-	"github.com/olongfen/user_base/src/pkg/codes"
-	"github.com/olongfen/user_base/src/service"
-	"github.com/olongfen/user_base/src/utils"
+	"github.com/olongfen/gorm-gin-admin/src/models"
+	"github.com/olongfen/gorm-gin-admin/src/pkg/app"
+	"github.com/olongfen/gorm-gin-admin/src/pkg/codes"
+	"github.com/olongfen/gorm-gin-admin/src/service"
+	"github.com/olongfen/gorm-gin-admin/src/utils"
 	"strconv"
 )
 
@@ -23,7 +23,7 @@ func AddMenu(c *gin.Context) {
 		err  error
 		data []*models.Menu
 		form []*utils.FormAddMenu
-		s *session.Session
+		s    *session.Session
 		role = &models.UserBase{}
 		code = codes.CodeProcessingFailed
 	)
@@ -34,13 +34,13 @@ func AddMenu(c *gin.Context) {
 			app.NewGinResponse(c).Success(data).Response()
 		}
 	}()
-	if s,code,err = GetSessionAndBindingForm(&form,c); err != nil {
+	if s, code, err = GetSessionAndBindingForm(&form, c); err != nil {
 		return
 	}
-	if err = role.GetByUId(s.UID);err!=nil{
+	if err = role.GetByUId(s.UID); err != nil {
 		return
 	}
-	if role.Role<models.UserRoleSuperAdmin{
+	if role.Role < models.UserRoleSuperAdmin {
 		err = utils.ErrActionNotAllow
 		return
 	}
@@ -125,15 +125,15 @@ func GetMenuList(c *gin.Context) {
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
 // @Path /api/v1/admin/delMenu [delete]
-func DelMenu(c *gin.Context)  {
+func DelMenu(c *gin.Context) {
 	var (
-		_id int
+		_id  int
 		err  error
-		s *session.Session
+		s    *session.Session
 		code = codes.CodeProcessingFailed
 		role = new(models.UserBase)
 	)
-	id :=c.Query("id")
+	id := c.Query("id")
 	defer func() {
 		if err != nil {
 			app.NewGinResponse(c).Fail(code, err.Error()).Response()
@@ -141,17 +141,17 @@ func DelMenu(c *gin.Context)  {
 			app.NewGinResponse(c).Success(nil).Response()
 		}
 	}()
-	if s,code,err = GetSession(c);err!=nil{
+	if s, code, err = GetSession(c); err != nil {
 		return
 	}
-	if err = role.GetByUId(s.UID);err!=nil{
+	if err = role.GetByUId(s.UID); err != nil {
 		return
 	}
-	if role.Role<models.UserRoleSuperAdmin{
+	if role.Role < models.UserRoleSuperAdmin {
 		err = utils.ErrActionNotAllow
 		return
 	}
-	if _id,err =strconv.Atoi(id);err!=nil{
+	if _id, err = strconv.Atoi(id); err != nil {
 		code = codes.CodeParamInvalid
 		err = utils.ErrParamInvalid
 		return
@@ -171,14 +171,13 @@ func DelMenu(c *gin.Context)  {
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
 // @Path  /api/v1/admin/editMenu [put]
-func EditMenu(c *gin.Context)  {
+func EditMenu(c *gin.Context) {
 	var (
-
 		err  error
 		code = codes.CodeProcessingFailed
-		s *session.Session
+		s    *session.Session
 		data *models.Menu
-		role =new(models.UserBase)
+		role = new(models.UserBase)
 		form = new(utils.FormUpdateMenu)
 	)
 
@@ -189,17 +188,17 @@ func EditMenu(c *gin.Context)  {
 			app.NewGinResponse(c).Success(data).Response()
 		}
 	}()
-	if s,code,err = GetSessionAndBindingForm(form,c); err != nil {
+	if s, code, err = GetSessionAndBindingForm(form, c); err != nil {
 		return
 	}
-	if err = role.GetByUId(s.UID);err!=nil{
+	if err = role.GetByUId(s.UID); err != nil {
 		return
 	}
-	if role.Role<models.UserRoleSuperAdmin{
+	if role.Role < models.UserRoleSuperAdmin {
 		err = utils.ErrActionNotAllow
 		return
 	}
-	if data,err = service.UpdateMenu(form);err!=nil{
+	if data, err = service.UpdateMenu(form); err != nil {
 		return
 	}
 }

@@ -3,9 +3,9 @@ package service
 import (
 	"github.com/dchest/captcha"
 	"github.com/olongfen/contrib/session"
-	"github.com/olongfen/user_base/src/models"
-	"github.com/olongfen/user_base/src/pkg/setting"
-	"github.com/olongfen/user_base/src/utils"
+	"github.com/olongfen/gorm-gin-admin/src/models"
+	"github.com/olongfen/gorm-gin-admin/src/pkg/setting"
+	"github.com/olongfen/gorm-gin-admin/src/utils"
 	"golang.org/x/crypto/bcrypt"
 	"time"
 )
@@ -54,7 +54,7 @@ func UserLogin(f *utils.LoginForm, isAdmin bool) (token string, err error) {
 			return
 		}
 	} else {
-		if data.Role==0 {
+		if data.Role == 0 {
 			err = utils.ErrActionNotAllow
 			return
 		}

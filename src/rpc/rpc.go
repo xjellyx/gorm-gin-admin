@@ -4,9 +4,9 @@ import (
 	"context"
 	"github.com/golang/protobuf/ptypes"
 	"github.com/olongfen/contrib"
+	"github.com/olongfen/gorm-gin-admin/src/models"
+	"github.com/olongfen/gorm-gin-admin/src/utils"
 	pb "github.com/olongfen/models.grpc"
-	"github.com/olongfen/user_base/src/models"
-	"github.com/olongfen/user_base/src/utils"
 	"google.golang.org/grpc"
 )
 

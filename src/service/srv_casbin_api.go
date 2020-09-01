@@ -2,9 +2,9 @@ package service
 
 import (
 	"github.com/casbin/casbin/v2"
-	"github.com/olongfen/user_base/src/models"
-	"github.com/olongfen/user_base/src/pkg/setting"
-	"github.com/olongfen/user_base/src/utils"
+	"github.com/olongfen/gorm-gin-admin/src/models"
+	"github.com/olongfen/gorm-gin-admin/src/pkg/setting"
+	"github.com/olongfen/gorm-gin-admin/src/utils"
 )
 
 // AddRuleAPI 增加角色api权限
@@ -20,7 +20,7 @@ func AddRuleAPI(f *utils.FormRoleAPIPerm) (ret []int64, err error) {
 	if err = user.GetByUId(f.Uid); err != nil {
 		return
 	}
-	if user.Role<models.UserRoleSuperAdmin{
+	if user.Role < models.UserRoleSuperAdmin {
 		err = utils.ErrActionNotAllow
 		return
 	}
@@ -52,7 +52,7 @@ func RemoveRuleAPI(f *utils.FormRoleAPIPerm) (ret []int64, err error) {
 	if err = user.GetByUId(f.Uid); err != nil {
 		return
 	}
-	if user.Role<models.UserRoleSuperAdmin{
+	if user.Role < models.UserRoleSuperAdmin {
 		err = utils.ErrActionNotAllow
 		return
 	}

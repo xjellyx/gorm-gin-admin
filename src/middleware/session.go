@@ -3,11 +3,11 @@ package middleware
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/olongfen/contrib/session"
-	"github.com/olongfen/user_base/src/models"
-	"github.com/olongfen/user_base/src/pkg/app"
-	"github.com/olongfen/user_base/src/pkg/codes"
-	"github.com/olongfen/user_base/src/pkg/setting"
-	"github.com/olongfen/user_base/src/utils"
+	"github.com/olongfen/gorm-gin-admin/src/models"
+	"github.com/olongfen/gorm-gin-admin/src/pkg/app"
+	"github.com/olongfen/gorm-gin-admin/src/pkg/codes"
+	"github.com/olongfen/gorm-gin-admin/src/pkg/setting"
+	"github.com/olongfen/gorm-gin-admin/src/utils"
 	"strings"
 )
 
@@ -34,7 +34,7 @@ func CheckUserAuth(isAdmin bool) gin.HandlerFunc {
 		}
 
 		if tokenStr == "" {
-			app.NewGinResponse(c).Fail(codes.CodeTokenInvalid,"token invalid").Response()
+			app.NewGinResponse(c).Fail(codes.CodeTokenInvalid, "token invalid").Response()
 			return
 		}
 
@@ -44,14 +44,14 @@ func CheckUserAuth(isAdmin bool) gin.HandlerFunc {
 		)
 		if isAdmin {
 			if s, err = models.AdminKey.SessionDecode(tokenStr); err != nil {
-				app.NewGinResponse(c).Fail(codes.CodeTokenInvalid,"token invalid").Response()
+				app.NewGinResponse(c).Fail(codes.CodeTokenInvalid, "token invalid").Response()
 				return
 			}
 		} else {
 			// 验证用户,管理员和普通用户的密钥对不一样，所以验证两次,管理员token可以使用与普通界面
 			if s, err = models.UserKey.SessionDecode(tokenStr); err != nil {
 				if s, err = models.AdminKey.SessionDecode(tokenStr); err != nil {
-					app.NewGinResponse(c).Fail(codes.CodeTokenInvalid,"token invalid").Response()
+					app.NewGinResponse(c).Fail(codes.CodeTokenInvalid, "token invalid").Response()
 					return
 				}
 			}

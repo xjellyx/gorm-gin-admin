@@ -2,7 +2,7 @@ package setting
 
 import (
 	"github.com/olongfen/contrib/config"
-	"github.com/olongfen/user_base/src/utils"
+	"github.com/olongfen/gorm-gin-admin/src/utils"
 	"github.com/sirupsen/logrus"
 	"time"
 )

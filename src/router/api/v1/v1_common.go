@@ -5,8 +5,8 @@ import (
 	"github.com/olongfen/contrib"
 	"github.com/olongfen/contrib/log"
 	"github.com/olongfen/contrib/session"
-	"github.com/olongfen/user_base/src/pkg/codes"
-	"github.com/olongfen/user_base/src/pkg/setting"
+	"github.com/olongfen/gorm-gin-admin/src/pkg/codes"
+	"github.com/olongfen/gorm-gin-admin/src/pkg/setting"
 )
 
 var (
@@ -14,7 +14,7 @@ var (
 )
 
 // GetSession 获取会话信息
-func GetSession(c *gin.Context) (ret *session.Session,code int, err error) {
+func GetSession(c *gin.Context) (ret *session.Session, code int, err error) {
 	var (
 		ok bool
 		s  interface{}
@@ -30,7 +30,7 @@ func GetSession(c *gin.Context) (ret *session.Session,code int, err error) {
 }
 
 func GetSessionAndBindingForm(form interface{}, c *gin.Context) (ret *session.Session, code int, err error) {
-	if ret,code, err = GetSession(c); err != nil {
+	if ret, code, err = GetSession(c); err != nil {
 		return
 	}
 	if err = c.ShouldBind(form); err != nil {

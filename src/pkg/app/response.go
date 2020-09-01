@@ -2,7 +2,7 @@ package app
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/olongfen/user_base/src/pkg/codes"
+	"github.com/olongfen/gorm-gin-admin/src/pkg/codes"
 )
 
 type Gin struct {
