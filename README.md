@@ -35,7 +35,7 @@ TODO
 ## 3. Features
 - Authority management: Authority management based on `jwt` and `casbin`. 
 - User management: The system administrator assigns user roles and role permissions.
-- Role management: Create the main object of permission control, and then assign different API permissions and menu permissions to the role.
+- Role management: Create the main object of permission control, and then assign different API permissions to the role.
 - Menu management: User dynamic menu configuration implementation, assigning different menus to different roles.
 - API management: Different users can call different API permissions.
 
