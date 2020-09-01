@@ -5,6 +5,11 @@ import (
 	"gorm.io/gorm"
 )
 
+type KV struct {
+	Label string `json:"label"`
+	Value int `json:"value"`
+}
+
 func getDB(options ...*gorm.DB) *gorm.DB {
 	var (
 		db *gorm.DB

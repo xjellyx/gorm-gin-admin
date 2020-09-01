@@ -70,5 +70,6 @@ func UpdateMenu(f *utils.FormUpdateMenu) (ret *models.Menu, err error) {
 	if err = data.Update(f.Id, f.ToMap()); err != nil {
 		return
 	}
+	ret = data
 	return
 }

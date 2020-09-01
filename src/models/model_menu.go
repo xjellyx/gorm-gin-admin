@@ -43,7 +43,7 @@ func (m *Menu) Insert(options ...*gorm.DB) (err error) {
 }
 
 func (m *Menu) Update(id int, values interface{}, options ...*gorm.DB) (err error) {
-	if err = getDB(options...).Model(m).Where("id = ?", id).Updates(values).Error; err != nil {
+	if err = getDB(options...).Model(m).Where("id = ?", id).Updates(values).First(m).Error; err != nil {
 		logModel.Errorln(err)
 		err = utils.ErrUpdateDataFailed
 		return

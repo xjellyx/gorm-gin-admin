@@ -2,12 +2,21 @@ package service
 
 import (
 	"github.com/dchest/captcha"
+	"github.com/olongfen/contrib/log"
 	"github.com/olongfen/contrib/session"
 	"github.com/olongfen/gorm-gin-admin/src/models"
 	"github.com/olongfen/gorm-gin-admin/src/pkg/setting"
 	"github.com/olongfen/gorm-gin-admin/src/utils"
 	"golang.org/x/crypto/bcrypt"
 	"time"
+)
+
+var(
+	logServe = log.NewLogFile(log.ParamLog{
+		Path:       setting.Setting.LogDir+"/service",
+		Stdout:     setting.Setting.IsProduct,
+		P:          setting.Setting.LogPatent,
+	})
 )
 
 // UserLogin 用户登入

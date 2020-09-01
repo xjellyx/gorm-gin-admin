@@ -78,6 +78,7 @@ func adminRouterAPI(r *gin.RouterGroup) {
 	apiAdmin.GET("listUser", v1.ListUser)
 	apiAdmin.PUT("editUser", v1.EditUser)
 	apiAdmin.DELETE("deleteUser", v1.DeleteUser)
+	apiAdmin.GET("getUserKV",v1.GetUserKV)
 	apiAdmin.POST("addRoleApiPerm", v1.AddRoleAPIPerm)
 	apiAdmin.DELETE("removeRoleApiPerm", v1.RemoveRolePermAPI)
 	apiAdmin.GET("getAllApiGroup", v1.GetAllAPIGroup)

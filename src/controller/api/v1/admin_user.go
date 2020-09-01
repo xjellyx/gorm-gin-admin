@@ -8,7 +8,6 @@ import (
 	"github.com/olongfen/gorm-gin-admin/src/pkg/codes"
 	"github.com/olongfen/gorm-gin-admin/src/service"
 	"github.com/olongfen/gorm-gin-admin/src/utils"
-	"strconv"
 )
 
 // @tags 管理员
@@ -326,131 +325,16 @@ func GetRoleApiList(c *gin.Context) {
 
 }
 
-// @tags 管理员
-// @Title 获取全部api
-// @Summary 获取全部api
-// @Description 获取全部api
-// @Accept json
-// @Produce json
-// @Success 200 {object} app.Response
-// @Failure 500 {object} app.Response
-// @Path  /api/v1/admin/getAllApiGroup [get]
-func GetAllAPIGroup(c *gin.Context) {
-	var (
-		err  error
-		code = codes.CodeProcessingFailed
-		ret  []*models.APIGroup
-	)
-	defer func() {
-		if err != nil {
-			app.NewGinResponse(c).Fail(code, err.Error()).Response()
-		}
-	}()
-	if _, code, err = GetSession(c); err != nil {
-		return
-	}
-	if ret, err = service.GetAPIGroupList(); err != nil {
-		return
-	}
-	app.NewGinResponse(c).Success(ret).Response()
-}
+
 
 // @tags 管理员
-// @Title 创建api
-// @Summary 创建api
-// @Description
+// @Summary 获取用户表状态信息
+// @Description 获取用户表状态信息
 // @Accept json
 // @Produce json
-// @Param {array} body utils.FormAPIGroupAdd true "api数组"
-// @Success 200 {object} app.Response
-// @Failure 500 {object} app.Response
-// @Path /api/v1/admin/addApiGroup [post]
-func AddApiGroup(c *gin.Context) {
-	var (
-		err  error
-		code = codes.CodeProcessingFailed
-		f    []*utils.FormAPIGroupAdd
-		ret  []*models.APIGroup
-	)
-	defer func() {
-		if err != nil {
-			app.NewGinResponse(c).Fail(code, err.Error()).Response()
-		}
-	}()
-	if _, code, err = GetSessionAndBindingForm(f, c); err != nil {
-		return
-	}
-	if ret, err = service.AddAPIGroup(f); err != nil {
-
-		return
-	}
-	app.NewGinResponse(c).Success(ret).Response()
-}
-
-// @tags 管理员
-// @Title 删除api
-// @Summary  删除api
-// @Description 删除api
-// @Accept json
-// @Produce json
-// @Param id query int true "id"
-// @Success 200 {object} app.Response
-// @Failure 500 {object} app.Response
-// @Path /api/v1/admin/removeApiGroup [delete]
-func RemoveApiGroup(c *gin.Context) {
-	var (
-		err  error
-		code = codes.CodeProcessingFailed
-		id   string
-	)
-	defer func() {
-		if err != nil {
-			app.NewGinResponse(c).Fail(code, err.Error()).Response()
-		}
-	}()
-	id = c.Query("id")
-	_id, err_ := strconv.ParseUint(id, 10, 64)
-	if err_ != nil {
-		code = codes.CodeParamInvalid
-		err = err_
-		return
-	}
-	if err = service.DelAPIGroup(int64(_id)); err != nil {
-		return
-	}
-	app.NewGinResponse(c).Success(nil).Response()
-}
-
-// @tags 管理员
-// @Title 修改api
-// @Summary 修改api
-// @Description 修改api
-// @Accept json
-// @Produce json
-// @Param {} body utils.FormAPIGroupEdit true "表单"
-// @Success 200 {object} app.Response
-// @Failure 500 {object} app.Response
-// @Path  /api/v1/admin/editApiGroup [put]
-func EditApiGroup(c *gin.Context) {
-	var (
-		f    = &utils.FormAPIGroupEdit{}
-		err  error
-		code = codes.CodeProcessingFailed
-		ret  *models.APIGroup
-	)
-	defer func() {
-		if err != nil {
-			app.NewGinResponse(c).Fail(code, err.Error()).Response()
-		}
-	}()
-	if _, code, err = GetSessionAndBindingForm(f, c); err != nil {
-		return
-	}
-
-	if ret, err = service.EditAPIGroup(f); err != nil {
-
-		return
-	}
-	app.NewGinResponse(c).Success(ret).Response()
-
+// @Success 200  {object}
+// @Failure 500  {object}
+// @router  /api/v1/getUserKV [get]
+func GetUserKV(c *gin.Context)  {
+	app.NewGinResponse(c).Success(service.GetUserKV()).Response()
 }

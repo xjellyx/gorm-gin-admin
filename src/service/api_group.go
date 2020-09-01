@@ -6,10 +6,20 @@ import (
 )
 
 // AddAPIGroup
-func AddAPIGroup(f []*utils.FormAPIGroupAdd) (ret []*models.APIGroup, err error) {
+func AddAPIGroup(uid string,f []*utils.FormAPIGroupAdd) (ret []*models.APIGroup, err error) {
 	var (
+
 		datas []*models.APIGroup
 	)
+	role := new(models.UserBase)
+	if err = role.GetByUId(uid);err!=nil{
+		return
+	}
+	// role must super admin
+	if role.Role!=models.UserRoleSuperAdmin{
+		err =utils.ErrActionNotAllow
+		return
+	}
 	for _, v := range f {
 		var (
 			data = new(models.APIGroup)
@@ -27,12 +37,21 @@ func AddAPIGroup(f []*utils.FormAPIGroupAdd) (ret []*models.APIGroup, err error)
 	return models.GetAPIGroupList()
 }
 
-func EditAPIGroup(f *utils.FormAPIGroupEdit) (ret *models.APIGroup, err error) {
+func EditAPIGroup(uid string,f *utils.FormAPIGroupEdit) (ret *models.APIGroup, err error) {
 	var (
 		data       = new(models.APIGroup)
 		dataCasbin = new(models.RuleAPI)
 		m          = map[string]interface{}{}
 	)
+	role := new(models.UserBase)
+	if err = role.GetByUId(uid);err!=nil{
+		return
+	}
+	// role must super admin
+	if role.Role!=models.UserRoleSuperAdmin{
+		err =utils.ErrActionNotAllow
+		return
+	}
 	if err = data.Get(f.Id); err != nil {
 		return nil, err
 	}
@@ -54,7 +73,8 @@ func EditAPIGroup(f *utils.FormAPIGroupEdit) (ret *models.APIGroup, err error) {
 	}
 	if len(m) > 0 {
 		if err = dataCasbin.Update(path, method, m); err != nil {
-			return nil, err
+			logServe.Errorln(err)
+			err = nil
 		}
 	}
 	if err = data.Update(f.Id, data); err != nil {
@@ -65,11 +85,20 @@ func EditAPIGroup(f *utils.FormAPIGroupEdit) (ret *models.APIGroup, err error) {
 	return
 }
 
-func DelAPIGroup(id int64) (err error) {
+func DelAPIGroup(uid string,id int64) (err error) {
 	var (
 		data       = new(models.APIGroup)
 		dataCasbin = new(models.RuleAPI)
 	)
+	role := new(models.UserBase)
+	if err = role.GetByUId(uid);err!=nil{
+		return
+	}
+	// role must super admin
+	if role.Role!=models.UserRoleSuperAdmin{
+		err =utils.ErrActionNotAllow
+		return
+	}
 	if err = data.Get(id); err != nil {
 		return
 	}

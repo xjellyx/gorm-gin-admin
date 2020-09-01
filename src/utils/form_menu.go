@@ -1,5 +1,7 @@
 package utils
 
+import "github.com/olongfen/gorm-gin-admin/src/pkg/body"
+
 // FormAddMenu
 type FormAddMenu struct {
 	Name     string `form:"name" binding:"required"`
@@ -16,7 +18,7 @@ type FormUpdateMenu struct {
 	ParentId *int   `form:"parentId" `
 	Path     *string `form:"path"`
 	Component *string `form:"component" `
-	Meta       map[string]interface{} `form:"meta"`
+	Meta       body.Body `form:"meta"`
 	Sort      *int    `form:"sort"`
 }
 

@@ -214,3 +214,20 @@ func DeleteUser(uid string, delUid string) (err error) {
 	}
 	return delRole.Delete(delRole.Uid)
 }
+
+func GetUserKV()(ret map[string][]models.KV)  {
+	ret = map[string][]models.KV{}
+	ret["role"] = []models.KV{
+		{Label: "general",Value: models.UserRoleNormal},
+		{Label: "admin",Value: models.UserRoleAdmin},
+		{Label: "superAdmin",Value: models.UserRoleSuperAdmin},
+
+	}
+	ret["status"] = []models.KV{
+		{Label: "register",Value: models.UserStatusRegister},
+		{Label: "login",Value: models.UserStatusLogin},
+		{Label: "logout",Value: models.UserStatusLogout},
+		{Label: "lock",Value: models.UserStatusLock},
+	}
+	return
+}

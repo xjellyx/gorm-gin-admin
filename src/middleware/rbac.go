@@ -28,6 +28,12 @@ func CasbinHandler() gin.HandlerFunc {
 			err = utils.ErrUserNotExist
 			return
 		}
+		// 验证是否已经是登录状态
+		if !CheckUserLogin(d){
+			app.NewGinResponse(c).Fail(403, "does't login").SetStatus(403).Response()
+			c.Abort()
+			return
+		}
 		if d.Role == models.UserRoleSuperAdmin {
 			c.Next()
 			return

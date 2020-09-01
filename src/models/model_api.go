@@ -1,8 +1,6 @@
 package models
 
 import (
-	"bytes"
-	"fmt"
 	"github.com/olongfen/gorm-gin-admin/src/utils"
 	"gorm.io/gorm"
 )
@@ -76,21 +74,9 @@ func GetAPIGroupList() (ret []*APIGroup, err error) {
 
 // BatchInsertAPIGroup
 func BatchInsertAPIGroup(datas []*APIGroup) (err error) {
-	var buffer bytes.Buffer
-	sql := "insert into `api_groups` (`path`,`description`,`api_group`,`method`) values"
-	if _, err := buffer.WriteString(sql); err != nil {
-		return err
-	}
-	for i, v := range datas {
-		if i == len(datas)-1 {
-			buffer.WriteString(fmt.Sprintf("('%s','%s',%s,%s);", v.Path, v.Description, v.ApiGroup, v.Method))
-		} else {
-			buffer.WriteString(fmt.Sprintf("('%s','%s',%s,%s),", v.Path, v.Description, v.ApiGroup, v.Method))
-		}
-	}
-	if err = DB.Exec(buffer.String()).Error; err != nil {
+	if err = DB.Model(&APIGroup{}).Create(datas).Error;err!=nil{
 		logModel.Errorln(err)
-		err = utils.ErrInsertDataFailed
+		err= utils.ErrInsertDataFailed
 		return
 	}
 	return
