@@ -6,15 +6,15 @@ import (
 	"gorm.io/gorm"
 )
 
-type EditRecord struct {
+type ActionRecord struct {
 	Model
 	Uid    string `json:"uid" gorm:"type:varchar(36); index"`
 	Action string `json:"action" gorm:"type: varchar(500)"`
 	From   string `json:"from" gorm:"type:varchar(36); index"`
 }
 
-func (e *EditRecord) Insert(dbs ...*gorm.DB) (err error) {
-	if err = getDB(dbs...).Model(&EditRecord{}).Create(e).Error; err != nil {
+func (e *ActionRecord) Insert(dbs ...*gorm.DB) (err error) {
+	if err = getDB(dbs...).Model(&ActionRecord{}).Create(e).Error; err != nil {
 		logModel.Errorln(err)
 		err = utils.ErrInsertDataFailed
 		return
@@ -22,8 +22,8 @@ func (e *EditRecord) Insert(dbs ...*gorm.DB) (err error) {
 	return
 }
 
-func (e *EditRecord) Get(dbs ...*gorm.DB) (err error) {
-	if err = getDB(dbs...).Model(&EditRecord{}).First(e.ID).Error; err != nil {
+func (e *ActionRecord) Get(dbs ...*gorm.DB) (err error) {
+	if err = getDB(dbs...).Model(&ActionRecord{}).First(e.ID).Error; err != nil {
 		logModel.Errorln(err)
 		err = utils.ErrGetDataFailed
 		return
@@ -31,8 +31,8 @@ func (e *EditRecord) Get(dbs ...*gorm.DB) (err error) {
 	return
 }
 
-func GetEditRecordList(q *query.Query) (ret []*EditRecord, err error) {
-	if err = DB.Model(&EditRecord{}).Where(q.Cond, q.Values...).Offset(q.PageNum).Limit(q.PageSize).Order("id asc").Find(&ret).Error; err != nil {
+func GetEditRecordList(q *query.Query) (ret []*ActionRecord, err error) {
+	if err = DB.Model(&ActionRecord{}).Where(q.Cond, q.Values...).Offset(q.PageNum).Limit(q.PageSize).Order("id asc").Find(&ret).Error; err != nil {
 		logModel.Errorln(err)
 		err = utils.ErrGetDataFailed
 		return
