@@ -166,6 +166,8 @@ func EditUser(c *gin.Context) {
 	defer func() {
 		if err != nil {
 			app.NewGinResponse(c).Fail(code, err.Error()).Response()
+		}else {
+			app.NewGinResponse(c).Success(nil).Response()
 		}
 	}()
 	if s, code, err = GetSessionAndBindingForm(form, c); err != nil {

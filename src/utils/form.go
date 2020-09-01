@@ -55,7 +55,7 @@ type FormEditUser struct {
 	Email    *string `json:"email" form:"email"`
 	Phone    *string `json:"phone" form:"phone"`
 	Sign     *string `json:"sign" form:"sign"`
-	Role     *string `json:"role" form:"role"`
+	Role     *int `json:"role" form:"role"`
 	Status   *string `json:"status" form:"status"`
 }
 
