@@ -10,7 +10,7 @@ ADD ./conf/ /app/conf
 
 ADD ./main /app
 
-EXPOSE 8060
-EXPOSE 9060
+EXPOSE 8050
+EXPOSE 9050
 
 ENTRYPOINT ["./main"]
