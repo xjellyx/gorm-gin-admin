@@ -20,7 +20,30 @@ English | [简体中文](./README-zh_CN.md)
 - Server Framework：[gin](https://github.com/gin-gonic/gin) 
 - Grom Framework: [gorm](https://github.com/go-gorm/gorm)
 ## 1. Basic Introduction
-TODO
+```
+    │  ├─conf               (Config file)
+    │  ├─docs  	            （swagger APIs docs）
+    │  ├─log                 (log file)
+    │  ├─public              (public static file)
+            │  ├─static      (head icon)
+    ├─src
+        │  ├─controller     (Controller)
+        │  ├─middleware      (Middleware）
+        │  ├─models         （Model entity）
+        │  ├─pkg            （Project private package）
+            │  ├─adapter    (Casbin adapter)
+            │  ├─app        (Gin service response) 
+            │  ├─codes      (Response code)
+            │  ├─error      (Project private error)
+            │  ├─gredis     (Redis)
+            │  ├─query      (Songo parase to SQL line)
+            │  ├─setting    (Project setting)
+        │  ├─router         (Router)
+        │  ├─rpc            (RPC)
+        │  ├─service        (services)
+        │  └─utils	        （common utilities）
+    
+```
 
 ## 2. Technical selection
 
