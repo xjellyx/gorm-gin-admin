@@ -15,40 +15,14 @@
 English | [简体中文](./README-zh_CN.md)
 
 # Project Guidelines
-[Online Documentation-todo]()
 
-[Development Steps](https://www.gin-vue-admin.com/docs/help) (Contributor:  <a href="https://github.com/LLemonGreen">LLemonGreen</a> And <a href="https://github.com/fkk0509">Fann</a>)
 - Web UI Framework：[element-ui](https://github.com/ElemeFE/element)  
 - Server Framework：[gin](https://github.com/gin-gonic/gin) 
 - Grom Framework: [gorm](https://github.com/go-gorm/gorm)
 ## 1. Basic Introduction
+TODO
 
-### 1.1 Project Introduction
-
-[Online Demo]()
-
-username：admin
-
-password：111111
-
-### 1.2 Contributing Guide
-#### 1.2.1 Issue Guidelines
-
-
-#### 1.2.2 Pull Request Guidelines
-
-- Fork this repository to your own account. Do not create branches here.
-
-- Commit info should be formatted as `[File Name]: Info about commit.` (e.g. `README.md: Fix xxx bug`)
-
-- <font color=red>Make sure PRs are created to `develop` branch instead of `master` branch.</font>
-
-- If your PR fixes a bug, please provide a description about the related bug.
-
-- Merging a PR takes two maintainers: one approves the changes after reviewing, and then the other reviews and merges.
-
-
-## 3. Technical selection
+## 2. Technical selection
 
 - Frontend: using `Element-UI` based on vue，to code the page.
 - Backend: using `Gin` to quickly build basic RESTful API. `Gin` is a web framework written in Go (Golang).
@@ -58,16 +32,15 @@ password：111111
 - Config: using `gopkg.in/yaml.v2` to implement `yaml` config file。
 - Log: using `github.com/sirupsen/logrus` record logs。
 
-## 5. Features
+## 3. Features
 - Authority management: Authority management based on `jwt` and `casbin`. 
 - User management: The system administrator assigns user roles and role permissions.
 - Role management: Create the main object of permission control, and then assign different API permissions and menu permissions to the role.
 - Menu management: User dynamic menu configuration implementation, assigning different menus to different roles.
 - API management: Different users can call different API permissions.
 
-## 6. To-do list
+## 4. To-do list
 
 - [ ] upload & export Excel
-- [ ] e-chart
-- [ ] workflow, task transfer function
-- [ ] frontend independent mode, mock
+- [ ] record manager actions
+- [ ] RPC 
