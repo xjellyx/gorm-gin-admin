@@ -1,6 +1,7 @@
 package models
 
 import (
+	"github.com/olongfen/gorm-gin-admin/src/pkg/query"
 	"github.com/olongfen/gorm-gin-admin/src/utils"
 	"gorm.io/gorm"
 )
@@ -63,11 +64,19 @@ func (a *APIGroup) Get(id int64) (err error) {
 }
 
 // GetAPIGroupList 获取api列表
-func GetAPIGroupList() (ret []*APIGroup, err error) {
-	if err = DB.Table(APIGroupTableName()).Where("id > ?", 0).Find(&ret).Error; err != nil {
-		logModel.Errorln(err)
-		err = utils.ErrGetDataFailed
-		return nil, err
+func GetAPIGroupList(q *query.Query) (ret []*APIGroup, err error) {
+	if q!=nil{
+		if err = DB.Table(APIGroupTableName()).Where(q.Cond,q.Values).Offset(q.PageNum).Limit(q.PageSize).Order("id asc").Find(&ret).Error; err != nil {
+			logModel.Errorln(err)
+			err = utils.ErrGetDataFailed
+			return nil, err
+		}
+	}else {
+		if err = DB.Table(APIGroupTableName()).Order("id asc").Find(&ret).Error; err != nil {
+			logModel.Errorln(err)
+			err = utils.ErrGetDataFailed
+			return nil, err
+		}
 	}
 	return
 }

@@ -2,6 +2,7 @@ package service
 
 import (
 	"github.com/olongfen/gorm-gin-admin/src/models"
+	"github.com/olongfen/gorm-gin-admin/src/pkg/query"
 	"github.com/olongfen/gorm-gin-admin/src/utils"
 )
 
@@ -34,7 +35,7 @@ func AddAPIGroup(uid string,f []*utils.FormAPIGroupAdd) (ret []*models.APIGroup,
 	if err = models.BatchInsertAPIGroup(datas); err != nil {
 		return nil, err
 	}
-	return models.GetAPIGroupList()
+	return models.GetAPIGroupList(nil)
 }
 
 func EditAPIGroup(uid string,f *utils.FormAPIGroupEdit) (ret *models.APIGroup, err error) {
@@ -111,6 +112,14 @@ func DelAPIGroup(uid string,id int64) (err error) {
 }
 
 // GetAPIGroupList
-func GetAPIGroupList() (ret []*models.APIGroup, err error) {
-	return models.GetAPIGroupList()
+func GetAPIGroupList(f *utils.ApiListForm) (ret []*models.APIGroup, err error) {
+		q,_err:=query.NewQuery(f.Page,f.PageSize).ValidCond(f.ToMap())
+		if _err!=nil{
+			err = _err
+			return
+		}
+		if len(q.Cond)==0 && q.PageNum==0 && q.PageSize==0{
+			q= nil
+		}
+	return models.GetAPIGroupList(q)
 }

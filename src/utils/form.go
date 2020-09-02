@@ -261,22 +261,7 @@ type FormUserList struct {
 	PageNum     int    `json:"pageNum" form:"pageNum" `
 }
 
-// FormAPIGroupAdd 添加api数据
-type FormAPIGroupAdd struct {
-	Path        string `json:"path" form:"path" binding:"required"`               // api路径
-	Method      string `json:"method" form:"method" binding:"required"`           // 请求方式
-	Description string `json:"description" form:"description" binding:"required"` // 中文描述
-	ApiGroup    string `json:"apiGroup" form:"apiGroup" binding:"required"`       // 组名
-}
 
-// FormAPIGroupEdit 添加api数据
-type FormAPIGroupEdit struct {
-	Id          int64  `json:"id" form:"id" binding:"required"`
-	Path        string `json:"path" form:"path" binding:"required" `              // api路径
-	Method      string `json:"method" form:"method" binding:"required"`           // 请求方式
-	Description string `json:"description" form:"description" binding:"required"` // 中文描述
-	ApiGroup    string `json:"apiGroup" form:"apiGroup" binding:"required"`       // 组名
-}
 
 // FormRoleAPIPerm 添加角色api权限
 type FormRoleAPIPerm struct {

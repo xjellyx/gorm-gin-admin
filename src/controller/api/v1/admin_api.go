@@ -15,26 +15,28 @@ import (
 // @Title 获取全部api
 // @Summary 获取全部api
 // @Description 获取全部api
+// @Param {} body utils.ApiListForm true "获取api列表"
 // @Accept json
 // @Produce json
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
 // @Path  /api/v1/admin/getAllApiGroup [get]
-func GetAllAPIGroup(c *gin.Context) {
+func GetAPIGroupList(c *gin.Context) {
 	var (
 		err  error
 		code = codes.CodeProcessingFailed
 		ret  []*models.APIGroup
+		form =new(utils.ApiListForm)
 	)
 	defer func() {
 		if err != nil {
 			app.NewGinResponse(c).Fail(code, err.Error()).Response()
 		}
 	}()
-	if _, code, err = GetSession(c); err != nil {
+	if _, code, err = GetSessionAndBindingForm(form,c); err != nil {
 		return
 	}
-	if ret, err = service.GetAPIGroupList(); err != nil {
+	if ret, err = service.GetAPIGroupList(form); err != nil {
 		return
 	}
 	app.NewGinResponse(c).Success(ret).Response()

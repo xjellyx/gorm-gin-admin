@@ -15,7 +15,7 @@
 English | [简体中文](./README-zh_CN.md)
 
 # Project Guidelines
-
+[Online Demo](http://39.98.44.155:80)
 - Web UI Framework：[element-ui](https://github.com/ElemeFE/element)  
 - Server Framework：[gin](https://github.com/gin-gonic/gin) 
 - Grom Framework: [gorm](https://github.com/go-gorm/gorm)
@@ -49,7 +49,7 @@ English | [简体中文](./README-zh_CN.md)
 ### 1.2 Environment step
 #### 1.2.1 Install golang
 - If you have proxy to see  [olongfen.github.o](https://olongfen.github.io/#/note/fedora%E8%A3%85%E6%9C%BA%E5%90%8E%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE?id=%e5%ae%89%e8%a3%85golang)
-- Else to see [blog.olongfen.ltd](http://blog.olongfen.ltd:9001/#/note/fedora%E8%A3%85%E6%9C%BA%E5%90%8E%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE?id=%e5%ae%89%e8%a3%85golang)
+- Else to see [blog.olongfen.ltd](http://blog.olongfen.ltd:9001/#/note/fedora%E8%A3%85%E6%9C%BA%E5%90%8E%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE?id=%E5%AE%89%E8%A3%85golang)
 
 ### 1.2.2 Install project Environment
 In this project, my environment install by docker.
