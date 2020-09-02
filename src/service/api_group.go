@@ -105,7 +105,7 @@ func DelAPIGroup(uid string,id int64) (err error) {
 	}
 
 	if err = dataCasbin.DeleteByPathAndMethod(data.Path, data.Method); err != nil {
-		return err
+		logServe.Errorln(err)
 	}
 
 	return data.Delete(id)

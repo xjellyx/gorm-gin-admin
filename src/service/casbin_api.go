@@ -8,9 +8,10 @@ import (
 )
 
 // AddRuleAPI 增加角色api权限
-func AddRuleAPI(f *utils.FormRoleAPIPerm) (ret []int64, err error) {
+func AddRuleAPI(uid string,f *utils.FormRoleAPIPerm) (ret []int64, err error) {
 	var (
 		e    *casbin.Enforcer
+		role = new(models.UserBase)
 		user = new(models.UserBase)
 	)
 
@@ -20,7 +21,10 @@ func AddRuleAPI(f *utils.FormRoleAPIPerm) (ret []int64, err error) {
 	if err = user.GetByUId(f.Uid); err != nil {
 		return
 	}
-	if user.Role < models.UserRoleSuperAdmin {
+	if err = role.GetByUId(uid); err != nil {
+		return
+	}
+	if user.Role >= role.Role {
 		err = utils.ErrActionNotAllow
 		return
 	}
@@ -40,10 +44,11 @@ func AddRuleAPI(f *utils.FormRoleAPIPerm) (ret []int64, err error) {
 }
 
 // RemoveRuleAPI 删除
-func RemoveRuleAPI(f *utils.FormRoleAPIPerm) (ret []int64, err error) {
+func RemoveRuleAPI(uid string,f *utils.FormRoleAPIPerm) (ret []int64, err error) {
 	var (
 		e    *casbin.Enforcer
 		user = new(models.UserBase)
+		role =  new(models.UserBase)
 	)
 
 	if e, err = casbin.NewEnforcer(setting.Setting.RBACModelDir, models.Adapter); err != nil {
@@ -52,7 +57,10 @@ func RemoveRuleAPI(f *utils.FormRoleAPIPerm) (ret []int64, err error) {
 	if err = user.GetByUId(f.Uid); err != nil {
 		return
 	}
-	if user.Role < models.UserRoleSuperAdmin {
+	if err = role.GetByUId(uid); err != nil {
+		return
+	}
+	if user.Role >= role.Role {
 		err = utils.ErrActionNotAllow
 		return
 	}
