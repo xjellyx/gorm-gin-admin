@@ -45,6 +45,12 @@ English | [简体中文](./README_zh.md)
         │  └─utils	        （common utilities）
     
 ```
+#### 1.1.1 Generate  api docs 
+```
+    cd grom-gin-admin
+    go get -u github.com/swaggo/swag/cmd/swag
+    swag init
+```
 
 ### 1.2 Environment step
 #### 1.2.1 Install golang

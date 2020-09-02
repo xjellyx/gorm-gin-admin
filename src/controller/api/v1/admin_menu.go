@@ -121,7 +121,7 @@ func GetMenuList(c *gin.Context) {
 // @Description 删除菜单
 // @Accept json
 // @Produce json
-// @Param id param int true "id"
+// @Param id query int true "id"
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
 // @Path /api/v1/admin/delMenu [delete]

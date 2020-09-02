@@ -25,52 +25,13 @@ var doc = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/api/v1/admin/addApiGroup": {
-            "post": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "管理员"
-                ],
-                "summary": "创建api",
-                "parameters": [
-                    {
-                        "description": "api数组",
-                        "name": "{array}",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/utils.FormAPIGroupAdd"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
-                    }
-                }
-            }
-        },
         "/api/v1/admin/addMenu": {
             "post": {
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
-                    "管理员"
+                    "超级管理员"
                 ],
                 "summary": "添加菜单",
                 "parameters": [
@@ -100,9 +61,9 @@ var doc = `{
                 }
             }
         },
-        "/api/v1/admin/addRoleAPIPerm": {
-            "post": {
-                "description": "添加角色接口权限",
+        "/api/v1/admin/deleteUser": {
+            "delete": {
+                "description": "删除用户",
                 "consumes": [
                     "application/json"
                 ],
@@ -112,132 +73,16 @@ var doc = `{
                 "tags": [
                     "管理员"
                 ],
-                "summary": "添加角色接口权限",
-                "parameters": [
-                    {
-                        "description": "添加api权限表单",
-                        "name": "{}",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/utils.FormRoleAPIPerm"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/admin/editApiGroup": {
-            "put": {
-                "description": "修改api",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "管理员"
-                ],
-                "summary": "修改api",
-                "parameters": [
-                    {
-                        "description": "表单",
-                        "name": "{}",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/utils.FormAPIGroupEdit"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/admin/editUser": {
-            "post": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "管理员"
-                ],
+                "summary": "删除用户",
                 "parameters": [
                     {
                         "type": "string",
-                        "description": "用户uid",
+                        "description": "用户UID",
                         "name": "uid",
-                        "in": "path",
+                        "in": "query",
                         "required": true
-                    },
-                    {
-                        "description": "修改用户信息",
-                        "name": "{}",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/utils.FormEditUser"
-                        }
                     }
                 ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/admin/getAllApiGroup": {
-            "get": {
-                "description": "获取全部api",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "管理员"
-                ],
-                "summary": "获取全部api",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -272,7 +117,8 @@ var doc = `{
                         "type": "integer",
                         "description": "菜单id",
                         "name": "id",
-                        "in": "query"
+                        "in": "query",
+                        "required": true
                     }
                 ],
                 "responses": {
@@ -291,9 +137,9 @@ var doc = `{
                 }
             }
         },
-        "/api/v1/admin/listUser": {
+        "/api/v1/admin/getMenuList": {
             "get": {
-                "description": "获取用户列表",
+                "description": "获取菜单",
                 "consumes": [
                     "application/json"
                 ],
@@ -303,18 +149,7 @@ var doc = `{
                 "tags": [
                     "管理员"
                 ],
-                "summary": "获取用户列表",
-                "parameters": [
-                    {
-                        "description": "查询数据",
-                        "name": "{}",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/utils.FormUserList"
-                        }
-                    }
-                ],
+                "summary": "获取菜单",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -407,84 +242,6 @@ var doc = `{
                 }
             }
         },
-        "/api/v1/admin/removeApiGroup": {
-            "delete": {
-                "description": "删除api",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "管理员"
-                ],
-                "summary": "删除api",
-                "parameters": [
-                    {
-                        "type": "integer",
-                        "description": "id",
-                        "name": "id",
-                        "in": "query",
-                        "required": true
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/admin/removeRoleAPIPerm": {
-            "delete": {
-                "description": "删除角色接口权限",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "管理员"
-                ],
-                "summary": "删除角色接口权限",
-                "parameters": [
-                    {
-                        "description": "删除api权限表单",
-                        "name": "{}",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/utils.FormRoleAPIPerm"
-                        }
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
-                    }
-                }
-            }
-        },
         "/api/v1/captcha": {
             "get": {
                 "consumes": [
@@ -533,9 +290,9 @@ var doc = `{
                 }
             }
         },
-        "/api/v1/getRoleApiList": {
+        "/api/v1/getUserKV": {
             "get": {
-                "description": "获取用户权限",
+                "description": "获取用户表状态信息",
                 "consumes": [
                     "application/json"
                 ],
@@ -545,15 +302,7 @@ var doc = `{
                 "tags": [
                     "管理员"
                 ],
-                "summary": "获取用户权限",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "用户uid,不输入默认返回自己uid",
-                        "name": "uid",
-                        "in": "query"
-                    }
-                ],
+                "summary": "获取用户表状态信息",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -623,59 +372,6 @@ var doc = `{
                 }
             }
         },
-        "/api/v1/user/getHeadIcon": {
-            "get": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "用户"
-                ],
-                "summary": "获取用户头像",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/user/getUserProfile": {
-            "get": {
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "用户"
-                ],
-                "summary": "获取个人信息",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
-                    }
-                }
-            }
-        },
         "/api/v1/user/login": {
             "post": {
                 "produces": [
@@ -724,45 +420,6 @@ var doc = `{
                     "用户"
                 ],
                 "summary": "用户登出",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
-                    }
-                }
-            }
-        },
-        "/api/v1/user/modifyHeadIcon": {
-            "put": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "用户"
-                ],
-                "summary": "修改用户头像",
-                "parameters": [
-                    {
-                        "description": "头像",
-                        "name": "headIcon",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -934,30 +591,15 @@ var doc = `{
                 }
             }
         },
-        "/api/v1/user/setPayPwd/": {
-            "post": {
-                "description": "用户设置支付密码",
-                "consumes": [
-                    "application/json"
-                ],
+        "/api/v1/user/profile": {
+            "get": {
                 "produces": [
                     "application/json"
                 ],
                 "tags": [
                     "用户"
                 ],
-                "summary": "用户设置支付密码",
-                "parameters": [
-                    {
-                        "description": "密码",
-                        "name": "pwd",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "type": "string"
-                        }
-                    }
-                ],
+                "summary": "获取个人信息",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1035,6 +677,37 @@ var doc = `{
                 }
             }
         },
+        "body.Body": {
+            "type": "object",
+            "additionalProperties": true
+        },
+        "utils.ApiListForm": {
+            "type": "object",
+            "properties": {
+                "apiGroup": {
+                    "description": "组名",
+                    "type": "string"
+                },
+                "description": {
+                    "description": "中文描述",
+                    "type": "string"
+                },
+                "method": {
+                    "description": "请求方式",
+                    "type": "string"
+                },
+                "page": {
+                    "type": "integer"
+                },
+                "pageSize": {
+                    "type": "integer"
+                },
+                "path": {
+                    "description": "api路径",
+                    "type": "string"
+                }
+            }
+        },
         "utils.FormAPIGroupAdd": {
             "type": "object",
             "required": [
@@ -1096,15 +769,19 @@ var doc = `{
         "utils.FormAddMenu": {
             "type": "object",
             "required": [
-                "icon",
+                "component",
+                "meta",
                 "name",
                 "parentId",
-                "router",
-                "title"
+                "path"
             ],
             "properties": {
-                "icon": {
+                "component": {
                     "type": "string"
+                },
+                "meta": {
+                    "type": "object",
+                    "additionalProperties": true
                 },
                 "name": {
                     "type": "string"
@@ -1112,11 +789,11 @@ var doc = `{
                 "parentId": {
                     "type": "integer"
                 },
-                "router": {
+                "path": {
                     "type": "string"
                 },
-                "title": {
-                    "type": "string"
+                "sort": {
+                    "type": "integer"
                 }
             }
         },
@@ -1127,16 +804,25 @@ var doc = `{
             ],
             "properties": {
                 "email": {
-                    "description": "Username *string ` + "`" + `json:\"username\" form:\"username\"` + "`" + `",
                     "type": "string"
                 },
                 "nickname": {
                     "type": "string"
                 },
+                "password": {
+                    "description": "Username *string ` + "`" + `json:\"username\" form:\"username\"` + "`" + `",
+                    "type": "string"
+                },
                 "phone": {
                     "type": "string"
                 },
+                "role": {
+                    "type": "integer"
+                },
                 "sign": {
+                    "type": "string"
+                },
+                "status": {
                     "type": "string"
                 },
                 "uid": {
@@ -1197,6 +883,36 @@ var doc = `{
                 "uid": {
                     "description": "角色uid",
                     "type": "string"
+                }
+            }
+        },
+        "utils.FormUpdateMenu": {
+            "type": "object",
+            "required": [
+                "id"
+            ],
+            "properties": {
+                "component": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "integer"
+                },
+                "meta": {
+                    "type": "object",
+                    "$ref": "#/definitions/body.Body"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "parentId": {
+                    "type": "integer"
+                },
+                "path": {
+                    "type": "string"
+                },
+                "sort": {
+                    "type": "integer"
                 }
             }
         },

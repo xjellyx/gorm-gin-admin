@@ -184,8 +184,8 @@ func EditUser(c *gin.Context) {
 // @Accept json
 // @Produce json
 // @Param uid query string true "用户UID"
-// @Success 200  {object}
-// @Failure 500  {object}
+// @Success 200  {object} app.Response
+// @Failure 500  {object} app.Response
 // @router /api/v1/admin/deleteUser [delete]
 func DeleteUser(c *gin.Context) {
 	var (
@@ -334,8 +334,8 @@ func GetRoleApiList(c *gin.Context) {
 // @Description 获取用户表状态信息
 // @Accept json
 // @Produce json
-// @Success 200  {object}
-// @Failure 500  {object}
+// @Success 200  {object} app.Response
+// @Failure 500  {object} app.Response
 // @router  /api/v1/getUserKV [get]
 func GetUserKV(c *gin.Context)  {
 	app.NewGinResponse(c).Success(service.GetUserKV()).Response()

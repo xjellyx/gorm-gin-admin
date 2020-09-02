@@ -12,15 +12,15 @@
 <img src="https://img.shields.io/badge/redis-6.15.9-lightGree"/>
 </div>
 
-English | [简体中文](./README-zh_CN.md)
+简体中文 | [English](./README.md)
 
-# Project Guidelines
+# 项目指导文档
 [Online Demo](http://39.98.44.155:80)
 - Web UI Framework：[element-ui](https://github.com/ElemeFE/element)  
 - Server Framework：[gin](https://github.com/gin-gonic/gin) 
 - Grom Framework: [gorm](https://github.com/go-gorm/gorm)
-## 1. Basic Introduction
-### 1.1 Project structure
+## 1. 基本介绍
+### 1.1 项目结构
 ```
     │  ├─conf               (Config file)
     │  ├─docs  	            （swagger APIs docs）
@@ -45,14 +45,21 @@ English | [简体中文](./README-zh_CN.md)
         │  └─utils	        （common utilities）
     
 ```
+#### 1.1.2 生成API文档
+```
+    cd grom-gin-admin
+    go get -u github.com/swaggo/swag/cmd/swag
+    swag init
+```
+访问http://localhost:8050/swagger/index.html，即可查看swagger文档
 
-### 1.2 Environment step
-#### 1.2.1 Install golang
-- If you have proxy to see  [olongfen.github.o](https://olongfen.github.io/#/note/fedora%E8%A3%85%E6%9C%BA%E5%90%8E%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE?id=%e5%ae%89%e8%a3%85golang)
-- Else to see [blog.olongfen.ltd](http://blog.olongfen.ltd:9001/#/note/fedora%E8%A3%85%E6%9C%BA%E5%90%8E%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE?id=%E5%AE%89%E8%A3%85golang)
+### 1.2 环境配置
+#### 1.2.1 Golang 安装
+- 国外代理可以浏览该界面查看golang安装文档  [olongfen.github.o](https://olongfen.github.io/#/note/fedora%E8%A3%85%E6%9C%BA%E5%90%8E%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE?id=%e5%ae%89%e8%a3%85golang)
+- 国内朋友点击这个界面查看golang安装文档 [blog.olongfen.ltd](http://blog.olongfen.ltd:9001/#/note/fedora%E8%A3%85%E6%9C%BA%E5%90%8E%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE?id=%E5%AE%89%E8%A3%85golang)
 
-### 1.2.2 Install project Environment
-In this project, my environment install by docker.
+### 1.2.2 项目环境配置
+本人在这个项目的环境配置通过docker安装，需要在主机安装配置自己安装PostgreSQL和Redis即可
 ``` 
    git clone https://github.com/olongfen/gorm-gin-admin.git
 ```
@@ -61,49 +68,49 @@ In this project, my environment install by docker.
     docker-compose up -d .
 ```
 
-### 1.2.3 Project configure step
+### 1.2.3 项目配置说明
 
-- admin and general user rsa key
+- 通过RSA 密钥对来验证用户会话权限
    ```
     admin.key admin.pub
     user.key user.pub
    ```
-- casbin model
+- casbin 模型文件
   ```model_casbin.conf``` 
-- project config 
+- 项目配置文件 
     
  ``` 
-  when you run project the first that will be auto creating, and then you can run service, you can edit project config file 
-when project is running.     
+    当你的conf目录下还没有配置文件的时候，你可以运行一次项目，会自动生成配置文件，再运行一次就可以开机服务了，修改项目配置无需重启项目，配置热加
+载每10s一次，可以自己在pkg/settiong/下修改热加载时间   
   ```  
 
 ### 1.2.4 Run Service
 ``` 
-    if you don't have config file which name project.config.yaml. you shuold run  project first auto generate config file,
-then you try again can be running.
-    command: go run main.go
+     go run main.go
 ```
 
-## 2. Technical selection
+## 2. 技术栈
 
-- Frontend: using `Element-UI` based on vue，to code the page.
-- Backend: using `Gin` to quickly build basic RESTful API. `Gin` is a web framework written in Go (Golang).
-- Database: `PostgreSQL` ，using `gorm2.0` to implement data manipulation.
-- Cache: using `Redis` to implement the recording of the JWT token of the currently active user and implement the multi-login restriction.
-- API: using Swagger of Gin to auto generate APIs docs。
-- Config: using `gopkg.in/yaml.v2` to implement `yaml` config file。
-- Log: using `github.com/sirupsen/logrus` record logs。
+- 前端：用基于`vue`的`Element-UI`构建基础页面。
+- 后端：用`Gin`快速搭建基础restful风格API，`Gin`是一个go语言编写的Web框架。
+- 数据库：采用`PostgreSQL`，使用`gorm2.0版本`实现对数据库的基本操作,
+- 缓存：准备开发使用`Redis`实现记录当前活跃用户的`jwt`令牌并实现多点登录限制。
+- API文档：使用`Swagger`构建自动化文档。
+- 配置文件：使用`gopkg.in/yaml.v2`实现`yaml`格式的配置文件。
+- 日志：使用`github.com/sirupsen/logrus`实现日志记录。
 
-## 3. Features
-- Authority management: Authority management based on `jwt` and `casbin`. 
-- User management: The system administrator assigns user roles and role permissions.
-- Role management: Create the main object of permission control, and then assign different API permissions to the role.
-- Menu management: User dynamic menu configuration implementation, assigning different menus to different roles.
-- API management: Different users can call different API permissions.
+## 3. 主要功能
+- 权限管理：基于`jwt`和`casbin`实现的权限管理 
+- 用户管理：系统管理员分配用户角色和角色权限。
+- 角色管理：创建权限控制的主要对象，可以给角色分配不同api权限和菜单权限。
+- 菜单管理：实现用户动态菜单配置，实现不同角色不同菜单。
+- api管理：不同用户可调用的api接口的权限不同。
+- 条件搜索：增加条件搜索示例。
+- restful示例：可以参考用户管理模块中的示例API。 
 
-## 4. To-do list
+## 4. 计划任务
 
-- [ ] upload & export Excel
-- [ ] record manager actions
-- [ ] RPC 
-- [ ] Cache token
+- [ ] 导入，导出Excel
+- [ ] 管理员操作记录
+- [ ] RPC给其他项目调用 
+- [ ] token缓存机制
