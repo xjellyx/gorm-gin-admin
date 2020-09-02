@@ -89,7 +89,7 @@ var (
 		AdminPubDir:  "./conf/admin.pub",
 		LogDir:       "./log",
 		HeadIconDir:  "./public/static/",
-		RBACModelDir: "./conf/model_api.conf",
+		RBACModelDir: "./conf/model_casbin.conf",
 		LogPatent:    "_%Y-%m-%d.log",
 		// RABCPolicyDir: "./conf/policy_api.csv",
 	}

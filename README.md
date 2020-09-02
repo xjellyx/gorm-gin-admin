@@ -20,6 +20,7 @@ English | [简体中文](./README-zh_CN.md)
 - Server Framework：[gin](https://github.com/gin-gonic/gin) 
 - Grom Framework: [gorm](https://github.com/go-gorm/gorm)
 ## 1. Basic Introduction
+### 1.1 Project structure
 ```
     │  ├─conf               (Config file)
     │  ├─docs  	            （swagger APIs docs）
@@ -45,6 +46,44 @@ English | [简体中文](./README-zh_CN.md)
     
 ```
 
+### 1.2 Environment step
+#### 1.2.1 Install golang
+- If you have proxy to see  [olongfen.github.o](https://olongfen.github.io/#/note/fedora%E8%A3%85%E6%9C%BA%E5%90%8E%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE?id=%e5%ae%89%e8%a3%85golang)
+- Else to see [blog.olongfen.ltd](http://blog.olongfen.ltd:9001/#/note/fedora%E8%A3%85%E6%9C%BA%E5%90%8E%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE?id=%e5%ae%89%e8%a3%85golang)
+
+### 1.2.2 Install project Environment
+In this project, my environment install by docker.
+``` 
+   git clone https://github.com/olongfen/gorm-gin-admin.git
+```
+```
+    cd gorm-gin-admin
+    docker-compose up -d .
+```
+
+### 1.2.3 Project configure step
+
+- admin and general user rsa key
+   ```
+    admin.key admin.pub
+    user.key user.pub
+   ```
+- casbin model
+  ```model_casbin.conf``` 
+- project config 
+    
+ ``` 
+  when you run project the first that will be auto creating, and then you can run service, you can edit project config file 
+when project is running.     
+  ```  
+
+### 1.2.4 Run Service
+``` 
+    if you don't have config file which name project.config.yaml. you shuold run  project first auto generate config file,
+then you try again can be running.
+    command: go run main.go
+```
+
 ## 2. Technical selection
 
 - Frontend: using `Element-UI` based on vue，to code the page.
@@ -67,3 +106,4 @@ English | [简体中文](./README-zh_CN.md)
 - [ ] upload & export Excel
 - [ ] record manager actions
 - [ ] RPC 
+- [ ] Cache token
