@@ -12,7 +12,7 @@
 <img src="https://img.shields.io/badge/redis-6.15.9-lightGree"/>
 </div>
 
-English | [简体中文](./README_zh.md)
+English | [简体中文](./README-zh_CN.md)
 
 # Project Guidelines
 [Online Demo](http://39.98.44.155:80)
