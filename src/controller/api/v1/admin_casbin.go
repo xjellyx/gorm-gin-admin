@@ -35,14 +35,25 @@ func AddRoleAPIPerm(c *gin.Context) {
 	if s, code, err = GetSessionAndBindingForm(f, c); err != nil {
 		return
 	}
-	if s.UID == f.Uid {
-		err = utils.ErrActionNotAllow
-		return
-	}
+
 	if ret, err = service.AddRuleAPI(s.UID,f); err != nil {
 		return
 	}
 	app.NewGinResponse(c).Success(ret).Response()
+}
+
+// @tags 管理员
+// @Title 添加角色组
+// @Summary 添加角色组
+// @Description 添加角色组
+// @Accept json
+// @Produce json
+// @Param {} body utils.FormRoleAPIPerm true "添加角色组"
+// @Success 200 {object} app.Response
+// @Failure 500 {object} app.Response
+// @Path /api/v1/admin/addRoleGroup [post]
+func AddRoleGroup(c *gin.Context)  {
+	
 }
 
 // @tags 管理员
@@ -69,10 +80,6 @@ func RemoveRolePermAPI(c *gin.Context) {
 		}
 	}()
 	if s, code, err = GetSessionAndBindingForm(f, c); err != nil {
-		return
-	}
-	if s.UID == f.Uid {
-		err = utils.ErrActionNotAllow
 		return
 	}
 	if ret, err = service.RemoveRuleAPI(s.UID,f); err != nil {

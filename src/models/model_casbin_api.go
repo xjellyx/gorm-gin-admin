@@ -8,7 +8,7 @@ import (
 type RuleAPI struct {
 	ID     uint   `json:"id" gorm:"column:id"`
 	PType  string `json:"pType" gorm:"column:p_type"`
-	Uid   string `json:"uid" gorm:"column:v0"`
+	Role   string `json:"role" gorm:"column:v0"`
 	Path   string `json:"path" gorm:"column:v1"`
 	Method string `json:"method" gorm:"column:v2"`
 }

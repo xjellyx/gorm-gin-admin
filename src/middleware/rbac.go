@@ -7,7 +7,6 @@ import (
 	"github.com/olongfen/gorm-gin-admin/src/models"
 	"github.com/olongfen/gorm-gin-admin/src/pkg/app"
 	"github.com/olongfen/gorm-gin-admin/src/pkg/setting"
-	"github.com/olongfen/gorm-gin-admin/src/utils"
 )
 
 func CasbinHandler() gin.HandlerFunc {
@@ -23,21 +22,17 @@ func CasbinHandler() gin.HandlerFunc {
 		_d, _ := c.Get("sessionTag")
 		s := _d.(*session.Session)
 		sub := s.UID
-		d := &models.UserBase{}
-		if err = d.GetByUId(s.UID); err != nil {
-			err = utils.ErrUserNotExist
-			return
-		}
-		// 验证是否已经是登录状态
-		if !CheckUserLogin(d){
-			app.NewGinResponse(c).Fail(403, "does't login").SetStatus(403).Response()
-			c.Abort()
-			return
-		}
-		if d.Role == models.UserRoleSuperAdmin {
-			c.Next()
-			return
-		}
+		//d := &models.UserBase{}
+		//if err = d.GetByUId(s.UID); err != nil {
+		//	err = utils.ErrUserNotExist
+		//	return
+		//}
+		//// 验证是否已经是登录状态
+		//if !CheckUserLogin(d){
+		//	app.NewGinResponse(c).Fail(403, "does't login").SetStatus(403).Response()
+		//	c.Abort()
+		//	return
+		//}
 		if ok, err := e.Enforce(sub, obj, act); err != nil {
 			app.NewGinResponse(c).Fail(403, "casbnin check failed").SetStatus(403).Response()
 			c.Abort()

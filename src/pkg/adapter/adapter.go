@@ -13,14 +13,14 @@ import (
 
 type CasbinRule struct {
 	TablePrefix string `gorm:"-"`
-	ID          uint   `gorm:"primarykey"`
-	PType       string `gorm:"size:100"`
-	V0          string `gorm:"size:100"`
-	V1          string `gorm:"size:100"`
-	V2          string `gorm:"size:100"`
-	V3          string `gorm:"size:100"`
-	V4          string `gorm:"size:100"`
-	V5          string `gorm:"size:100"`
+	ID          uint   `gorm:"primaryKey"`
+	PType       string `gorm:"size:100;index"`
+	V0          string `gorm:"size:100;index"`
+	V1          string `gorm:"size:100;index"`
+	V2          string `gorm:"size:100;index"`
+	V3          string `gorm:"size:100;index"`
+	V4          string `gorm:"size:100;index"`
+	V5          string `gorm:"size:100;index"`
 }
 
 type Filter struct {

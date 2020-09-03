@@ -46,7 +46,12 @@ func EditUserBySelf(uid string, form *utils.FormEditUser) (ret *models.UserBase,
 	if err = data.GetByUId(uid); err != nil {
 		return
 	}
-
+	if _,ok:=dataMap["role"];ok{
+		delete(dataMap,"role")
+	}
+	if _,ok:=dataMap["status"];ok{
+		delete(dataMap,"status")
+	}
 	if err = data.Update(form.Uid, dataMap); err != nil {
 		return nil, err
 	}
@@ -60,13 +65,13 @@ func EditUserBySelf(uid string, form *utils.FormEditUser) (ret *models.UserBase,
 func EditUserByRole(uid string, form *utils.FormEditUser) (ret *models.UserBase, err error) {
 	var (
 		dataMap map[string]interface{}
-		role    = new(models.UserBase)
+		user    = new(models.UserBase)
 		data    = &models.UserBase{}
 	)
 	if dataMap, err = form.Valid(); err != nil {
 		return
 	}
-	if err = role.GetByUId(uid); err != nil {
+	if err = user.GetByUId(uid); err != nil {
 		return
 	}
 
@@ -74,7 +79,7 @@ func EditUserByRole(uid string, form *utils.FormEditUser) (ret *models.UserBase,
 		return
 	}
 	// 只能修改比自己权限底的角色
-	if data.Role > role.Role && uid != form.Uid {
+	if data.Role.Level >= user.Role.Level {
 		err = utils.ErrActionNotAllow
 		return
 	}
@@ -162,7 +167,6 @@ func GetUserList(uid string, form *utils.FormUserList) (ret []*models.UserBase, 
 		return
 	}
 	cond := map[string]interface{}{}
-	cond["role$lte$"] = data.Role
 	if form.Username != "" {
 		cond["$and$username"] = utils.SpiltInterfaceList(form.Username, ",")
 	}
@@ -208,7 +212,7 @@ func DeleteUser(uid string, delUid string) (err error) {
 	if err = delRole.GetByUId(delUid); err != nil {
 		return
 	}
-	if role.Role <= delRole.Role {
+	if role.Role.Level <= delRole.Role.Level {
 		err = utils.ErrActionNotAllow
 		return
 	}
@@ -217,12 +221,6 @@ func DeleteUser(uid string, delUid string) (err error) {
 
 func GetUserKV()(ret map[string][]models.KV)  {
 	ret = map[string][]models.KV{}
-	ret["role"] = []models.KV{
-		{Label: "general",Value: models.UserRoleNormal},
-		{Label: "admin",Value: models.UserRoleAdmin},
-		{Label: "superAdmin",Value: models.UserRoleSuperAdmin},
-
-	}
 	ret["status"] = []models.KV{
 		{Label: "register",Value: models.UserStatusRegister},
 		{Label: "login",Value: models.UserStatusLogin},

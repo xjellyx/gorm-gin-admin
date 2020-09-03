@@ -63,10 +63,6 @@ func UserLogin(f *utils.LoginForm, isAdmin bool) (token string, err error) {
 			return
 		}
 	} else {
-		if data.Role == 0 {
-			err = utils.ErrActionNotAllow
-			return
-		}
 		if token, err = models.AdminKey.SessionEncode(s); err != nil {
 			return
 		}
@@ -77,10 +73,10 @@ func UserLogin(f *utils.LoginForm, isAdmin bool) (token string, err error) {
 	//var (
 	//	dataOnline *UserOnline
 	//)
-	//if dataOnline, err = PubUserOnlineGet(data.Uid); err != nil {
+	//if dataOnline, err = PubUserOnlineGet(data.Role); err != nil {
 	//	if err == gorm.ErrRecordNotFound {
 	//		dataOnline = new(UserOnline)
-	//		dataOnline.Uid = s.UID
+	//		dataOnline.Role = s.UID
 	//		if f.DeviceId != nil {
 	//			dataOnline.Device = *f.DeviceId
 	//		}
@@ -106,7 +102,7 @@ func UserLogin(f *utils.LoginForm, isAdmin bool) (token string, err error) {
 	//	err = _err
 	//	return
 	//} else {
-	//	if err = red.Set("cache_token"+data.Uid, token, session.SessionExpMaxSecure).Err(); err != nil {
+	//	if err = red.Set("cache_token"+data.Role, token, session.SessionExpMaxSecure).Err(); err != nil {
 	//		return
 	//	}
 	//	red.Close()

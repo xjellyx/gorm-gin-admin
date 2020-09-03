@@ -261,10 +261,21 @@ type FormUserList struct {
 	PageNum     int    `json:"pageNum" form:"pageNum" `
 }
 
+// FormRole add
+type FormRole struct {
+	Role string `json:"role" form:"role" binding:"required"`           // 角色名称
+	Level int `json:"level" form:"level" binding:"required"`
+}
 
+// FormUpdateRole 更新
+type FormUpdateRole struct {
+	Id  int `json:"id" form:"uid" binding:"required" `
+	Role string `json:"role" form:"role" binding:"required"`           // 角色名称
+	Level int `json:"level" form:"level" binding:"required"`
+}
 
 // FormRoleAPIPerm 添加角色api权限
 type FormRoleAPIPerm struct {
-	Uid     string  `json:"uid" form:"uid" binding:"required"`           // 角色uid
+	Role    string  `json:"role" form:"role" binding:"required"`           // 角色名称
 	GroupID []int64 `json:"groupIds" form:"groupIds" binding:"required"` // api id
 }

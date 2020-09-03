@@ -173,6 +173,10 @@ func EditUser(c *gin.Context) {
 	if s, code, err = GetSessionAndBindingForm(form, c); err != nil {
 		return
 	}
+	if s.UID==form.Uid{
+		err = utils.ErrActionNotAllow
+		return
+	}
 	if _, err = service.EditUserByRole(s.UID, form); err != nil {
 		return
 	}

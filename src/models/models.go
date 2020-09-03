@@ -48,7 +48,7 @@ func InitModel() {
 	if err = AdminKey.SetRSA(setting.Setting.UserKeyDir, setting.Setting.UserPubDir); err != nil {
 		logrus.Fatal(err)
 	}
-	err = DB.AutoMigrate(&UserBase{}, &UserCard{}, &APIGroup{}, &Menu{})
+	err = DB.AutoMigrate(&UserBase{}, &UserCard{}, &APIGroup{}, &Menu{},&Role{})
 	if err != nil {
 		panic(err)
 	}

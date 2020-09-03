@@ -40,10 +40,6 @@ func AddMenu(c *gin.Context) {
 	if err = role.GetByUId(s.UID); err != nil {
 		return
 	}
-	if role.Role < models.UserRoleSuperAdmin {
-		err = utils.ErrActionNotAllow
-		return
-	}
 	if data, err = service.AddMenu(form); err != nil {
 		return
 	}
@@ -129,9 +125,7 @@ func DelMenu(c *gin.Context) {
 	var (
 		_id  int
 		err  error
-		s    *session.Session
 		code = codes.CodeProcessingFailed
-		role = new(models.UserBase)
 	)
 	id := c.Query("id")
 	defer func() {
@@ -141,16 +135,10 @@ func DelMenu(c *gin.Context) {
 			app.NewGinResponse(c).Success(nil).Response()
 		}
 	}()
-	if s, code, err = GetSession(c); err != nil {
+	if _, code, err = GetSession(c); err != nil {
 		return
 	}
-	if err = role.GetByUId(s.UID); err != nil {
-		return
-	}
-	if role.Role < models.UserRoleSuperAdmin {
-		err = utils.ErrActionNotAllow
-		return
-	}
+
 	if _id, err = strconv.Atoi(id); err != nil {
 		code = codes.CodeParamInvalid
 		err = utils.ErrParamInvalid
@@ -175,9 +163,7 @@ func EditMenu(c *gin.Context) {
 	var (
 		err  error
 		code = codes.CodeProcessingFailed
-		s    *session.Session
 		data *models.Menu
-		role = new(models.UserBase)
 		form = new(utils.FormUpdateMenu)
 	)
 
@@ -188,16 +174,10 @@ func EditMenu(c *gin.Context) {
 			app.NewGinResponse(c).Success(data).Response()
 		}
 	}()
-	if s, code, err = GetSessionAndBindingForm(form, c); err != nil {
+	if _, code, err = GetSessionAndBindingForm(form, c); err != nil {
 		return
 	}
-	if err = role.GetByUId(s.UID); err != nil {
-		return
-	}
-	if role.Role < models.UserRoleSuperAdmin {
-		err = utils.ErrActionNotAllow
-		return
-	}
+
 	if data, err = service.UpdateMenu(form); err != nil {
 		return
 	}

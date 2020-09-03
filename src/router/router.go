@@ -92,6 +92,7 @@ func adminRouterAPI(r *gin.RouterGroup) {
 	apiAdmin.DELETE("delMenu", v1.DelMenu)
 	apiAdmin.PUT("editMenu", v1.EditMenu)
 	apiAdmin.GET("userTotal", v1.UserTotal)
+	roleRouterAPI(apiAdmin)
 	// apiAdmin.GET("/profile", auth.RequiresPermissions([]string{"profile:admin"}), api.GetUserProfile)
 
 }

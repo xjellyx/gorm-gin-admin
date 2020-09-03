@@ -8,10 +8,10 @@ import (
 
 type APIGroup struct {
 	Model
-	Path        string `json:"path" gorm:"type:varchar(100);comment:'api路径'"`
+	Path        string `json:"path" gorm:"type:varchar(100);uniqueIndex:idx_api_groups_path_method;comment:'api路径'"`
 	Description string `json:"description" gorm:"type:varchar(64);comment:'api中文描述'"`
 	ApiGroup    string `json:"apiGroup" gorm:"type:varchar(36);comment:'api组'"`
-	Method      string `json:"method" gorm:"type:varchar(10);unique_index:idx_api_groups_path_method;comment:'方法'"`
+	Method      string `json:"method" gorm:"type:varchar(10);uniqueIndex:idx_api_groups_path_method;comment:'方法'"`
 	// CreateUID   string `json:"create_uid" gorm:"type:varchar(36)"`
 }
 

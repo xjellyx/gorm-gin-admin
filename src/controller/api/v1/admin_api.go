@@ -2,7 +2,6 @@ package v1
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/olongfen/contrib/session"
 	"github.com/olongfen/gorm-gin-admin/src/models"
 	"github.com/olongfen/gorm-gin-admin/src/pkg/app"
 	"github.com/olongfen/gorm-gin-admin/src/pkg/codes"
@@ -58,17 +57,17 @@ func AddApiGroup(c *gin.Context) {
 		code = codes.CodeProcessingFailed
 		f    []*utils.FormAPIGroupAdd
 		ret  []*models.APIGroup
-		s *session.Session
+
 	)
 	defer func() {
 		if err != nil {
 			app.NewGinResponse(c).Fail(code, err.Error()).Response()
 		}
 	}()
-	if s, code, err = GetSessionAndBindingForm(&f, c); err != nil {
+	if _, code, err = GetSessionAndBindingForm(&f, c); err != nil {
 		return
 	}
-	if ret, err = service.AddAPIGroup(s.UID,f); err != nil {
+	if ret, err = service.AddAPIGroup(f); err != nil {
 
 		return
 	}
@@ -88,7 +87,6 @@ func AddApiGroup(c *gin.Context) {
 func RemoveApiGroup(c *gin.Context) {
 	var (
 		err  error
-		s *session.Session
 		code = codes.CodeProcessingFailed
 		id   string
 	)
@@ -104,10 +102,10 @@ func RemoveApiGroup(c *gin.Context) {
 		err = err_
 		return
 	}
-	if s,code,err = GetSession(c);err!=nil{
+	if _,code,err = GetSession(c);err!=nil{
 		return
 	}
-	if err = service.DelAPIGroup(s.UID,int64(_id)); err != nil {
+	if err = service.DelAPIGroup(int64(_id)); err != nil {
 		return
 	}
 	app.NewGinResponse(c).Success(nil).Response()
@@ -129,19 +127,17 @@ func EditApiGroup(c *gin.Context) {
 		err  error
 		code = codes.CodeProcessingFailed
 		ret  *models.APIGroup
-		s *session.Session
 	)
 	defer func() {
 		if err != nil {
 			app.NewGinResponse(c).Fail(code, err.Error()).Response()
 		}
 	}()
-	if s, code, err = GetSessionAndBindingForm(f, c); err != nil {
+	if _, code, err = GetSessionAndBindingForm(f, c); err != nil {
 		return
 	}
 
-	if ret, err = service.EditAPIGroup(s.UID,f); err != nil {
-
+	if ret, err = service.EditAPIGroup(f); err != nil {
 		return
 	}
 	app.NewGinResponse(c).Success(ret).Response()

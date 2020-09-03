@@ -118,7 +118,7 @@ func SessionCheck(s *session.Session) (err error) {
 //	if f.DeviceId != nil {
 //		s.ID = *f.DeviceId
 //	}
-//	s.UID = data.Uid
+//	s.UID = data.Role
 //	s.IP = f.IP
 //	n := time.Now()
 //	s.CreateTime = n.Unix()
@@ -127,17 +127,17 @@ func SessionCheck(s *session.Session) (err error) {
 //	if token, err = UserKey.SessionEncodeAuto(s); err != nil {
 //		return
 //	}
-//	if err = Database.Model(&UserDetail{}).Where("uid = ?", data.Uid).Update("status", UserStatusNormal).Error; err != nil {
+//	if err = Database.Model(&UserDetail{}).Where("uid = ?", data.Role).Update("status", UserStatusNormal).Error; err != nil {
 //		return
 //	}
 //
 //	var (
 //		dataOnline *UserOnline
 //	)
-//	if dataOnline, err = PubUserOnlineGet(data.Uid); err != nil {
+//	if dataOnline, err = PubUserOnlineGet(data.Role); err != nil {
 //		if err == gorm.ErrRecordNotFound {
 //			dataOnline = new(UserOnline)
-//			dataOnline.Uid = s.UID
+//			dataOnline.Role = s.UID
 //			if f.DeviceId != nil {
 //				dataOnline.Device = *f.DeviceId
 //			}
@@ -163,7 +163,7 @@ func SessionCheck(s *session.Session) (err error) {
 //		err = _err
 //		return
 //	} else {
-//		if err = red.Set("cache_token"+data.Uid, token, session.SessionExpMaxSecure).Err(); err != nil {
+//		if err = red.Set("cache_token"+data.Role, token, session.SessionExpMaxSecure).Err(); err != nil {
 //			return
 //		}
 //		red.Close()
@@ -190,8 +190,8 @@ func SessionCheck(s *session.Session) (err error) {
 //		token string
 //		s     = &session.Session{}
 //	)
-//	if len(f.Uid) > 0 {
-//		if data, err = PubUserGet(f.Uid); err != nil {
+//	if len(f.Role) > 0 {
+//		if data, err = PubUserGet(f.Role); err != nil {
 //			return
 //		}
 //	} else if len(f.Username) > 0 {
@@ -221,7 +221,7 @@ func SessionCheck(s *session.Session) (err error) {
 //
 //	s.Password = data.LoginPassword
 //	s.ID = f.Device
-//	s.UID = data.Uid
+//	s.UID = data.Role
 //	s.IP = f.Ip
 //	n := time.Now()
 //	s.CreateTime = n.Unix()
@@ -229,7 +229,7 @@ func SessionCheck(s *session.Session) (err error) {
 //	s.Level = session.SessionLevelSecure
 //
 //	//
-//	if data.Uid {
+//	if data.Role {
 //		if token, err = AdminKey.SessionEncodeAuto(s); err != nil {
 //			return
 //		}
@@ -239,7 +239,7 @@ func SessionCheck(s *session.Session) (err error) {
 //		}
 //	}
 //	if data.Status != UserStatusNormal && data.Status != UserStatusFreeze {
-//		if err = Database.Model(&UserDetail{}).Where("uid = ?", data.Uid).Update("status", UserStatusNormal).Error; err != nil {
+//		if err = Database.Model(&UserDetail{}).Where("uid = ?", data.Role).Update("status", UserStatusNormal).Error; err != nil {
 //			return
 //		}
 //	}
@@ -249,7 +249,7 @@ func SessionCheck(s *session.Session) (err error) {
 //		err = _err
 //		return
 //	} else {
-//		if err = red.Set("cache_token"+data.Uid, token, session.SessionExpMaxSecure).Err(); err != nil {
+//		if err = red.Set("cache_token"+data.Role, token, session.SessionExpMaxSecure).Err(); err != nil {
 //			return
 //		}
 //		red.Close()
@@ -263,9 +263,9 @@ func SessionCheck(s *session.Session) (err error) {
 //	dataOnline.LoginIp = f.Ip
 //	dataOnline.Device = f.Device
 //	dataOnline.LoginTime = time.Now()
-//	if err = Database.Model(&UserOnline{}).First(dataOnline, "uid = ?", data.Uid).Error; err != nil {
+//	if err = Database.Model(&UserOnline{}).First(dataOnline, "uid = ?", data.Role).Error; err != nil {
 //		if err == gorm.ErrRecordNotFound {
-//			dataOnline.Uid = data.Uid
+//			dataOnline.Role = data.Role
 //			if err = Database.Model(&UserOnline{}).Create(dataOnline).Error; err != nil {
 //				return
 //			}
@@ -279,7 +279,7 @@ func SessionCheck(s *session.Session) (err error) {
 //
 //	//
 //	ret = token
-//	uid = data.Uid
+//	uid = data.Role
 //	return
 //}
 //
@@ -301,7 +301,7 @@ func SessionCheck(s *session.Session) (err error) {
 //	if data, err = PubUserOnlineGet(uid); err != nil {
 //		return
 //	}
-//	if data, err = PubUserOnlineUpdate(data.Uid, &utils.FormUserOnline{
+//	if data, err = PubUserOnlineUpdate(data.Role, &utils.FormUserOnline{
 //		IsOnline:    &b,
 //		OfflineTime: time.Now().Unix(),
 //	}); err != nil {
@@ -312,7 +312,7 @@ func SessionCheck(s *session.Session) (err error) {
 //		err = _err
 //		return
 //	} else {
-//		if err = red.Del("cache_token" + data.Uid).Err(); err != nil {
+//		if err = red.Del("cache_token" + data.Role).Err(); err != nil {
 //			return
 //		}
 //		red.Close()
@@ -337,7 +337,7 @@ func SessionCheck(s *session.Session) (err error) {
 //	}
 //	defer rdb.Close()
 //	for _, v := range data {
-//		uidArr = append(uidArr, "cache_token"+v.Uid)
+//		uidArr = append(uidArr, "cache_token"+v.Role)
 //	}
 //	count, _ = rdb.Exists(uidArr...).Result()
 //

@@ -9,10 +9,10 @@ import (
 // UserCard
 type UserCard struct {
 	Model
-	Uid string `json:"uid" gorm:"type:varchar(36); unique_index"`
+	Uid string `json:"uid" gorm:"type:varchar(36); uniqueIndex"`
 	//
 	Name        string `json:"name" `
-	CardId      string `json:"cardId" gorm:"unique_index;type:varchar(18)" ` // 身份证号
+	CardId      string `json:"cardId" gorm:"uniqueIndex;type:varchar(18)" ` // 身份证号
 	IssueOrg    string `json:"issueOrg" `                                    // 身份证发证机关
 	Birthday    string `json:"birthday" gorm:"type:varchar(12)"`             // 出生日期
 	ValidPeriod string `json:"validPeriod"  gorm:"type:varchar(24)"`         // 有效时期

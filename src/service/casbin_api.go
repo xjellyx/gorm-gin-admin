@@ -11,20 +11,21 @@ import (
 func AddRuleAPI(uid string,f *utils.FormRoleAPIPerm) (ret []int64, err error) {
 	var (
 		e    *casbin.Enforcer
-		role = new(models.UserBase)
+		role = new(models.Role)
 		user = new(models.UserBase)
 	)
 
 	if e, err = casbin.NewEnforcer(setting.Setting.RBACModelDir, models.Adapter); err != nil {
 		return
 	}
-	if err = user.GetByUId(f.Uid); err != nil {
+	if err = user.GetByUId(uid); err != nil {
 		return
 	}
-	if err = role.GetByUId(uid); err != nil {
+
+	if err = role.GetByRole(f.Role); err != nil {
 		return
 	}
-	if user.Role >= role.Role {
+	if user.Role.Level <= role.Level {
 		err = utils.ErrActionNotAllow
 		return
 	}
@@ -33,7 +34,7 @@ func AddRuleAPI(uid string,f *utils.FormRoleAPIPerm) (ret []int64, err error) {
 		if err = dataGroup.Get(v); err != nil {
 			return
 		}
-		if _, err = e.AddPolicy(f.Uid, dataGroup.Path, dataGroup.Method); err != nil {
+		if _, err = e.AddPolicy(f.Role, dataGroup.Path, dataGroup.Method); err != nil {
 			ret = append(ret, v)
 			continue
 		}
@@ -43,24 +44,29 @@ func AddRuleAPI(uid string,f *utils.FormRoleAPIPerm) (ret []int64, err error) {
 	return
 }
 
+// AddRoleGroup
+func AddRoleGroup(uid string,f *utils.FormRoleAPIPerm)  {
+
+}
+
 // RemoveRuleAPI 删除
 func RemoveRuleAPI(uid string,f *utils.FormRoleAPIPerm) (ret []int64, err error) {
 	var (
 		e    *casbin.Enforcer
 		user = new(models.UserBase)
-		role =  new(models.UserBase)
+		role =  new(models.Role)
 	)
 
 	if e, err = casbin.NewEnforcer(setting.Setting.RBACModelDir, models.Adapter); err != nil {
 		return
 	}
-	if err = user.GetByUId(f.Uid); err != nil {
+	if err = user.GetByUId(uid); err != nil {
 		return
 	}
-	if err = role.GetByUId(uid); err != nil {
+	if err = role.GetByRole(f.Role); err != nil {
 		return
 	}
-	if user.Role >= role.Role {
+	if user.Role.Level <= role.Level {
 		err = utils.ErrActionNotAllow
 		return
 	}
@@ -69,7 +75,7 @@ func RemoveRuleAPI(uid string,f *utils.FormRoleAPIPerm) (ret []int64, err error)
 		if err = dataGroup.Get(v); err != nil {
 			return
 		}
-		if _, err = e.RemovePolicy(f.Uid, dataGroup.Path, dataGroup.Method); err != nil {
+		if _, err = e.RemovePolicy(f.Role, dataGroup.Path, dataGroup.Method); err != nil {
 			ret = append(ret, v)
 			continue
 		}

@@ -13,18 +13,13 @@ const (
 	UserStatusLock            // 3 封锁状态
 )
 
-const (
-	UserRoleNormal     = iota // 普通用户
-	UserRoleAdmin             // 普通管理员
-	UserRoleSuperAdmin        // 超级管理员
-)
 
 // UserBase 用户信息
 type UserBase struct {
 	Model
-	Uid      string `json:"uid" gorm:"type:varchar(36); unique_index"`
-	Username string `json:"username" gorm:"type:varchar(16); unique_index"`
-	Phone    string `json:"phone" gorm:"type:varchar(11); unique_index"`
+	Uid      string `json:"uid" gorm:"type:varchar(36); uniqueIndex"`
+	Username string `json:"username" gorm:"type:varchar(16); uniqueIndex"`
+	Phone    string `json:"phone" gorm:"type:varchar(11); uniqueIndex"`
 	LoginPwd string `json:"-" gorm:"type:varchar(128)"`
 	PayPwd   string `json:"-" gorm:"type:varchar(128)"`
 	Email    string `json:"email" gorm:"type:varchar(32)"`
@@ -33,7 +28,8 @@ type UserBase struct {
 	Sign     string `json:"sign" gorm:"type:varchar(256)"`
 	Status   int    `json:"status"`
 	//
-	Role int `json:"role"  gorm:"default:0; index"` // 0 普通用户，1 普通管理员， 2 超级管理员或者开发人员
+	Role Role `json:"role"  gorm:"foreignKey:RoleRefer"` // 默认普通用户
+	RoleRefer uint
 
 	// 外键
 	// UserCard UserCard `json:"userCard" gorm:"foreignkey:ID"`
