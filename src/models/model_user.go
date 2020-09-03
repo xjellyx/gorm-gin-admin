@@ -29,7 +29,7 @@ type UserBase struct {
 	Status   int    `json:"status"`
 	//
 	Role Role `json:"role"  gorm:"foreignKey:RoleRefer"` // 默认普通用户
-	RoleRefer uint
+	RoleRefer uint `json:"roleRefer"`
 
 	// 外键
 	// UserCard UserCard `json:"userCard" gorm:"foreignkey:ID"`
