@@ -16,6 +16,7 @@ type ProjectConfig struct {
 	RpcPort       string
 	Sync          bool   // true: 数据库同步
 	IsProduct     bool   //
+	Stdout bool
 	UserKeyDir    string // 私钥地址
 	UserPubDir    string // 公钥地址
 	AdminKeyDir   string // 私钥地址

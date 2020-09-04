@@ -7,8 +7,8 @@ import (
 
 type Role struct {
 	Model
-	Role     string `json:"role" gorm:"varchar(36);uniqueIndex"`
-	Level    int `json:"level" gorm:"default:0"`
+	Role     string `json:"role" gorm:"type:varchar(36);uniqueIndex"`
+	Level    int `json:"level" gorm:"type:varchar(1)"`
 }
 
 // Insert

@@ -46,8 +46,8 @@ func EditUserBySelf(uid string, form *utils.FormEditUser) (ret *models.UserBase,
 	if err = data.GetByUId(uid); err != nil {
 		return
 	}
-	if _,ok:=dataMap["role"];ok{
-		delete(dataMap,"role")
+	if _,ok:=dataMap["roleRefer"];ok{
+		delete(dataMap,"roleRefer")
 	}
 	if _,ok:=dataMap["status"];ok{
 		delete(dataMap,"status")

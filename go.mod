@@ -11,7 +11,7 @@ require (
 	github.com/go-redis/redis v6.15.9+incompatible
 	github.com/lib/pq v1.8.0
 	github.com/mitchellh/mapstructure v1.3.3
-	github.com/olongfen/contrib v0.0.0-20200824065706-eea94f8f700c
+	github.com/olongfen/contrib v0.0.0-20200904032819-23014dd60527
 	github.com/satori/go.uuid v1.2.0
 	github.com/sirupsen/logrus v1.6.0
 	github.com/swaggo/gin-swagger v1.2.0

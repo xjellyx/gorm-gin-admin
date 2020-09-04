@@ -34,7 +34,7 @@ func InitModel() {
 	var (
 		err error
 	)
-	logModel = log.NewLogFile(log.ParamLog{Path: setting.Setting.LogDir + "/" + "model", Stdout: setting.Setting.IsProduct, P: setting.Setting.LogPatent})
+	logModel = log.NewLogFile(log.ParamLog{Path: setting.Setting.LogDir + "/" + "model", Stdout: setting.Setting.Stdout, P: setting.Setting.LogPatent})
 	dataSourceName := fmt.Sprintf("%s://%s:%s@%s:%s/%s?sslmode=disable", setting.Setting.Db.Driver, setting.Setting.Db.Username,
 		setting.Setting.Db.Password, setting.Setting.Db.Host, setting.Setting.Db.Port, setting.Setting.Db.DatabaseName)
 	if DB, err = gorm.Open(postgres.Open(dataSourceName), nil); err != nil {

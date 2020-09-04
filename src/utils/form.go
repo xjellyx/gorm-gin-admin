@@ -51,12 +51,12 @@ type FormEditUser struct {
 	Uid      string  `json:"uid" form:"uid" binding:"required"`
 	Nickname *string `json:"nickname" form:"nickname"`
 	// Username *string `json:"username" form:"username"`
-	Password *string `json:"password" form:"password"`
-	Email    *string `json:"email" form:"email"`
-	Phone    *string `json:"phone" form:"phone"`
-	Sign     *string `json:"sign" form:"sign"`
-	Role     *int `json:"role" form:"role"`
-	Status   *string `json:"status" form:"status"`
+	Password  *string `json:"password" form:"password"`
+	Email     *string `json:"email" form:"email"`
+	Phone     *string `json:"phone" form:"phone"`
+	Sign      *string `json:"sign" form:"sign"`
+	RoleRefer *int    `json:"roleRefer" form:"roleRefer"`
+	Status    *string `json:"status" form:"status"`
 }
 
 func (f *FormEditUser) Valid() (ret map[string]interface{}, err error) {
@@ -107,8 +107,8 @@ func (f *FormEditUser) Valid() (ret map[string]interface{}, err error) {
 	} else if f.Nickname != nil {
 		ret["nickname"] = *f.Nickname
 	}
-	if f.Role != nil {
-		ret["role"] = *f.Role
+	if f.RoleRefer != nil {
+		ret["role_refer"] = *f.RoleRefer
 	}
 	if f.Status != nil {
 		ret["status"] = *f.Status

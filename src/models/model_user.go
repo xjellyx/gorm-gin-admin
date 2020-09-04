@@ -28,11 +28,15 @@ type UserBase struct {
 	Sign     string `json:"sign" gorm:"type:varchar(256)"`
 	Status   int    `json:"status"`
 	//
-	Role Role `json:"role"  gorm:"foreignKey:RoleRefer"` // 默认普通用户
+	Role Role `json:"role"  gorm:"foreignKey:RoleRefer;associationForeignKey:RoleRefer"` // 默认普通用户
 	RoleRefer uint `json:"roleRefer"`
 
 	// 外键
 	// UserCard UserCard `json:"userCard" gorm:"foreignkey:ID"`
+}
+
+func (*UserBase)TableName() string {
+	return  "user_bases"
 }
 
 func NewUserBase() *UserBase {
@@ -41,7 +45,7 @@ func NewUserBase() *UserBase {
 
 // Insert 插入一条数据
 func (u *UserBase) Insert(options ...*gorm.DB) (err error) {
-	if err = getDB(options...).Create(u).Error; err != nil {
+	if err = getDB(options...).Table(u.TableName()).Create(u).Error; err != nil {
 		logModel.Errorln(err)
 		err = utils.ErrInsertDataFailed
 		return
@@ -50,7 +54,7 @@ func (u *UserBase) Insert(options ...*gorm.DB) (err error) {
 }
 
 func (u *UserBase) Update(uid string, data interface{}, options ...*gorm.DB) (err error) {
-	if err = getDB(options...).Model(u).Where("uid = ?", uid).Updates(data).Error; err != nil {
+	if err = getDB(options...).Table(u.TableName()).Where("uid = ?", uid).Updates(data).Error; err != nil {
 		logModel.Errorln(err)
 		err = utils.ErrInsertDataFailed
 		return
@@ -60,7 +64,7 @@ func (u *UserBase) Update(uid string, data interface{}, options ...*gorm.DB) (er
 
 // UpdateUser 更新数据
 func (u *UserBase) UpdateUser(uid string, options ...*gorm.DB) (err error) {
-	if err = getDB(options...).Model(u).Where("uid = ?", uid).Updates(u).Error; err != nil {
+	if err = getDB(options...).Table(u.TableName()).Where("uid = ?", uid).Updates(u).Error; err != nil {
 		logModel.Errorln(err)
 		err = utils.ErrUpdateDataFailed
 		return
@@ -70,7 +74,7 @@ func (u *UserBase) UpdateUser(uid string, options ...*gorm.DB) (err error) {
 
 // UpdateOne 更新一个字段
 func (u *UserBase) UpdateOne(uid string, column string, val interface{}, options ...*gorm.DB) (err error) {
-	if err = getDB(options...).Model(u).Where("uid = ?", uid).Update(column, val).Error; err != nil {
+	if err = getDB(options...).Table(u.TableName()).Where("uid = ?", uid).Update(column, val).Error; err != nil {
 		logModel.Errorln(err)
 		err = utils.ErrUpdateDataFailed
 		return
@@ -80,7 +84,7 @@ func (u *UserBase) UpdateOne(uid string, column string, val interface{}, options
 
 // GetById 通过id获取数据
 func (u *UserBase) GetById(id int64) (err error) {
-	if err = DB.First(u, "id = ?", id).Error; err != nil {
+	if err = DB.Model(u).Preload("Role").Find(u, "id = ?", id).Error; err != nil {
 		logModel.Errorln(err)
 		err = utils.ErrGetDataFailed
 		return
@@ -90,7 +94,7 @@ func (u *UserBase) GetById(id int64) (err error) {
 
 // Delete 删除数据
 func (u *UserBase) Delete(uid string, options ...*gorm.DB) (err error) {
-	if err = getDB(options...).Model(u).Where("uid = ?", uid).Delete(u).Error; err != nil {
+	if err = getDB(options...).Table(u.TableName()).Where("uid = ?", uid).Delete(u).Error; err != nil {
 		logModel.Errorln(err)
 		err = utils.ErrDeleteDataFailed
 		return
@@ -100,7 +104,7 @@ func (u *UserBase) Delete(uid string, options ...*gorm.DB) (err error) {
 
 // GetByUId 通过id获取数据
 func (u *UserBase) GetByUId(uid string) (err error) {
-	if err = DB.First(u, "uid = ?", uid).Error; err != nil {
+	if err = DB.Model(u).Where("uid = ?", uid).Preload("Role").Find(u, ).Error; err != nil {
 		logModel.Errorln(err)
 		err = utils.ErrGetDataFailed
 		return
@@ -110,7 +114,7 @@ func (u *UserBase) GetByUId(uid string) (err error) {
 
 // GetByUsername 通过username获取用户信息
 func (u *UserBase) GetByUsername(username string) (err error) {
-	if err = DB.Find(u, "username = ?", username).Error; err != nil {
+	if err = DB.Model(u).Preload("Role").Find(u, "username = ?", username).Error; err != nil {
 		logModel.Errorln(err)
 		err = utils.ErrGetDataFailed
 		return
@@ -120,7 +124,7 @@ func (u *UserBase) GetByUsername(username string) (err error) {
 
 // GetByPhone 通过phone获取信息
 func (u *UserBase) GetByPhone(phone string) (err error) {
-	if err = DB.First(u, "phone = ?", phone).Error; err != nil {
+	if err = DB.Model(u).Preload("Role").Find(u, "phone = ?", phone).Error; err != nil {
 		logModel.Errorln(err)
 		err = utils.ErrGetDataFailed
 		return
@@ -130,7 +134,8 @@ func (u *UserBase) GetByPhone(phone string) (err error) {
 
 // GetUserList 获取用户列表
 func GetUserList(q *query.Query) (ret []*UserBase, err error) {
-	if err = DB.Model(&UserBase{}).Where(q.Cond, q.Values...).Offset(q.PageNum).Limit(q.PageSize).Order("id asc").Find(&ret).Error; err != nil {
+	if err = DB.Model(&UserBase{}).Where(q.Cond, q.Values...).Offset(q.PageNum).Limit(q.PageSize).Order("id asc").
+		Preload("Role").Find(&ret).Error; err != nil {
 		logModel.Errorln(err)
 		err = utils.ErrGetDataFailed
 		return

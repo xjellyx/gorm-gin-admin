@@ -174,7 +174,7 @@ func EditUser(c *gin.Context) {
 		return
 	}
 	if s.UID==form.Uid{
-		err = utils.ErrActionNotAllow
+		err = utils.ErrActionNotAllow.SetMeta("")
 		return
 	}
 	if _, err = service.EditUserByRole(s.UID, form); err != nil {
