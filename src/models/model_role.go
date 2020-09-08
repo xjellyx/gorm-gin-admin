@@ -3,12 +3,18 @@ package models
 import (
 	"github.com/olongfen/gorm-gin-admin/src/utils"
 	"gorm.io/gorm"
+	"strconv"
 )
 
 type Role struct {
 	Model
 	Role     string `json:"role" gorm:"type:varchar(36);uniqueIndex"`
-	Level    int `json:"level" gorm:"type:varchar(1)"`
+	Level    string `json:"level" gorm:"type:varchar(1)"`
+}
+
+func (r *Role)GetLevelMust() int {
+	level,_:=strconv.Atoi(r.Level)
+	return level
 }
 
 // Insert
@@ -53,7 +59,7 @@ func (r *Role)GetByRole(role string,dbs ...*gorm.DB)(err error)  {
 
 // Get
 func (r *Role)Update(data interface{},dbs ...*gorm.DB)(err error)  {
-	if err = getDB(dbs...).Model(r).Where("id = ?",r.ID).Updates(data).Error;err!=nil{
+	if err = getDB(dbs...).Model(r).Updates(data).Error;err!=nil{
 		logModel.Errorln(err)
 		err = utils.ErrUpdateDataFailed
 		return

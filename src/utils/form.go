@@ -264,14 +264,14 @@ type FormUserList struct {
 // FormRole add
 type FormRole struct {
 	Role string `json:"role" form:"role" binding:"required"`           // 角色名称
-	Level int `json:"level" form:"level" binding:"required"`
+	Level string `json:"level" form:"level" binding:"required"`
 }
 
 // FormUpdateRole 更新
 type FormUpdateRole struct {
 	Id  int `json:"id" form:"uid" binding:"required" `
 	Role string `json:"role" form:"role" binding:"required"`           // 角色名称
-	Level int `json:"level" form:"level" binding:"required"`
+	Level string `json:"level" form:"level" binding:"required"`
 }
 
 // FormRoleAPIPerm 添加角色api权限

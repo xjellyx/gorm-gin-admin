@@ -30,7 +30,7 @@ func AddRoleAPI(uid string,f *utils.FormRoleAPIPerm) (ret []struct{
 		return
 	}
 	// 不能修改等级比自己大的
-	if user.Role.Level <= role.Level && user.Role.Level<setting.Setting.MaxRoleLevel {
+	if user.Role.GetLevelMust() <= role.GetLevelMust() && user.Role.GetLevelMust()<setting.Setting.MaxRoleLevel {
 		err = utils.ErrActionNotAllow
 		return
 	}
@@ -76,7 +76,7 @@ func RemoveRoleAPI(uid string,f *utils.FormRoleAPIPerm) ( err error) {
 	if err = role.GetByRole(f.Role); err != nil {
 		return
 	}
-	if user.Role.Level <= role.Level && user.Role.Level<setting.Setting.MaxRoleLevel  {
+	if user.Role.GetLevelMust() <= role.GetLevelMust() && user.Role.GetLevelMust()<setting.Setting.MaxRoleLevel  {
 		err = utils.ErrActionNotAllow
 		return
 	}

@@ -80,7 +80,7 @@ func EditUserByRole(uid string, form *utils.FormEditUser) (ret *models.UserBase,
 		return
 	}
 	// 只能修改比自己权限底的角色
-	if data.Role.Level >= user.Role.Level && user.Role.Level<setting.Setting.MaxRoleLevel   {
+	if data.Role.GetLevelMust() >= user.Role.GetLevelMust() && user.Role.GetLevelMust()<setting.Setting.MaxRoleLevel   {
 		err = utils.ErrActionNotAllow
 		return
 	}
@@ -213,7 +213,7 @@ func DeleteUser(uid string, delUid string) (err error) {
 	if err = delRole.GetByUId(delUid); err != nil {
 		return
 	}
-	if role.Role.Level <= delRole.Role.Level && role.Role.Level<setting.Setting.MaxRoleLevel   {
+	if role.Role.GetLevelMust() <= delRole.Role.GetLevelMust() && role.Role.GetLevelMust()<setting.Setting.MaxRoleLevel   {
 		err = utils.ErrActionNotAllow
 		return
 	}

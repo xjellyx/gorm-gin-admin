@@ -31,7 +31,7 @@ func DelRole(uid string,id int)(err error)  {
 	if err = data.Get();err!=nil{
 		return
 	}
-	if data.Level>=user.Role.Level && user.Role.Level<setting.Setting.MaxRoleLevel  {
+	if data.GetLevelMust()>=user.Role.GetLevelMust() && user.Role.GetLevelMust()<setting.Setting.MaxRoleLevel  {
 		err = utils.ErrActionNotAllow
 		return
 	}
@@ -48,13 +48,13 @@ func UpdateRole(uid string,f *utils.FormUpdateRole)(err  error) {
 	if err =user.GetByUId(uid);err!=nil{
 		return
 	}
-	if data.Level>=user.Role.Level && user.Role.Level<setting.Setting.MaxRoleLevel  {
+	if data.GetLevelMust()>=user.Role.GetLevelMust() && user.Role.GetLevelMust()<setting.Setting.MaxRoleLevel  {
 		err = utils.ErrActionNotAllow
 		return
 	}
 
-	data.Level = f.Level
-	return data.Update(map[string]interface{}{"role":f.Role})
+	data.ID = uint(f.Id)
+	return data.Update(map[string]interface{}{"role":f.Role,"level":f.Level})
 }
 
 func GetRoleList()(ret []*models.Role,err error)  {

@@ -6,6 +6,7 @@ import (
 	"github.com/olongfen/gorm-gin-admin/src/models"
 	"github.com/olongfen/gorm-gin-admin/src/pkg/app"
 	"github.com/olongfen/gorm-gin-admin/src/pkg/codes"
+	"github.com/olongfen/gorm-gin-admin/src/pkg/setting"
 	"github.com/olongfen/gorm-gin-admin/src/service"
 	"github.com/olongfen/gorm-gin-admin/src/utils"
 	"strconv"
@@ -136,4 +137,37 @@ func GetRoleList(c *gin.Context)  {
 		return
 	}
 	app.NewGinResponse(c).Success(data).Response()
+}
+
+
+// @tags 管理员
+// @Title 获取角色等级列表
+// @Summary 获取角色等级列表
+// @Description 获取角色等级列表
+// @Accept json
+// @Produce json
+// @Success 200 {object} app.Response
+// @Failure 500 {object} app.Response
+// @Path /api/v1/admin/getRoleLevel [get]
+func GetRoleLevel(c *gin.Context) {
+	var (
+		err  error
+		code = codes.CodeProcessingFailed
+
+		data  []int
+	)
+	defer func() {
+		if err != nil {
+			app.NewGinResponse(c).Fail(code, err.Error()).Response()
+		}else {
+			app.NewGinResponse(c).Success(data).Response()
+		}
+	}()
+	if _, code, err = GetSession(c); err != nil {
+		return
+	}
+	for i:=1;i<=setting.Setting.MaxRoleLevel;i++{
+		data = append(data,i)
+	}
+
 }
