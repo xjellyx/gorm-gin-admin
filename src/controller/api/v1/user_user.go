@@ -273,7 +273,7 @@ func ModifyPayPwd(c *gin.Context) {
 // @Param headIcon body string true "头像"
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
-// @Path /api/v1/user/modifyHeadIcon [put]
+// @Router /api/v1/user/modifyHeadIcon [put]
 func ModifyHeadIcon(c *gin.Context) {
 
 	var (
@@ -340,7 +340,7 @@ func ModifyHeadIcon(c *gin.Context) {
 // @Accept json
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
-// @Path /api/v1/user/getHeadIcon [get]
+// @Router /api/v1/user/getHeadIcon [get]
 func GetHeadIcon(c *gin.Context) {
 	var (
 		err  error
@@ -372,7 +372,7 @@ func GetHeadIcon(c *gin.Context) {
 // @Param pwd body string true "密码"
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
-// @Path /api/v1/user/setPayPwd/ [post]
+// @Router /api/v1/user/setPayPwd/ [post]
 func SetPayPwd(c *gin.Context) {
 	var (
 		sess *session.Session

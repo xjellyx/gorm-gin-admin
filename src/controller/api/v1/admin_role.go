@@ -17,8 +17,8 @@ import (
 // @Accept json
 // @Produce json
 // @Param {} body utils.FormRole true "添加角色form"
-// @Success 200  {object}
-// @Failure 500  {object}
+// @Success 200  {object} app.Response
+// @Failure 500  {object} app.Response
 // @router /api/v1/admin/addRole [post]
 func AddRole(c *gin.Context)  {
 	var(
@@ -47,8 +47,8 @@ func AddRole(c *gin.Context)  {
 // @Accept json
 // @Produce json
 // @Param {} body utils.FormUpdateRole true "更新角色form"
-// @Success 200  {object}
-// @Failure 500  {object}
+// @Success 200  {object} app.Response
+// @Failure 500  {object} app.Response
 // @router /api/v1/admin/editRole [put]
 func EditRole(c *gin.Context)  {
 	var(
@@ -77,8 +77,8 @@ func EditRole(c *gin.Context)  {
 // @Accept json
 // @Produce json
 // @Param id query string true "角色id"
-// @Success 200  {object}
-// @Failure 500  {object}
+// @Success 200  {object} app.Response
+// @Failure 500  {object} app.Response
 // @router /api/v1/admin/removeRole [delete]
 func RemoveRole(c *gin.Context)  {
 	var(
@@ -112,13 +112,12 @@ func RemoveRole(c *gin.Context)  {
 }
 
 // @tags 管理员
-// @Summary 删除角色
-// @Description 删除角色
+// @Summary 获取角色列表
+// @Description 获取角色列表
 // @Accept json
 // @Produce json
-// @Param id query string true "角色id"
-// @Success 200  {object}
-// @Failure 500  {object}
+// @Success 200  {object} app.Response
+// @Failure 500  {object} app.Response
 // @router /api/v1/admin/getRoleList [get]
 func GetRoleList(c *gin.Context)  {
 	var(

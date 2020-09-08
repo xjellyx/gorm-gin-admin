@@ -19,7 +19,7 @@ import (
 // @Produce json
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
-// @Path  /api/v1/admin/getAllApiGroup [get]
+// @Router  /api/v1/admin/getAllApiGroup [get]
 func GetAPIGroupList(c *gin.Context) {
 	var (
 		err  error
@@ -50,7 +50,7 @@ func GetAPIGroupList(c *gin.Context) {
 // @Param {array} body utils.FormAPIGroupAdd true "api数组"
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
-// @Path /api/v1/admin/addApiGroup [post]
+// @Router /api/v1/admin/addApiGroup [post]
 func AddApiGroup(c *gin.Context) {
 	var (
 		err  error
@@ -83,7 +83,7 @@ func AddApiGroup(c *gin.Context) {
 // @Param id query int true "id"
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
-// @Path /api/v1/admin/removeApiGroup [delete]
+// @Router /api/v1/admin/removeApiGroup [delete]
 func RemoveApiGroup(c *gin.Context) {
 	var (
 		err  error
@@ -120,7 +120,7 @@ func RemoveApiGroup(c *gin.Context) {
 // @Param {} body utils.FormAPIGroupEdit true "表单"
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
-// @Path  /api/v1/admin/editApiGroup [put]
+// @Router  /api/v1/admin/editApiGroup [put]
 func EditApiGroup(c *gin.Context) {
 	var (
 		f    = &utils.FormAPIGroupEdit{}

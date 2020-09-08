@@ -32,10 +32,10 @@ func InitRouter() (ret *gin.Engine) {
 			"error": fmt.Sprintf("%v ", http.StatusNotFound) + http.StatusText(http.StatusNotFound),
 		})
 	})
-	engine.GET("swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	// TODO 路由
 	{
 		api := engine.Group("api/v1")
+		api.GET("swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 		api.Use(middleware.Common())
 
 		// 测试连接
@@ -57,15 +57,7 @@ func userRouterAPI(r *gin.RouterGroup) {
 	apiUser := r.Group("user")
 	apiUser.POST("login", v1.UserLogin)
 	apiUser.Use(middleware.CheckUserAuth(false))
-	apiUser.POST("logout", v1.UserLogout)
-	apiUser.POST("verified", v1.Verified)
-	apiUser.POST("setPayPwd", v1.SetPayPwd)
-	apiUser.PUT("modifyProfile", v1.ModifyProfile)
-	apiUser.PUT("modifyLoginPwd", v1.ModifyLoginPwd)
-	apiUser.PUT("modifyPayPwd", v1.ModifyPayPwd)
-	apiUser.PUT("modifyHeadIcon", v1.ModifyHeadIcon)
-	apiUser.GET("getHeadIcon", v1.GetHeadIcon)
-	apiUser.GET("profile", v1.GetUserProfile)
+	userBaseRouterAPI(apiUser)
 }
 
 func adminRouterAPI(r *gin.RouterGroup) {
@@ -74,24 +66,10 @@ func adminRouterAPI(r *gin.RouterGroup) {
 	apiAdmin.Use(middleware.CheckUserAuth(true))
 	apiAdmin.POST("logout", v1.AdminLogout)
 	apiAdmin.Use(middleware.CasbinHandler())
-	// apiAdmin.POST("/editUser", v1.EditUser)
-	apiAdmin.GET("listUser", v1.ListUser)
-	apiAdmin.PUT("editUser", v1.EditUser)
-	apiAdmin.DELETE("deleteUser", v1.DeleteUser)
-	apiAdmin.GET("getUserKV",v1.GetUserKV)
-	apiAdmin.POST("addRoleApiPerm", v1.AddRoleAPIPerm)
-	apiAdmin.DELETE("removeRoleApiPerm", v1.RemoveRolePermAPI)
-	apiAdmin.GET("getApiGroupList", v1.GetAPIGroupList)
-	apiAdmin.POST("addApiGroup", v1.AddApiGroup)
-	apiAdmin.DELETE("removeApiGroup", v1.RemoveApiGroup)
-	apiAdmin.PUT("editApiGroup", v1.EditApiGroup)
-	apiAdmin.GET("getRoleApiList", v1.GetRoleApiList)
-	apiAdmin.POST("addMenu", v1.AddMenu)
-	apiAdmin.GET("getMenu", v1.GetMenu)
-	apiAdmin.GET("getMenuList", v1.GetMenuList)
-	apiAdmin.DELETE("delMenu", v1.DelMenu)
-	apiAdmin.PUT("editMenu", v1.EditMenu)
-	apiAdmin.GET("userTotal", v1.UserTotal)
+	adminActionUserRouterAPI(apiAdmin)
+	apiRolePermRouterAPI(apiAdmin)
+	apiRouterAPI(apiAdmin)
+	menuRouterAPI(apiAdmin)
 	roleRouterAPI(apiAdmin)
 	// apiAdmin.GET("/profile", auth.RequiresPermissions([]string{"profile:admin"}), api.GetUserProfile)
 

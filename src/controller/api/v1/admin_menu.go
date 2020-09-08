@@ -11,7 +11,7 @@ import (
 "strconv"
 )
 
-// @tags 超级管理员
+// @tags 管理员
 // @Summary 添加菜单
 // @Produce json
 // @Param {} body utils.FormAddMenu true "菜单form"
@@ -111,7 +111,7 @@ func GetMenuList(c *gin.Context) {
 
 }
 
-// @tags 超级管理员
+// @tags 管理员
 // @Title 删除菜单
 // @Summary 删除菜单
 // @Description 删除菜单
@@ -120,7 +120,7 @@ func GetMenuList(c *gin.Context) {
 // @Param id query int true "id"
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
-// @Path /api/v1/admin/delMenu [delete]
+// @Router /api/v1/admin/delMenu [delete]
 func DelMenu(c *gin.Context) {
 	var (
 		_id  int
@@ -149,7 +149,7 @@ func DelMenu(c *gin.Context) {
 	}
 }
 
-// @tags 超级管理员
+// @tags 管理员
 // @Title 更新菜单
 // @Summary 更新菜单
 // @Description 更新菜单
@@ -158,7 +158,7 @@ func DelMenu(c *gin.Context) {
 // @Param {} body utils.FormUpdateMenu true "菜单form"
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
-// @Path  /api/v1/admin/editMenu [put]
+// @Router  /api/v1/admin/editMenu [put]
 func EditMenu(c *gin.Context) {
 	var (
 		err  error

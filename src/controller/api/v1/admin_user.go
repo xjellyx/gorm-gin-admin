@@ -84,7 +84,7 @@ func AdminLogout(c *gin.Context) {
 // @Param {} body utils.FormUserList true "查询数据"
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
-// @Path /api/v1/admin/listUser [get]
+// @Router /api/v1/admin/listUser [get]
 func ListUser(c *gin.Context) {
 	var (
 		err  error
@@ -120,7 +120,7 @@ func ListUser(c *gin.Context) {
 // @Produce json
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
-// @Path   /api/v1/admin/userTotal  []
+// @Router   /api/v1/admin/userTotal  [get]
 func UserTotal(c *gin.Context) {
 	var (
 		err  error
@@ -154,7 +154,7 @@ func UserTotal(c *gin.Context) {
 // @Param {} body utils.FormEditUser true "修改用户信息"
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
-// @Path /api/v1/admin/editUser [post]
+// @Router /api/v1/admin/editUser [post]
 func EditUser(c *gin.Context) {
 	var (
 		err  error

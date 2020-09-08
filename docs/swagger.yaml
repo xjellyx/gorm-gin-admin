@@ -112,7 +112,7 @@ definitions:
         type: string
       phone:
         type: string
-      role:
+      roleRefer:
         type: integer
       sign:
         type: string
@@ -150,6 +150,17 @@ definitions:
     - nation
     - validPeriod
     type: object
+  utils.FormRole:
+    properties:
+      level:
+        type: integer
+      role:
+        description: 角色名称
+        type: string
+    required:
+    - level
+    - role
+    type: object
   utils.FormRoleAPIPerm:
     properties:
       groupIds:
@@ -157,12 +168,12 @@ definitions:
         items:
           type: integer
         type: array
-      uid:
-        description: 角色uid
+      role:
+        description: 角色名称
         type: string
     required:
     - groupIds
-    - uid
+    - role
     type: object
   utils.FormUpdateMenu:
     properties:
@@ -183,6 +194,20 @@ definitions:
         type: integer
     required:
     - id
+    type: object
+  utils.FormUpdateRole:
+    properties:
+      id:
+        type: integer
+      level:
+        type: integer
+      role:
+        description: 角色名称
+        type: string
+    required:
+    - id
+    - level
+    - role
     type: object
   utils.FormUserList:
     properties:
@@ -223,6 +248,31 @@ info:
   contact: {}
   license: {}
 paths:
+  /api/v1/admin/addApiGroup:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: api数组
+        in: body
+        name: '{array}'
+        required: true
+        schema:
+          $ref: '#/definitions/utils.FormAPIGroupAdd'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 创建api
+      tags:
+      - 管理员
   /api/v1/admin/addMenu:
     post:
       parameters:
@@ -245,7 +295,109 @@ paths:
             $ref: '#/definitions/app.Response'
       summary: 添加菜单
       tags:
-      - 超级管理员
+      - 管理员
+  /api/v1/admin/addRole:
+    post:
+      consumes:
+      - application/json
+      description: 添加角色
+      parameters:
+      - description: 添加角色form
+        in: body
+        name: '{}'
+        required: true
+        schema:
+          $ref: '#/definitions/utils.FormRole'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 添加角色
+      tags:
+      - 管理员
+  /api/v1/admin/addRoleApiPerm:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 添加api权限表单
+        in: body
+        name: '{}'
+        required: true
+        schema:
+          $ref: '#/definitions/utils.FormRoleAPIPerm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 添加角色接口权限
+      tags:
+      - 管理员
+  /api/v1/admin/addRoleGroup:
+    post:
+      consumes:
+      - application/json
+      description: 添加角色组
+      parameters:
+      - description: 添加角色组
+        in: body
+        name: '{}'
+        required: true
+        schema:
+          $ref: '#/definitions/utils.FormRoleAPIPerm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 添加角色组
+      tags:
+      - 管理员
+  /api/v1/admin/delMenu:
+    delete:
+      consumes:
+      - application/json
+      description: 删除菜单
+      parameters:
+      - description: id
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 删除菜单
+      tags:
+      - 管理员
   /api/v1/admin/deleteUser:
     delete:
       consumes:
@@ -269,6 +421,139 @@ paths:
           schema:
             $ref: '#/definitions/app.Response'
       summary: 删除用户
+      tags:
+      - 管理员
+  /api/v1/admin/editApiGroup:
+    put:
+      consumes:
+      - application/json
+      description: 修改api
+      parameters:
+      - description: 表单
+        in: body
+        name: '{}'
+        required: true
+        schema:
+          $ref: '#/definitions/utils.FormAPIGroupEdit'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 修改api
+      tags:
+      - 管理员
+  /api/v1/admin/editMenu:
+    put:
+      consumes:
+      - application/json
+      description: 更新菜单
+      parameters:
+      - description: 菜单form
+        in: body
+        name: '{}'
+        required: true
+        schema:
+          $ref: '#/definitions/utils.FormUpdateMenu'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 更新菜单
+      tags:
+      - 管理员
+  /api/v1/admin/editRole:
+    put:
+      consumes:
+      - application/json
+      description: 更新角色
+      parameters:
+      - description: 更新角色form
+        in: body
+        name: '{}'
+        required: true
+        schema:
+          $ref: '#/definitions/utils.FormUpdateRole'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 更新角色
+      tags:
+      - 管理员
+  /api/v1/admin/editUser:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: 用户uid
+        in: path
+        name: uid
+        required: true
+        type: string
+      - description: 修改用户信息
+        in: body
+        name: '{}'
+        required: true
+        schema:
+          $ref: '#/definitions/utils.FormEditUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - 管理员
+  /api/v1/admin/getAllApiGroup:
+    get:
+      consumes:
+      - application/json
+      description: 获取全部api
+      parameters:
+      - description: 获取api列表
+        in: body
+        name: '{}'
+        required: true
+        schema:
+          $ref: '#/definitions/utils.ApiListForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 获取全部api
       tags:
       - 管理员
   /api/v1/admin/getMenu:
@@ -313,6 +598,51 @@ paths:
           schema:
             $ref: '#/definitions/app.Response'
       summary: 获取菜单
+      tags:
+      - 管理员
+  /api/v1/admin/getRoleList:
+    get:
+      consumes:
+      - application/json
+      description: 获取角色列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 获取角色列表
+      tags:
+      - 管理员
+  /api/v1/admin/listUser:
+    get:
+      consumes:
+      - application/json
+      description: 获取用户列表
+      parameters:
+      - description: 查询数据
+        in: body
+        name: '{}'
+        required: true
+        schema:
+          $ref: '#/definitions/utils.FormUserList'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 获取用户列表
       tags:
       - 管理员
   /api/v1/admin/login:
@@ -364,6 +694,101 @@ paths:
       summary: 管理员登出
       tags:
       - 管理员
+  /api/v1/admin/removeApiGroup:
+    delete:
+      consumes:
+      - application/json
+      description: 删除api
+      parameters:
+      - description: id
+        in: query
+        name: id
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 删除api
+      tags:
+      - 管理员
+  /api/v1/admin/removeRole:
+    delete:
+      consumes:
+      - application/json
+      description: 删除角色
+      parameters:
+      - description: 角色id
+        in: query
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 删除角色
+      tags:
+      - 管理员
+  /api/v1/admin/removeRoleAPIPerm:
+    delete:
+      consumes:
+      - application/json
+      description: 删除角色接口权限
+      parameters:
+      - description: 删除api权限表单
+        in: body
+        name: '{}'
+        required: true
+        schema:
+          $ref: '#/definitions/utils.FormRoleAPIPerm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 删除角色接口权限
+      tags:
+      - 管理员
+  /api/v1/admin/userTotal:
+    get:
+      consumes:
+      - application/json
+      description: 获取用户总数
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 获取用户总数
+      tags:
+      - 管理员
   /api/v1/captcha:
     get:
       consumes:
@@ -395,6 +820,30 @@ paths:
       summary: 获取验证码
       tags:
       - 验证码
+  /api/v1/getRoleApiList:
+    get:
+      consumes:
+      - application/json
+      description: 获取用户权限
+      parameters:
+      - description: 用户uid,不输入默认返回自己uid
+        in: query
+        name: uid
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 获取用户权限
+      tags:
+      - 管理员
   /api/v1/getUserKV:
     get:
       consumes:
@@ -448,6 +897,24 @@ paths:
       summary: 用户注册
       tags:
       - 用户
+  /api/v1/user/getHeadIcon:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 获取用户头像
+      tags:
+      - 用户
   /api/v1/user/login:
     post:
       parameters:
@@ -487,6 +954,31 @@ paths:
           schema:
             $ref: '#/definitions/app.Response'
       summary: 用户登出
+      tags:
+      - 用户
+  /api/v1/user/modifyHeadIcon:
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: 头像
+        in: body
+        name: headIcon
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 修改用户头像
       tags:
       - 用户
   /api/v1/user/modifyLoginPwd:
@@ -602,6 +1094,32 @@ paths:
           schema:
             $ref: '#/definitions/app.Response'
       summary: 获取个人信息
+      tags:
+      - 用户
+  /api/v1/user/setPayPwd/:
+    post:
+      consumes:
+      - application/json
+      description: 用户设置支付密码
+      parameters:
+      - description: 密码
+        in: body
+        name: pwd
+        required: true
+        schema:
+          type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 用户设置支付密码
       tags:
       - 用户
   /api/v1/user/verified:

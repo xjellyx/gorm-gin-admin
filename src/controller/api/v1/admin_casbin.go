@@ -10,15 +10,13 @@ import (
 )
 
 // @tags 管理员
-// @Title 添加角色接口权限
 // @Summary 添加角色接口权限
-// @Description 添加角色接口权限
 // @Accept json
 // @Produce json
 // @Param {} body utils.FormRoleAPIPerm true "添加api权限表单"
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
-// @Path /api/v1/admin/addRoleAPIPerm [post]
+// @Router /api/v1/admin/addRoleApiPerm [post]
 func AddRoleAPIPerm(c *gin.Context) {
 	var (
 		f    = &utils.FormRoleAPIPerm{}
@@ -51,7 +49,7 @@ func AddRoleAPIPerm(c *gin.Context) {
 // @Param {} body utils.FormRoleAPIPerm true "添加角色组"
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
-// @Path /api/v1/admin/addRoleGroup [post]
+// @Router /api/v1/admin/addRoleGroup [post]
 func AddRoleGroup(c *gin.Context)  {
 	
 }
@@ -65,7 +63,7 @@ func AddRoleGroup(c *gin.Context)  {
 // @Param {} body utils.FormRoleAPIPerm true "删除api权限表单"
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
-// @Path /api/v1/admin/removeRoleAPIPerm [delete]
+// @Router /api/v1/admin/removeRoleAPIPerm [delete]
 func RemoveRolePermAPI(c *gin.Context) {
 	var (
 		f    = &utils.FormRoleAPIPerm{}
@@ -97,7 +95,7 @@ func RemoveRolePermAPI(c *gin.Context) {
 // @Param uid query string false "用户uid,不输入默认返回自己uid"
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
-// @Path /api/v1/getRoleApiList [get]
+// @Router /api/v1/getRoleApiList [get]
 func GetRoleApiList(c *gin.Context) {
 	var (
 		err  error
