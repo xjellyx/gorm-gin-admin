@@ -7,11 +7,15 @@ import (
 	"github.com/olongfen/gorm-gin-admin/src/utils"
 )
 
-// AddRuleAPI 增加角色api权限
-func AddRuleAPI(uid string,f *utils.FormRoleAPIPerm) (ret []int64, err error) {
+// AddRoleAPI 增加角色api权限
+func AddRoleAPI(uid string,f *utils.FormRoleAPIPerm) (ret []struct{
+	Method string `json:"method"`
+	Path string `json:"path"`
+}, err error) {
 	var (
 		e    *casbin.Enforcer
 		role = new(models.Role)
+		dataCasbin = new(models.RoleAPI)
 		user = new(models.UserBase)
 	)
 
@@ -25,14 +29,20 @@ func AddRuleAPI(uid string,f *utils.FormRoleAPIPerm) (ret []int64, err error) {
 	if err = role.GetByRole(f.Role); err != nil {
 		return
 	}
-	if user.Role.Level <= role.Level {
+	// 不能修改等级比自己大的
+	if user.Role.Level <= role.Level && user.Role.Level<setting.Setting.MaxRoleLevel {
 		err = utils.ErrActionNotAllow
 		return
 	}
-	for _, v := range f.GroupID {
+	for _, v := range f.Groups {
 		dataGroup := new(models.APIGroup)
-		if err = dataGroup.Get(v); err != nil {
-			return
+		if err = dataGroup.GetBPathAndMethod(v.Path,v.Method); err != nil {
+			logServe.Infoln(err,"path: ",dataGroup.Path,"method:",dataGroup.Method)
+			continue
+		}
+		if err  = dataCasbin.GetByPathAndMethodAndRole(dataCasbin.Path,dataGroup.Method,role.Role);err==nil{
+			logServe.Infoln( utils.ErrRoleAPIExist,"path: ",dataGroup.Path,"method:",dataGroup.Method)
+			continue
 		}
 		if _, err = e.AddPolicy(f.Role, dataGroup.Path, dataGroup.Method); err != nil {
 			ret = append(ret, v)
@@ -49,8 +59,8 @@ func AddRoleGroup(uid string,f *utils.FormRoleAPIPerm)  {
 
 }
 
-// RemoveRuleAPI 删除
-func RemoveRuleAPI(uid string,f *utils.FormRoleAPIPerm) (ret []int64, err error) {
+// RemoveRoleAPI 删除
+func RemoveRoleAPI(uid string,f *utils.FormRoleAPIPerm) ( err error) {
 	var (
 		e    *casbin.Enforcer
 		user = new(models.UserBase)
@@ -66,17 +76,16 @@ func RemoveRuleAPI(uid string,f *utils.FormRoleAPIPerm) (ret []int64, err error)
 	if err = role.GetByRole(f.Role); err != nil {
 		return
 	}
-	if user.Role.Level <= role.Level {
+	if user.Role.Level <= role.Level && user.Role.Level<setting.Setting.MaxRoleLevel  {
 		err = utils.ErrActionNotAllow
 		return
 	}
-	for _, v := range f.GroupID {
+	for _, v := range f.Groups {
 		dataGroup := new(models.APIGroup)
-		if err = dataGroup.Get(v); err != nil {
-			return
+		if err = dataGroup.GetBPathAndMethod(v.Path,v.Method); err != nil {
+			continue
 		}
 		if _, err = e.RemovePolicy(f.Role, dataGroup.Path, dataGroup.Method); err != nil {
-			ret = append(ret, v)
 			continue
 		}
 
@@ -84,20 +93,19 @@ func RemoveRuleAPI(uid string,f *utils.FormRoleAPIPerm) (ret []int64, err error)
 	return
 }
 
-// GetRuleApiList
-func GetRuleApiList(uid string) (ret []struct {
-	Path   string
-	Method string
-}, err error) {
-	var d []*models.RuleAPI
-	if d, err = models.GetRuleAPIListByUID(uid); err != nil {
+type RoleApiResp struct {
+	Path   string `json:"path"`
+	Method string `json:"method"`
+}
+
+// GetRoleApiList
+func GetRoleApiList(role string) (ret []RoleApiResp, err error) {
+	var d []*models.RoleAPI
+	if d, err = models.GetRoleAPIListByRole(role); err != nil {
 		return nil, err
 	}
 	for _, v := range d {
-		ret = append(ret, struct {
-			Path   string
-			Method string
-		}{Path: v.Path, Method: v.Method})
+		ret = append(ret, RoleApiResp{Path: v.Path, Method: v.Method})
 	}
 	return
 }

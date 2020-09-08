@@ -116,7 +116,7 @@ func SessionCheck(s *session.Session) (err error) {
 //
 //	s.Password = data.LoginPassword
 //	if f.DeviceId != nil {
-//		s.ID = *f.DeviceId
+//		s.Value = *f.DeviceId
 //	}
 //	s.UID = data.RoleRefer
 //	s.IP = f.IP
@@ -220,7 +220,7 @@ func SessionCheck(s *session.Session) (err error) {
 //	}
 //
 //	s.Password = data.LoginPassword
-//	s.ID = f.Device
+//	s.Value = f.Device
 //	s.UID = data.RoleRefer
 //	s.IP = f.Ip
 //	n := time.Now()

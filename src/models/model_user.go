@@ -32,7 +32,7 @@ type UserBase struct {
 	RoleRefer uint `json:"roleRefer"`
 
 	// 外键
-	// UserCard UserCard `json:"userCard" gorm:"foreignkey:ID"`
+	// UserCard UserCard `json:"userCard" gorm:"foreignkey:Value"`
 }
 
 func (*UserBase)TableName() string {

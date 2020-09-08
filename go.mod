@@ -9,6 +9,7 @@ require (
 	github.com/dchest/captcha v0.0.0-20170622155422-6a29415a8364
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-redis/redis v6.15.9+incompatible
+	github.com/jianfengye/collection v0.0.0-20200827021300-290144bad0d5 // indirect
 	github.com/lib/pq v1.8.0
 	github.com/mitchellh/mapstructure v1.3.3
 	github.com/olongfen/contrib v0.0.0-20200904032819-23014dd60527

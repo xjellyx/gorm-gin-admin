@@ -5,7 +5,7 @@ import (
 	"gorm.io/gorm"
 )
 
-type RuleAPI struct {
+type RoleAPI struct {
 	ID     uint   `json:"id" gorm:"column:id"`
 	PType  string `json:"pType" gorm:"column:p_type"`
 	Role   string `json:"role" gorm:"column:v0"`
@@ -17,7 +17,7 @@ func RuleAPITableName() string {
 	return "casbin_rule"
 }
 
-func (c *RuleAPI) Insert(options ...*gorm.DB) (err error) {
+func (c *RoleAPI) Insert(options ...*gorm.DB) (err error) {
 	if err = getDB(options...).Table(RuleAPITableName()).Create(c).Error; err != nil {
 		logModel.Errorln(err)
 		err = utils.ErrGetDataFailed
@@ -26,7 +26,7 @@ func (c *RuleAPI) Insert(options ...*gorm.DB) (err error) {
 	return
 }
 
-func (c *RuleAPI) Update(path string, method string, m map[string]interface{}, options ...*gorm.DB) (err error) {
+func (c *RoleAPI) Update(path string, method string, m map[string]interface{}, options ...*gorm.DB) (err error) {
 	if err = getDB(options...).Table(RuleAPITableName()).Updates(m).Where("v1 = ? and v2 = ?", path, method).Error; err != nil {
 		logModel.Errorln(err)
 		err = utils.ErrUpdateDataFailed
@@ -35,7 +35,7 @@ func (c *RuleAPI) Update(path string, method string, m map[string]interface{}, o
 	return
 }
 
-func (c *RuleAPI) Delete(id int64, options ...*gorm.DB) (err error) {
+func (c *RoleAPI) Delete(id int64, options ...*gorm.DB) (err error) {
 	if err = getDB(options...).Table(RuleAPITableName()).Delete(c, "id = ?", id).Error; err != nil {
 		logModel.Errorln(err)
 		err = utils.ErrDeleteDataFailed
@@ -44,8 +44,8 @@ func (c *RuleAPI) Delete(id int64, options ...*gorm.DB) (err error) {
 	return
 }
 
-func GetRuleAPIListByUID(uid string) (ret []*RuleAPI, err error) {
-	if err = DB.Table(RuleAPITableName()).Where("uid = ?", uid).Find(&ret).Order("id asc").Error; err != nil {
+func GetRoleAPIListByRole(role string) (ret []*RoleAPI, err error) {
+	if err = DB.Table(RuleAPITableName()).Where("v0 = ?", role).Find(&ret).Order("id asc").Error; err != nil {
 		logModel.Errorln(err)
 		err = utils.ErrGetDataFailed
 		return nil, err
@@ -54,8 +54,18 @@ func GetRuleAPIListByUID(uid string) (ret []*RuleAPI, err error) {
 }
 
 //
-func (c *RuleAPI) DeleteByPathAndMethod(path string, method string, options ...*gorm.DB) (err error) {
+func (c *RoleAPI) DeleteByPathAndMethod(path string, method string, options ...*gorm.DB) (err error) {
 	if err = getDB(options...).Table(RuleAPITableName()).Delete(c, "v1 = ? and v2 = ?", path, method).Error; err != nil {
+		logModel.Errorln(err)
+		err = utils.ErrDeleteDataFailed
+		return err
+	}
+	return
+}
+
+
+func (c *RoleAPI) GetByPathAndMethodAndRole(path string, method string, role string,options ...*gorm.DB) (err error) {
+	if err = getDB(options...).Table(RuleAPITableName()).First(c, "v0 = ? and v1 = ? and v2 = ?", role,path, method).Error; err != nil {
 		logModel.Errorln(err)
 		err = utils.ErrDeleteDataFailed
 		return err

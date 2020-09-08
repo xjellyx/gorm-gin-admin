@@ -47,7 +47,7 @@ func Captcha(ctx *gin.Context) {
 	ctx.Header("Cache-Control", "no-cache, no-store, must-revalidate")
 	ctx.Header("Pragma", "no-cache")
 	ctx.Header("Expires", strconv.Itoa(int(captcha.Expiration/time.Second))+"s")
-	ctx.Header("Captcha-ID", id)
+	ctx.Header("Captcha-Value", id)
 	var content bytes.Buffer
 	switch d.Ext {
 	case "png":

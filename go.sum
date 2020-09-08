@@ -285,6 +285,8 @@ github.com/jcmturner/gokrb5/v8 v8.2.0 h1:lzPl/30ZLkTveYsYZPKMcgXc8MbnE6RsTd4F9Kg
 github.com/jcmturner/gokrb5/v8 v8.2.0/go.mod h1:T1hnNppQsBtxW0tCHMHTkAt8n/sABdzZgZdoFrZaZNM=
 github.com/jcmturner/rpc/v2 v2.0.2 h1:gMB4IwRXYsWw4Bc6o/az2HJgFUA1ffSh90i26ZJ6Xl0=
 github.com/jcmturner/rpc/v2 v2.0.2/go.mod h1:VUJYCIDm3PVOEHw8sgt091/20OJjskO/YJki3ELg/Hc=
+github.com/jianfengye/collection v0.0.0-20200827021300-290144bad0d5 h1:OphGh6PrvQdbsUxKuBlhBB+F5TCX5LdzPXpnW3DIGH4=
+github.com/jianfengye/collection v0.0.0-20200827021300-290144bad0d5/go.mod h1:5YQ2J86Ftx8KaszFIL6ICVtIhsrHvrk5Cf7++Mm6QFw=
 github.com/jinzhu/gorm v0.0.0-20180213101209-6e1387b44c64 h1:8I4kQ5M5OjZKNsgRUs20soTdIoo1GbiGApV31kJ9e6Y=
 github.com/jinzhu/gorm v0.0.0-20180213101209-6e1387b44c64/go.mod h1:Vla75njaFJ8clLU1W44h34PjIkijhjHIYnZxMqCdxqo=
 github.com/jinzhu/inflection v0.0.0-20170102125226-1c35d901db3d/go.mod h1:h+uFLlag+Qp1Va5pdKtLDYj+kHp5pxUVkryuEj+Srlc=

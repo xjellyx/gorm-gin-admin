@@ -24,7 +24,10 @@ func AddRoleAPIPerm(c *gin.Context) {
 		f    = &utils.FormRoleAPIPerm{}
 		err  error
 		code = codes.CodeProcessingFailed
-		ret  []int64
+		ret  []struct{
+			Method string `json:"method"`
+			Path string `json:"path"`
+		}
 		s    *session.Session
 	)
 	defer func() {
@@ -36,7 +39,7 @@ func AddRoleAPIPerm(c *gin.Context) {
 		return
 	}
 
-	if ret, err = service.AddRuleAPI(s.UID,f); err != nil {
+	if ret, err = service.AddRoleAPI(s.UID,f); err != nil {
 		return
 	}
 	app.NewGinResponse(c).Success(ret).Response()
@@ -71,7 +74,7 @@ func RemoveRolePermAPI(c *gin.Context) {
 		f    = &utils.FormRoleAPIPerm{}
 		err  error
 		code = codes.CodeProcessingFailed
-		ret  []int64
+
 		s    *session.Session
 	)
 	defer func() {
@@ -82,10 +85,10 @@ func RemoveRolePermAPI(c *gin.Context) {
 	if s, code, err = GetSessionAndBindingForm(f, c); err != nil {
 		return
 	}
-	if ret, err = service.RemoveRuleAPI(s.UID,f); err != nil {
+	if  err = service.RemoveRoleAPI(s.UID,f); err != nil {
 		return
 	}
-	app.NewGinResponse(c).Success(ret).Response()
+	app.NewGinResponse(c).Success(nil).Response()
 }
 
 // @tags 管理员
@@ -94,37 +97,35 @@ func RemoveRolePermAPI(c *gin.Context) {
 // @Description 获取用户权限
 // @Accept json
 // @Produce json
-// @Param uid query string false "用户uid,不输入默认返回自己uid"
+// @Param role query string true "角色名称"
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
-// @Path /api/v1/getRoleApiList [get]
+// @Path /api/v1/admin/getRoleApiList [get]
 func GetRoleApiList(c *gin.Context) {
 	var (
 		err  error
 		code = codes.CodeProcessingFailed
-		s    *session.Session
-		uid  string
-		data []struct {
-			Path   string
-			Method string
-		}
+		role string
+		data  []service.RoleApiResp
 	)
 	defer func() {
 		if err != nil {
 			app.NewGinResponse(c).Fail(code, err.Error()).Response()
+		}else {
+			app.NewGinResponse(c).Success(data).Response()
 		}
 	}()
-	if s, code, err = GetSession(c); err != nil {
+	if _, code, err = GetSession(c); err != nil {
 		return
 	}
-	uid = c.Query("uid")
-	if len(uid) == 0 {
-		uid = s.UID
-	}
-	if data, err = service.GetRuleApiList(uid); err != nil {
+	role = c.Query("role")
+	if len(role) == 0 {
 		return
 	}
-	app.NewGinResponse(c).Success(data).Response()
+	if data, err = service.GetRoleApiList(role); err != nil {
+		return
+	}
+
 
 }
 
