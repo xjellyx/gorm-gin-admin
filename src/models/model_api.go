@@ -63,6 +63,15 @@ func (a *APIGroup) Get(id int64) (err error) {
 	return
 }
 
+func (a *APIGroup) GetBPathAndMethod(path,method string) (err error) {
+	if err = DB.First(a, "path = ? and method= ?", path,method).Error; err != nil {
+		logModel.Errorln(err)
+		err = utils.ErrGetDataFailed
+		return
+	}
+	return
+}
+
 // GetAPIGroupList 获取api列表
 func GetAPIGroupList(q *query.Query) (ret []*APIGroup, err error) {
 	if q!=nil{

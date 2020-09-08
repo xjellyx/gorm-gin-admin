@@ -253,7 +253,7 @@ type AddUserForm struct {
 
 // FormUserList
 type FormUserList struct {
-	ID          string `json:"id" form:"id"`                    // ID
+	ID          string `json:"id" form:"id"`                    // Value
 	Username    string `json:"username" form:"username" `       // 用户名
 	CreatedTime string `json:"createdTime" form:"createdTime" ` // 创建时间
 	Status      string `json:"status" form:"status"`            // 状态
@@ -264,18 +264,21 @@ type FormUserList struct {
 // FormRole add
 type FormRole struct {
 	Role string `json:"role" form:"role" binding:"required"`           // 角色名称
-	Level int `json:"level" form:"level" binding:"required"`
+	Level string `json:"level" form:"level" binding:"required"`
 }
 
 // FormUpdateRole 更新
 type FormUpdateRole struct {
 	Id  int `json:"id" form:"uid" binding:"required" `
 	Role string `json:"role" form:"role" binding:"required"`           // 角色名称
-	Level int `json:"level" form:"level" binding:"required"`
+	Level string `json:"level" form:"level" binding:"required"`
 }
 
 // FormRoleAPIPerm 添加角色api权限
 type FormRoleAPIPerm struct {
-	Role    string  `json:"role" form:"role" binding:"required"`           // 角色名称
-	GroupID []int64 `json:"groupIds" form:"groupIds" binding:"required"` // api id
+	Role   string  `json:"role" form:"role" binding:"required"`           // 角色名称
+	Groups []struct{
+		Method string `json:"method"`
+		Path string `json:"path"`
+	} `json:"groups" form:"groups" binding:"required"` // api id
 }

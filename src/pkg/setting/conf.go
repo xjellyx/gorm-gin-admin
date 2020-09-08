@@ -30,6 +30,7 @@ type ProjectConfig struct {
 	LogPatent     string
 	HeadIconDir   string
 	RBACModelDir  string
+	MaxRoleLevel int
 	// RABCPolicyDir string
 }
 
@@ -92,6 +93,7 @@ var (
 		HeadIconDir:  "./public/static/",
 		RBACModelDir: "./conf/model_casbin.conf",
 		LogPatent:    "_%Y-%m-%d.log",
+		MaxRoleLevel: 9,
 		// RABCPolicyDir: "./conf/policy_api.csv",
 	}
 )

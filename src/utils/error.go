@@ -49,4 +49,5 @@ var (
 	ErrIDCardInvalid       = contrib.NewError(22, "id card number invalid", prefix)
 	ErrCaptchaVerifyFail   = contrib.NewError(23, "captcha verify failed ", prefix)
 	ErrParamInvalid        = contrib.NewError(24, "param invalid", prefix)
+	ErrRoleAPIExist = contrib.NewError(25,"role api dose exist",prefix)
 )

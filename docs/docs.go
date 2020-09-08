@@ -905,43 +905,6 @@ var doc = `{
                 }
             }
         },
-        "/api/v1/getRoleApiList": {
-            "get": {
-                "description": "获取用户权限",
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "管理员"
-                ],
-                "summary": "获取用户权限",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "用户uid,不输入默认返回自己uid",
-                        "name": "uid",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
-                    },
-                    "500": {
-                        "description": "Internal Server Error",
-                        "schema": {
-                            "$ref": "#/definitions/app.Response"
-                        }
-                    }
-                }
-            }
-        },
         "/api/v1/getUserKV": {
             "get": {
                 "description": "获取用户表状态信息",
@@ -1633,7 +1596,7 @@ var doc = `{
             ],
             "properties": {
                 "level": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "role": {
                     "description": "角色名称",
@@ -1644,15 +1607,22 @@ var doc = `{
         "utils.FormRoleAPIPerm": {
             "type": "object",
             "required": [
-                "groupIds",
                 "role"
             ],
             "properties": {
-                "groupIds": {
+                "groups": {
                     "description": "api id",
                     "type": "array",
                     "items": {
-                        "type": "integer"
+                        "type": "object",
+                        "properties": {
+                            "method": {
+                                "type": "string"
+                            },
+                            "path": {
+                                "type": "string"
+                            }
+                        }
                     }
                 },
                 "role": {
@@ -1703,7 +1673,7 @@ var doc = `{
                     "type": "integer"
                 },
                 "level": {
-                    "type": "integer"
+                    "type": "string"
                 },
                 "role": {
                     "description": "角色名称",
@@ -1719,7 +1689,7 @@ var doc = `{
                     "type": "string"
                 },
                 "id": {
-                    "description": "ID",
+                    "description": "Value",
                     "type": "string"
                 },
                 "pageNum": {

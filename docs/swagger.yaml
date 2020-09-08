@@ -153,7 +153,7 @@ definitions:
   utils.FormRole:
     properties:
       level:
-        type: integer
+        type: string
       role:
         description: 角色名称
         type: string
@@ -163,16 +163,20 @@ definitions:
     type: object
   utils.FormRoleAPIPerm:
     properties:
-      groupIds:
+      groups:
         description: api id
         items:
-          type: integer
+          properties:
+            method:
+              type: string
+            path:
+              type: string
+          type: object
         type: array
       role:
         description: 角色名称
         type: string
     required:
-    - groupIds
     - role
     type: object
   utils.FormUpdateMenu:
@@ -200,7 +204,7 @@ definitions:
       id:
         type: integer
       level:
-        type: integer
+        type: string
       role:
         description: 角色名称
         type: string
@@ -215,7 +219,7 @@ definitions:
         description: 创建时间
         type: string
       id:
-        description: ID
+        description: Value
         type: string
       pageNum:
         type: integer
@@ -820,30 +824,6 @@ paths:
       summary: 获取验证码
       tags:
       - 验证码
-  /api/v1/getRoleApiList:
-    get:
-      consumes:
-      - application/json
-      description: 获取用户权限
-      parameters:
-      - description: 用户uid,不输入默认返回自己uid
-        in: query
-        name: uid
-        type: string
-      produces:
-      - application/json
-      responses:
-        "200":
-          description: OK
-          schema:
-            $ref: '#/definitions/app.Response'
-        "500":
-          description: Internal Server Error
-          schema:
-            $ref: '#/definitions/app.Response'
-      summary: 获取用户权限
-      tags:
-      - 管理员
   /api/v1/getUserKV:
     get:
       consumes:

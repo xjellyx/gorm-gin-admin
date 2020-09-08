@@ -11,7 +11,7 @@ func Serve(w http.ResponseWriter, r *http.Request, id, ext, lang string, downloa
 	w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate")
 	w.Header().Set("Pragma", "no-cache")
 	w.Header().Set("Expires", "0")
-	w.Header().Set("Captcha-ID", id)
+	w.Header().Set("Captcha-Value", id)
 	var content bytes.Buffer
 	switch ext {
 	case "png":

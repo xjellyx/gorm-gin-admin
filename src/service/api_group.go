@@ -33,7 +33,7 @@ func AddAPIGroup(f []*utils.FormAPIGroupAdd) (ret []*models.APIGroup, err error)
 func EditAPIGroup(f *utils.FormAPIGroupEdit) (ret *models.APIGroup, err error) {
 	var (
 		data       = new(models.APIGroup)
-		dataCasbin = new(models.RuleAPI)
+		dataCasbin = new(models.RoleAPI)
 		m          = map[string]interface{}{}
 	)
 	if err = data.Get(f.Id); err != nil {
@@ -72,7 +72,7 @@ func EditAPIGroup(f *utils.FormAPIGroupEdit) (ret *models.APIGroup, err error) {
 func DelAPIGroup(id int64) (err error) {
 	var (
 		data       = new(models.APIGroup)
-		dataCasbin = new(models.RuleAPI)
+		dataCasbin = new(models.RoleAPI)
 	)
 	if err = data.Get(id); err != nil {
 		return
