@@ -1,12 +1,10 @@
 package main
 
 import (
-	"github.com/olongfen/contrib/log"
 	"github.com/olongfen/gorm-gin-admin/src/models"
 	"github.com/olongfen/gorm-gin-admin/src/pkg/gredis"
 	"github.com/olongfen/gorm-gin-admin/src/pkg/setting"
 	"github.com/olongfen/gorm-gin-admin/src/router"
-	"github.com/olongfen/gorm-gin-admin/src/service"
 )
 
 
@@ -22,8 +20,4 @@ func init() {
 }
 
 func main() {
-	data,_:=service.GetAPIGroupListTree(0)
-	for _,v:=range data{
-		log.Warnln(v)
-	}
 }

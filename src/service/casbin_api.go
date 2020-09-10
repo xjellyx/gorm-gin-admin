@@ -40,7 +40,7 @@ func AddRoleAPI(uid string,f *utils.FormRoleAPIPerm) (ret []struct{
 			logServe.Infoln(err,"path: ",dataGroup.Path,"method:",dataGroup.Method)
 			continue
 		}
-		if err  = dataCasbin.GetByPathAndMethodAndRole(dataCasbin.Path,dataGroup.Method,role.Role);err==nil{
+		if err  = dataCasbin.GetByPathAndMethodAndRole(dataGroup.Path,dataGroup.Method,role.Role);err==nil{
 			logServe.Infoln( utils.ErrRoleAPIExist,"path: ",dataGroup.Path,"method:",dataGroup.Method)
 			continue
 		}
