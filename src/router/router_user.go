@@ -24,4 +24,5 @@ func adminActionUserRouterAPI(apiAdmin *gin.RouterGroup)  {
 	apiAdmin.DELETE("deleteUser", v1.DeleteUser)
 	apiAdmin.GET("getUserKV",v1.GetUserKV)
 	apiAdmin.GET("userTotal", v1.UserTotal)
+	apiAdmin.POST("addUser",v1.AddUser)
 }

@@ -7,6 +7,11 @@ import (
 	"time"
 )
 
+type GlobalConfig struct {
+	config.Config `yaml:"-"`
+	Env     string   // product: 生成环境 dev：开发环境 test： 测试环境
+}
+
 // ProjectConfig
 type ProjectConfig struct {
 	config.Config `yaml:"-"`
@@ -61,6 +66,9 @@ type Database struct {
 }
 
 var (
+	Global = &GlobalConfig{
+		Env: "dev",
+	}
 	Setting = &ProjectConfig{
 		ServerAddr: utils.PubGetEnvString("SERVER_ADDR", "127.0.0.1"),
 		ServerPort: utils.PubGetEnvString("SERVER_PORT", "8050"),
@@ -102,8 +110,29 @@ var (
 func InitConfig() {
 	var (
 		err error
+		projectPath = ""
+		prod bool
 	)
-	if err = config.LoadConfigAndSave("./conf/project.config.yaml", Setting, Setting, time.Second*10); err != nil {
+	if err = config.LoadConfigAndSave("./conf/global.config.yaml", Global, Global, -1); err != nil {
+		logrus.Fatal(err)
+	}
+	if err = Global.Save(nil); err != nil {
+		logrus.Fatal(err)
+	}
+	switch Global.Env {
+	case "dev":
+		projectPath="./conf/project.config-dev.yaml"
+	case "product":
+		projectPath="./conf/project.config-prod.yaml"
+		prod =true
+	case "test":
+		projectPath="./conf/project.config-test.yaml"
+	default:
+		logrus.Fatal("env: ",Global.Env, "not support")
+		return
+
+	}
+	if err = config.LoadConfigAndSave(projectPath, Setting, Setting, time.Second*10); err != nil {
 		logrus.Fatal(err)
 	}
 	if Setting.IsTLS {
@@ -112,6 +141,7 @@ func InitConfig() {
 			Key:  "./conf/serve.key",
 		}
 	}
+	Setting.IsProduct = prod
 	if err = Setting.Save(nil); err != nil {
 		logrus.Fatal(err)
 	}

@@ -9,8 +9,12 @@ import (
 type ActionRecord struct {
 	Model
 	Uid    string `json:"uid" gorm:"type:varchar(36); index"`
+	Username string `json:"username" gorm:"type:varchar(16);index"`
 	Action string `json:"action" gorm:"type: varchar(500)"`
 	From   string `json:"from" gorm:"type:varchar(36); index"`
+	Method string `json:"method" gorm:"type:varchar(12);index"`
+	Path  string `json:"path" gorm:"type:varchar(120);index"`
+	IP string `json:"ip" gorm:"type:varchar(20);index"`
 }
 
 func (e *ActionRecord) Insert(dbs ...*gorm.DB) (err error) {

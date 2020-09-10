@@ -251,6 +251,14 @@ type AddUserForm struct {
 	Code     string `form:"codes"`
 }
 
+// AdminAddUserForm
+type AdminAddUserForm struct {
+	Username string `form:"username" binding:"required"`
+	Password string `form:"password" binding:"required"`
+	RoleRefer int `json:"roleRefer" binding:"required"`
+}
+
+
 // FormUserList
 type FormUserList struct {
 	ID          string `json:"id" form:"id"`                    // Value

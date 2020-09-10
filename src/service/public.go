@@ -58,6 +58,7 @@ func UserLogin(f *utils.LoginForm, isAdmin bool) (token string, err error) {
 	s.ExpireTime = n.Add(session.SessionExpMaxSecure).Unix()
 	s.Level = session.SessionLevelSecure
 	s.ID = int64(data.ID)
+	s.Username= data.Username
 	if !isAdmin {
 		if token, err = models.UserKey.SessionEncode(s); err != nil {
 			return

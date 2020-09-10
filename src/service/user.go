@@ -2,6 +2,7 @@ package service
 
 import (
 	"fmt"
+	genid "github.com/olongfen/gen-id"
 	"github.com/olongfen/gorm-gin-admin/src/models"
 	"github.com/olongfen/gorm-gin-admin/src/pkg/query"
 	"github.com/olongfen/gorm-gin-admin/src/pkg/setting"
@@ -22,6 +23,41 @@ func AddUser(form *utils.AddUserForm) (ret *models.UserBase, err error) {
 	}
 	u.Phone = form.Phone
 	u.Username = form.Username
+	if _d, _err := bcrypt.GenerateFromPassword([]byte(form.Password), bcrypt.DefaultCost); _err != nil {
+		err = _err
+		return
+	} else {
+		u.LoginPwd = string(_d)
+	}
+	u.Uid = uuid.NewV4().String()
+	if err = u.Insert(); err != nil {
+		return
+	}
+	return u, nil
+}
+
+// AdminAddUser 添加哟个用户
+func AdminAddUser(uid string, form *utils.AdminAddUserForm) (ret *models.UserBase, err error) {
+	var (
+		user =new(models.UserBase)
+		u = new(models.UserBase)
+		role =new(models.Role)
+	)
+
+	if err = user.GetByUId(uid);err!=nil{
+		return
+	}
+	role.ID = uint(form.RoleRefer)
+	if err = role.Get();err!=nil{
+		return
+	}
+	if user.Role.GetLevelMust()<role.GetLevelMust(){
+		err= utils.ErrActionNotAllow.SetMeta("you role level don't can do it ")
+		return
+	}
+	u.Phone = genid.NewGeneratorData(nil).PhoneNum
+	u.Username = form.Username
+	u.RoleRefer = uint(form.RoleRefer)
 	if _d, _err := bcrypt.GenerateFromPassword([]byte(form.Password), bcrypt.DefaultCost); _err != nil {
 		err = _err
 		return

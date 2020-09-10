@@ -226,7 +226,41 @@ func DeleteUser(c *gin.Context) {
 // @Produce json
 // @Success 200  {object} app.Response
 // @Failure 500  {object} app.Response
-// @router  /api/v1/getUserKV [get]
+// @router  /api/v1/admin/getUserKV [get]
 func GetUserKV(c *gin.Context)  {
 	app.NewGinResponse(c).Success(service.GetUserKV()).Response()
+}
+
+// @tags 管理员
+// @Summary 添加用户
+// @Description 添加用户
+// @Accept json
+// @Produce json
+// @Param {object} body utils.AddUserForm true "添加用户form"
+// @Success 200  {object} app.Response
+// @Failure 500  {object} app.Response
+// @router  /api/v1/admin/addUser [post]
+func AddUser(c *gin.Context)  {
+	var (
+		form = new(utils.AdminAddUserForm)
+		data *models.UserBase
+		code = codes.CodeProcessingFailed
+		s *session.Session
+		err  error
+	)
+
+	defer func() {
+		if err != nil {
+			app.NewGinResponse(c).Fail(code, err.Error()).Response()
+		} else {
+			app.NewGinResponse(c).Success(data).Response()
+		}
+	}()
+	if s,code,err = GetSessionAndBindingForm(form,c);err!=nil{
+		return
+	}
+	if data,err = service.AdminAddUser(s.UID,form);err!=nil{
+		return
+	}
+
 }

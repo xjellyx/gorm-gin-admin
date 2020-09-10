@@ -12,7 +12,8 @@ require (
 	github.com/jianfengye/collection v0.0.0-20200827021300-290144bad0d5 // indirect
 	github.com/lib/pq v1.8.0
 	github.com/mitchellh/mapstructure v1.3.3
-	github.com/olongfen/contrib v0.0.0-20200904032819-23014dd60527
+	github.com/olongfen/contrib v0.0.0-20200910075237-38d59b6f8a19
+	github.com/olongfen/gen-id v1.0.2-0.20200910083018-c2a28915b392
 	github.com/satori/go.uuid v1.2.0
 	github.com/sirupsen/logrus v1.6.0
 	github.com/swaggo/gin-swagger v1.2.0
