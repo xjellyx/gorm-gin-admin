@@ -1,0 +1,33 @@
+serveraddr: 127.0.0.1
+serverport: "8050"
+rpchost: 127.0.0.1
+rpcport: "9050"
+sync: false
+isproduct: false
+stdout: false
+userkeydir: ./conf/user.key
+userpubdir: ./conf/user.pub
+adminkeydir: ./conf/admin.key
+adminpubdir: ./conf/admin.pub
+db:
+  host: 127.0.0.1
+  port: "65432"
+  driver: postgres
+  databasename: business
+  username: business
+  password: business
+  maxidleconn: 200
+  maxopenconn: 2000
+rdb:
+  host: 127.0.0.1
+  port: "6379"
+  db: 0
+  password: ""
+istls: false
+tls: null
+iscaptcha: false
+logdir: ./log
+logpatent: _%Y-%m-%d.log
+headicondir: ./public/static/
+rbacmodeldir: ./conf/model_casbin.conf
+maxrolelevel: 9

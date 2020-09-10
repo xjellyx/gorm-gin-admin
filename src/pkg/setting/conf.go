@@ -4,6 +4,7 @@ import (
 	"github.com/olongfen/contrib/config"
 	"github.com/olongfen/gorm-gin-admin/src/utils"
 	"github.com/sirupsen/logrus"
+	"strings"
 	"time"
 )
 
@@ -119,19 +120,20 @@ func InitConfig() {
 	if err = Global.Save(nil); err != nil {
 		logrus.Fatal(err)
 	}
-	switch Global.Env {
-	case "dev":
-		projectPath="./conf/project.config-dev.yaml"
-	case "product":
-		projectPath="./conf/project.config-prod.yaml"
-		prod =true
-	case "test":
-		projectPath="./conf/project.config-test.yaml"
-	default:
-		logrus.Fatal("env: ",Global.Env, "not support")
-		return
 
-	}
+	 if strings.Contains(Global.Env,"dev"){
+		 projectPath="./conf/project.config-dev.yaml"
+	 }else if strings.Contains(Global.Env,"prod"){
+		 projectPath="./conf/project.config-prod.yaml"
+		 prod =true
+	 }else if strings.Contains(Global.Env,"test"){
+		 projectPath="./conf/project.config-test.yaml"
+	 }else {
+		 logrus.Fatal("env: ",Global.Env, "not support")
+		 return
+	 }
+
+
 	if err = config.LoadConfigAndSave(projectPath, Setting, Setting, time.Second*10); err != nil {
 		logrus.Fatal(err)
 	}
