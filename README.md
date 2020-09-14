@@ -15,7 +15,7 @@
 English | [简体中文](./README_zh.md)
 
 # Project Guidelines
-[Online Demo](http://39.98.44.155:80)
+[Online Demo](http://www.olongfen.ltd)
 
 [Font Een](https://github.com/olongfen/user_admin.git)
 - Web UI Framework：[element-ui](https://github.com/ElemeFE/element)  
