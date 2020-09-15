@@ -316,6 +316,10 @@ github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e/go.mod h1:zD1mROLA
 github.com/oklog/ulid v1.3.1/go.mod h1:CirwcVhetQ6Lv90oh/F+FBtV6XMibvdAFo93nm5qn4U=
 github.com/olongfen/contrib v0.0.0-20200910075237-38d59b6f8a19 h1:062xuVoKEX3rTb3Qt10YJnIP9f1P9pO7sQUCtdcNWOo=
 github.com/olongfen/contrib v0.0.0-20200910075237-38d59b6f8a19/go.mod h1:UYTh2wisCjvJh73khhEeOyhOzZYIRisaCNawK/r656E=
+github.com/olongfen/contrib v0.0.0-20200915090247-50264c3fc5ef h1:uMF+TlfgFhU8vD/OkJ6N9bNG2ovaDDkGS+2YWIHSfOw=
+github.com/olongfen/contrib v0.0.0-20200915090247-50264c3fc5ef/go.mod h1:UYTh2wisCjvJh73khhEeOyhOzZYIRisaCNawK/r656E=
+github.com/olongfen/contrib v0.0.0-20200915090526-cb1a02a44053 h1:BWgq7rJmA5uakAQhftAj+zP2JvXPkJ2WRo0vo2Sq3oU=
+github.com/olongfen/contrib v0.0.0-20200915090526-cb1a02a44053/go.mod h1:UYTh2wisCjvJh73khhEeOyhOzZYIRisaCNawK/r656E=
 github.com/olongfen/gen-id v0.0.0-20200205020411-aa724763f90c h1:r9VG8nW5b3afBI3sXqPWwd9+P8jDq0U5AQ5oILU2IbM=
 github.com/olongfen/gen-id v0.0.0-20200205020411-aa724763f90c/go.mod h1:C/CUI5OzvtkRtITIOzDw8UkiVcpBamaYlSP7kLq/yoU=
 github.com/olongfen/gen-id v1.0.2-0.20200205020411-aa724763f90c h1:tn1x4gRakTpnY97zuliQ81pHqclQXolnpPar02LWE4Q=

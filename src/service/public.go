@@ -28,7 +28,7 @@ func UserLogin(f *utils.LoginForm, isAdmin bool) (token string, err error) {
 		data = &models.UserBase{}
 		s    = new(session.Session)
 	)
-	if setting.DevEnv {
+	if !setting.DevEnv {
 		verify := captcha.VerifyString(f.CaptchaId, f.Digits)
 		if !verify {
 			err = utils.ErrCaptchaVerifyFail
@@ -46,19 +46,20 @@ func UserLogin(f *utils.LoginForm, isAdmin bool) (token string, err error) {
 	if err = bcrypt.CompareHashAndPassword([]byte(data.LoginPwd), []byte(f.Password)); err != nil {
 		return
 	}
-
-	s.Password = data.LoginPwd
+	s.Content = map[string]interface{}{}
+	s.Content["password"] = data.LoginPwd
 	if f.DeviceId != nil {
-		s.DeviceID = *f.DeviceId
+		s.Content["deviceId"] = *f.DeviceId
 	}
 	s.UID = data.Uid
-	s.IP = f.IP
+	s.Content["ip"] = f.IP
+
 	n := time.Now()
-	s.CreateTime = n.Unix()
+	s.Content["createTime"] = n.Unix()
 	s.ExpireTime = n.Add(session.SessionExpMaxSecure).Unix()
-	s.Level = session.SessionLevelSecure
-	s.ID = int64(data.ID)
-	s.Username = data.Username
+	s.Content["level"] = session.SessionLevelSecure
+	s.Content["id"] = int64(data.ID)
+	s.Content["username"] = data.Username
 	if !isAdmin {
 		if token, err = models.UserKey.SessionEncode(s); err != nil {
 			return

@@ -56,10 +56,19 @@ func CheckUserAuth(isAdmin bool) gin.HandlerFunc {
 				}
 			}
 		}
+
 		// 不是同一个ip地址
-		if s.IP != c.ClientIP() && setting.DevEnv {
-			app.NewGinResponse(c).Fail(codes.CodeIPAddressInvalid, utils.ErrIPAddressInvalid.Error()).Response()
-			return
+		if !setting.DevEnv {
+			var (
+				ip string
+			)
+			if ip, err = s.Content.GetValueByString("ip"); err != nil {
+				app.NewGinResponse(c).SetStatus(500).Fail(500, err.Error()).Response()
+				return
+			} else if ip != c.ClientIP() {
+				app.NewGinResponse(c).Fail(codes.CodeIPAddressInvalid, utils.ErrIPAddressInvalid.Error()).Response()
+				return
+			}
 		}
 		c.Set("sessionTag", s)
 		c.Next() // 后续的处理函数可以用过c.Get("username")来获取当前请求的用户信息

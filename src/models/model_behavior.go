@@ -21,7 +21,7 @@ type BehaviorRecord struct {
 func NewActionRecord(s *session.Session, c *gin.Context, action string) *BehaviorRecord {
 	d := &BehaviorRecord{
 		Uid:      s.UID,
-		Username: s.Username,
+		Username: s.Content["username"].(string),
 		Behavior: action,
 		Method:   c.Request.Method,
 		Path:     c.Request.URL.Path,
