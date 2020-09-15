@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"github.com/olongfen/gorm-gin-admin/src/pkg/query"
 	"github.com/olongfen/gorm-gin-admin/src/utils"
 	"gorm.io/gorm"
@@ -63,8 +64,8 @@ func (a *APIGroup) Get(id int64) (err error) {
 	return
 }
 
-func (a *APIGroup) GetBPathAndMethod(path,method string) (err error) {
-	if err = DB.First(a, "path = ? and method= ?", path,method).Error; err != nil {
+func (a *APIGroup) GetBPathAndMethod(path, method string) (err error) {
+	if err = DB.First(a, "path = ? and method= ?", path, method).Error; err != nil {
 		logModel.Errorln(err)
 		err = utils.ErrGetDataFailed
 		return
@@ -74,13 +75,14 @@ func (a *APIGroup) GetBPathAndMethod(path,method string) (err error) {
 
 // GetAPIGroupList 获取api列表
 func GetAPIGroupList(q *query.Query) (ret []*APIGroup, err error) {
-	if q!=nil{
-		if err = DB.Table(APIGroupTableName()).Where(q.Cond,q.Values).Offset(q.PageNum).Limit(q.PageSize).Order("id asc").Find(&ret).Error; err != nil {
+	if q != nil {
+		fmt.Println(q)
+		if err = DB.Table(APIGroupTableName()).Where(q.Cond, q.Values...).Offset(q.PageNum).Limit(q.PageSize).Order("id asc").Find(&ret).Error; err != nil {
 			logModel.Errorln(err)
 			err = utils.ErrGetDataFailed
 			return nil, err
 		}
-	}else {
+	} else {
 		if err = DB.Table(APIGroupTableName()).Order("id asc").Find(&ret).Error; err != nil {
 			logModel.Errorln(err)
 			err = utils.ErrGetDataFailed
@@ -92,9 +94,9 @@ func GetAPIGroupList(q *query.Query) (ret []*APIGroup, err error) {
 
 // BatchInsertAPIGroup
 func BatchInsertAPIGroup(datas []*APIGroup) (err error) {
-	if err = DB.Model(&APIGroup{}).Create(datas).Error;err!=nil{
+	if err = DB.Model(&APIGroup{}).Create(datas).Error; err != nil {
 		logModel.Errorln(err)
-		err= utils.ErrInsertDataFailed
+		err = utils.ErrInsertDataFailed
 		return
 	}
 	return
