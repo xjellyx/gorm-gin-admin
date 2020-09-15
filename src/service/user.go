@@ -5,7 +5,7 @@ import (
 	genid "github.com/olongfen/gen-id"
 	"github.com/olongfen/gorm-gin-admin/src/models"
 	"github.com/olongfen/gorm-gin-admin/src/pkg/query"
-	"github.com/olongfen/gorm-gin-admin/src/pkg/setting"
+	"github.com/olongfen/gorm-gin-admin/src/setting"
 	"github.com/olongfen/gorm-gin-admin/src/utils"
 	uuid "github.com/satori/go.uuid"
 	"golang.org/x/crypto/bcrypt"
@@ -39,20 +39,20 @@ func AddUser(form *utils.AddUserForm) (ret *models.UserBase, err error) {
 // AdminAddUser 添加哟个用户
 func AdminAddUser(uid string, form *utils.AdminAddUserForm) (ret *models.UserBase, err error) {
 	var (
-		user =new(models.UserBase)
-		u = new(models.UserBase)
-		role =new(models.Role)
+		user = new(models.UserBase)
+		u    = new(models.UserBase)
+		role = new(models.Role)
 	)
 
-	if err = user.GetByUId(uid);err!=nil{
+	if err = user.GetByUId(uid); err != nil {
 		return
 	}
 	role.ID = uint(form.RoleRefer)
-	if err = role.Get();err!=nil{
+	if err = role.Get(); err != nil {
 		return
 	}
-	if user.Role.GetLevelMust()<role.GetLevelMust(){
-		err= utils.ErrActionNotAllow.SetMeta("you role level don't can do it ")
+	if user.Role.GetLevelMust() < role.GetLevelMust() {
+		err = utils.ErrActionNotAllow.SetMeta("you role level don't can do it ")
 		return
 	}
 	u.Phone = genid.NewGeneratorData(nil).PhoneNum
@@ -83,11 +83,11 @@ func EditUserBySelf(uid string, form *utils.FormEditUser) (ret *models.UserBase,
 	if err = data.GetByUId(uid); err != nil {
 		return
 	}
-	if _,ok:=dataMap["roleRefer"];ok{
-		delete(dataMap,"roleRefer")
+	if _, ok := dataMap["roleRefer"]; ok {
+		delete(dataMap, "roleRefer")
 	}
-	if _,ok:=dataMap["status"];ok{
-		delete(dataMap,"status")
+	if _, ok := dataMap["status"]; ok {
+		delete(dataMap, "status")
 	}
 	if err = data.Update(form.Uid, dataMap); err != nil {
 		return nil, err
@@ -116,7 +116,7 @@ func EditUserByRole(uid string, form *utils.FormEditUser) (ret *models.UserBase,
 		return
 	}
 	// 只能修改比自己权限底的角色
-	if data.Role.GetLevelMust() >= user.Role.GetLevelMust() && user.Role.GetLevelMust()<setting.Setting.MaxRoleLevel   {
+	if data.Role.GetLevelMust() >= user.Role.GetLevelMust() && user.Role.GetLevelMust() < setting.Settings.Project.MaxRoleLevel {
 		err = utils.ErrActionNotAllow
 		return
 	}
@@ -249,20 +249,20 @@ func DeleteUser(uid string, delUid string) (err error) {
 	if err = delRole.GetByUId(delUid); err != nil {
 		return
 	}
-	if role.Role.GetLevelMust() <= delRole.Role.GetLevelMust() && role.Role.GetLevelMust()<setting.Setting.MaxRoleLevel   {
+	if role.Role.GetLevelMust() <= delRole.Role.GetLevelMust() && role.Role.GetLevelMust() < setting.Settings.Project.MaxRoleLevel {
 		err = utils.ErrActionNotAllow
 		return
 	}
 	return delRole.Delete(delRole.Uid)
 }
 
-func GetUserKV()(ret map[string][]models.KV)  {
+func GetUserKV() (ret map[string][]models.KV) {
 	ret = map[string][]models.KV{}
 	ret["status"] = []models.KV{
-		{Label: "register",Value: models.UserStatusRegister},
-		{Label: "login",Value: models.UserStatusLogin},
-		{Label: "logout",Value: models.UserStatusLogout},
-		{Label: "lock",Value: models.UserStatusLock},
+		{Label: "register", Value: models.UserStatusRegister},
+		{Label: "login", Value: models.UserStatusLogin},
+		{Label: "logout", Value: models.UserStatusLogout},
+		{Label: "lock", Value: models.UserStatusLock},
 	}
 	return
 }

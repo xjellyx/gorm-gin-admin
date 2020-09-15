@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	log2 "github.com/olongfen/contrib/log"
-	"github.com/olongfen/gorm-gin-admin/src/pkg/setting"
+	"github.com/olongfen/gorm-gin-admin/src/setting"
 	"time"
 )
 
@@ -24,7 +24,7 @@ func GinAPILog() gin.HandlerFunc {
 				param.Request.UserAgent(),
 			)
 		},
-		Output: log2.NewLogFile(log2.ParamLog{Path: "./log/router", Stdout: !setting.Setting.IsProduct, P: setting.Setting.LogPatent}).Out,
+		Output: log2.NewLogFile(log2.ParamLog{Path: "./log/router", Stdout: !setting.DevEnv, P: setting.Settings.FilePath.LogPatent}).Out,
 	})
 
 }

@@ -13,7 +13,6 @@ const (
 	UserStatusLock            // 3 封锁状态
 )
 
-
 // UserBase 用户信息
 type UserBase struct {
 	Model
@@ -28,15 +27,15 @@ type UserBase struct {
 	Sign     string `json:"sign" gorm:"type:varchar(256)"`
 	Status   int    `json:"status"`
 	//
-	Role Role `json:"role"  gorm:"foreignKey:RoleRefer;associationForeignKey:RoleRefer"` // 默认普通用户
+	Role      Role `json:"role"  gorm:"foreignKey:RoleRefer;associationForeignKey:RoleRefer"` // 默认普通用户
 	RoleRefer uint `json:"roleRefer"`
 
 	// 外键
 	// UserCard UserCard `json:"userCard" gorm:"foreignkey:Value"`
 }
 
-func (*UserBase)TableName() string {
-	return  "user_bases"
+func (*UserBase) TableName() string {
+	return "user_bases"
 }
 
 func NewUserBase() *UserBase {
@@ -104,7 +103,7 @@ func (u *UserBase) Delete(uid string, options ...*gorm.DB) (err error) {
 
 // GetByUId 通过id获取数据
 func (u *UserBase) GetByUId(uid string) (err error) {
-	if err = DB.Model(u).Where("uid = ?", uid).Preload("Role").Find(u, ).Error; err != nil {
+	if err = DB.Model(u).Where("uid = ?", uid).Preload("Role").Find(u).Error; err != nil {
 		logModel.Errorln(err)
 		err = utils.ErrGetDataFailed
 		return

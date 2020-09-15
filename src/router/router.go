@@ -5,36 +5,35 @@ import (
 	"github.com/gin-gonic/gin"
 	v1 "github.com/olongfen/gorm-gin-admin/src/controller/api/v1"
 	"github.com/olongfen/gorm-gin-admin/src/middleware"
-	"github.com/olongfen/gorm-gin-admin/src/pkg/setting"
+	"github.com/olongfen/gorm-gin-admin/src/setting"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"github.com/swaggo/gin-swagger/swaggerFiles"
 	"net/http"
 )
 
-// InitRouter 初始化路由模块
-func InitRouter() (ret *gin.Engine) {
-	// 初始化路由
-	var engine = gin.Default()
+// 初始化路由
+var Engine = gin.Default()
 
-	if setting.Setting.IsProduct {
-
+// init 初始化路由模块
+func init() {
+	if !setting.DevEnv {
 		gin.SetMode(gin.ReleaseMode)
-		engine.Use(gin.Logger())
+		Engine.Use(gin.Logger())
 	}
 
 	// 添加中间件
-	engine.Use(gin.Recovery())
-	engine.Use(middleware.CORS())
-	engine.Use(middleware.GinAPILog())
+	Engine.Use(gin.Recovery())
+	Engine.Use(middleware.CORS())
+	Engine.Use(middleware.GinAPILog())
 	// 没有路由请求
-	engine.NoRoute(func(c *gin.Context) {
+	Engine.NoRoute(func(c *gin.Context) {
 		c.JSON(http.StatusNotFound, map[string]interface{}{
 			"error": fmt.Sprintf("%v ", http.StatusNotFound) + http.StatusText(http.StatusNotFound),
 		})
 	})
 	// TODO 路由
 	{
-		api := engine.Group("api/v1")
+		api := Engine.Group("api/v1")
 		api.GET("swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 		api.Use(middleware.Common())
 
@@ -50,7 +49,6 @@ func InitRouter() (ret *gin.Engine) {
 		adminRouterAPI(api)
 
 	}
-	return engine
 }
 
 func userRouterAPI(r *gin.RouterGroup) {

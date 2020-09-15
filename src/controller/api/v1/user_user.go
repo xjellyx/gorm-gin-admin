@@ -7,8 +7,8 @@ import (
 	"github.com/olongfen/gorm-gin-admin/src/models"
 	"github.com/olongfen/gorm-gin-admin/src/pkg/app"
 	"github.com/olongfen/gorm-gin-admin/src/pkg/codes"
-	"github.com/olongfen/gorm-gin-admin/src/pkg/setting"
 	"github.com/olongfen/gorm-gin-admin/src/service"
+	"github.com/olongfen/gorm-gin-admin/src/setting"
 	"github.com/olongfen/gorm-gin-admin/src/utils"
 	uuid "github.com/satori/go.uuid"
 	"image"
@@ -321,7 +321,7 @@ func ModifyHeadIcon(c *gin.Context) {
 	oldDst := d.HeadIcon
 	//
 	arr := strings.Split(headIcon.Filename, ".")
-	dst := setting.Setting.HeadIconDir + uuid.NewV4().String() + "." + arr[len(arr)-1]
+	dst := setting.Settings.FilePath.HeadIconDir + uuid.NewV4().String() + "." + arr[len(arr)-1]
 	if err = c.SaveUploadedFile(headIcon, dst); err != nil {
 		return
 	}

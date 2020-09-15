@@ -1,7 +1,9 @@
 package v1
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/olongfen/contrib/session"
 	"github.com/olongfen/gorm-gin-admin/src/models"
 	"github.com/olongfen/gorm-gin-admin/src/pkg/app"
 	"github.com/olongfen/gorm-gin-admin/src/pkg/codes"
@@ -25,14 +27,14 @@ func GetAPIGroupList(c *gin.Context) {
 		err  error
 		code = codes.CodeProcessingFailed
 		ret  []*models.APIGroup
-		form =new(utils.ApiListForm)
+		form = new(utils.ApiListForm)
 	)
 	defer func() {
 		if err != nil {
 			app.NewGinResponse(c).Fail(code, err.Error()).Response()
 		}
 	}()
-	if _, code, err = GetSessionAndBindingForm(form,c); err != nil {
+	if _, code, err = GetSessionAndBindingForm(form, c); err != nil {
 		return
 	}
 	if ret, err = service.GetAPIGroupList(form); err != nil {
@@ -57,20 +59,21 @@ func AddApiGroup(c *gin.Context) {
 		code = codes.CodeProcessingFailed
 		f    []*utils.FormAPIGroupAdd
 		ret  []*models.APIGroup
-
+		s    *session.Session
 	)
 	defer func() {
 		if err != nil {
 			app.NewGinResponse(c).Fail(code, err.Error()).Response()
 		}
 	}()
-	if _, code, err = GetSessionAndBindingForm(&f, c); err != nil {
+	if s, code, err = GetSessionAndBindingForm(&f, c); err != nil {
 		return
 	}
 	if ret, err = service.AddAPIGroup(f); err != nil {
 
 		return
 	}
+	_ = models.NewActionRecord(s, c, fmt.Sprintf(`add  api `)).Insert()
 	app.NewGinResponse(c).Success(ret).Response()
 }
 
@@ -89,6 +92,7 @@ func RemoveApiGroup(c *gin.Context) {
 		err  error
 		code = codes.CodeProcessingFailed
 		id   string
+		s    *session.Session
 	)
 	defer func() {
 		if err != nil {
@@ -102,12 +106,13 @@ func RemoveApiGroup(c *gin.Context) {
 		err = err_
 		return
 	}
-	if _,code,err = GetSession(c);err!=nil{
+	if s, code, err = GetSession(c); err != nil {
 		return
 	}
 	if err = service.DelAPIGroup(int64(_id)); err != nil {
 		return
 	}
+	_ = models.NewActionRecord(s, c, fmt.Sprintf(`remove  api %s `, id)).Insert()
 	app.NewGinResponse(c).Success(nil).Response()
 }
 
@@ -127,19 +132,21 @@ func EditApiGroup(c *gin.Context) {
 		err  error
 		code = codes.CodeProcessingFailed
 		ret  *models.APIGroup
+		s    *session.Session
 	)
 	defer func() {
 		if err != nil {
 			app.NewGinResponse(c).Fail(code, err.Error()).Response()
 		}
 	}()
-	if _, code, err = GetSessionAndBindingForm(f, c); err != nil {
+	if s, code, err = GetSessionAndBindingForm(f, c); err != nil {
 		return
 	}
 
 	if ret, err = service.EditAPIGroup(f); err != nil {
 		return
 	}
+	_ = models.NewActionRecord(s, c, fmt.Sprintf(`edit  api %d`, f.Id)).Insert()
 	app.NewGinResponse(c).Success(ret).Response()
 
 }

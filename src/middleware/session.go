@@ -6,7 +6,7 @@ import (
 	"github.com/olongfen/gorm-gin-admin/src/models"
 	"github.com/olongfen/gorm-gin-admin/src/pkg/app"
 	"github.com/olongfen/gorm-gin-admin/src/pkg/codes"
-	"github.com/olongfen/gorm-gin-admin/src/pkg/setting"
+	"github.com/olongfen/gorm-gin-admin/src/setting"
 	"github.com/olongfen/gorm-gin-admin/src/utils"
 	"strings"
 )
@@ -57,7 +57,7 @@ func CheckUserAuth(isAdmin bool) gin.HandlerFunc {
 			}
 		}
 		// 不是同一个ip地址
-		if s.IP != c.ClientIP() && setting.Setting.IsProduct {
+		if s.IP != c.ClientIP() && setting.DevEnv {
 			app.NewGinResponse(c).Fail(codes.CodeIPAddressInvalid, utils.ErrIPAddressInvalid.Error()).Response()
 			return
 		}

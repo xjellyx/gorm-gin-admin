@@ -4,12 +4,12 @@ import (
 	"github.com/olongfen/gorm-gin-admin/src/models"
 	"github.com/olongfen/gorm-gin-admin/src/pkg/query"
 	"github.com/olongfen/gorm-gin-admin/src/utils"
+	"strings"
 )
 
 // AddAPIGroup
 func AddAPIGroup(f []*utils.FormAPIGroupAdd) (ret []*models.APIGroup, err error) {
 	var (
-
 		datas []*models.APIGroup
 	)
 
@@ -20,7 +20,7 @@ func AddAPIGroup(f []*utils.FormAPIGroupAdd) (ret []*models.APIGroup, err error)
 		data.ApiGroup = v.ApiGroup
 		data.Description = v.Description
 		data.Path = v.Path
-		data.Method = v.Method
+		data.Method = strings.ToLower(v.Method)
 
 		datas = append(datas, data)
 	}
@@ -52,8 +52,8 @@ func EditAPIGroup(f *utils.FormAPIGroupEdit) (ret *models.APIGroup, err error) {
 		data.Path = f.Path
 	}
 	if len(f.Method) != 0 {
-		data.Method = f.Method
-		m["v2"] = f.Method
+		data.Method = strings.ToLower(f.Method)
+		m["v2"] = strings.ToLower(f.Method)
 	}
 	if len(m) > 0 {
 		if err = dataCasbin.Update(path, method, m); err != nil {
@@ -87,13 +87,13 @@ func DelAPIGroup(id int64) (err error) {
 
 // GetAPIGroupList
 func GetAPIGroupList(f *utils.ApiListForm) (ret []*models.APIGroup, err error) {
-		q,_err:=query.NewQuery(f.Page,f.PageSize).ValidCond(f.ToMap())
-		if _err!=nil{
-			err = _err
-			return
-		}
-		if len(q.Cond)==0 && q.PageNum==0 && q.PageSize==0{
-			q= nil
-		}
+	q, _err := query.NewQuery(f.Page, f.PageSize).ValidCond(f.ToMap())
+	if _err != nil {
+		err = _err
+		return
+	}
+	if len(q.Cond) == 0 && q.PageNum == 0 && q.PageSize == 0 {
+		q = nil
+	}
 	return models.GetAPIGroupList(q)
 }

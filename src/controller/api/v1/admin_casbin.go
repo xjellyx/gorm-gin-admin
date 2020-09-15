@@ -1,8 +1,10 @@
 package v1
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/olongfen/contrib/session"
+	"github.com/olongfen/gorm-gin-admin/src/models"
 	"github.com/olongfen/gorm-gin-admin/src/pkg/app"
 	"github.com/olongfen/gorm-gin-admin/src/pkg/codes"
 	"github.com/olongfen/gorm-gin-admin/src/service"
@@ -22,11 +24,11 @@ func AddRoleAPIPerm(c *gin.Context) {
 		f    = &utils.FormRoleAPIPerm{}
 		err  error
 		code = codes.CodeProcessingFailed
-		ret  []struct{
+		ret  []struct {
 			Method string `json:"method"`
-			Path string `json:"path"`
+			Path   string `json:"path"`
 		}
-		s    *session.Session
+		s *session.Session
 	)
 	defer func() {
 		if err != nil {
@@ -37,9 +39,10 @@ func AddRoleAPIPerm(c *gin.Context) {
 		return
 	}
 
-	if ret, err = service.AddRoleAPI(s.UID,f); err != nil {
+	if ret, err = service.AddRoleAPI(s.UID, f); err != nil {
 		return
 	}
+	_ = models.NewActionRecord(s, c, fmt.Sprintf(`add  role api perm %s `, f.Role)).Insert()
 	app.NewGinResponse(c).Success(ret).Response()
 }
 
@@ -53,8 +56,8 @@ func AddRoleAPIPerm(c *gin.Context) {
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
 // @Router /api/v1/admin/addRoleGroup [post]
-func AddRoleGroup(c *gin.Context)  {
-	
+func AddRoleGroup(c *gin.Context) {
+
 }
 
 // @tags 管理员
@@ -73,7 +76,7 @@ func RemoveRolePermAPI(c *gin.Context) {
 		err  error
 		code = codes.CodeProcessingFailed
 
-		s    *session.Session
+		s *session.Session
 	)
 	defer func() {
 		if err != nil {
@@ -83,9 +86,10 @@ func RemoveRolePermAPI(c *gin.Context) {
 	if s, code, err = GetSessionAndBindingForm(f, c); err != nil {
 		return
 	}
-	if  err = service.RemoveRoleAPI(s.UID,f); err != nil {
+	if err = service.RemoveRoleAPI(s.UID, f); err != nil {
 		return
 	}
+	_ = models.NewActionRecord(s, c, fmt.Sprintf(`remove  role permission %s `, f.Role)).Insert()
 	app.NewGinResponse(c).Success(nil).Response()
 }
 
@@ -104,12 +108,12 @@ func GetRoleApiList(c *gin.Context) {
 		err  error
 		code = codes.CodeProcessingFailed
 		role string
-		data  []service.RoleApiResp
+		data []service.RoleApiResp
 	)
 	defer func() {
 		if err != nil {
 			app.NewGinResponse(c).Fail(code, err.Error()).Response()
-		}else {
+		} else {
 			app.NewGinResponse(c).Success(data).Response()
 		}
 	}()
@@ -124,8 +128,4 @@ func GetRoleApiList(c *gin.Context) {
 		return
 	}
 
-
 }
-
-
-

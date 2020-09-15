@@ -5,17 +5,17 @@ import (
 	"github.com/olongfen/contrib/log"
 	"github.com/olongfen/contrib/session"
 	"github.com/olongfen/gorm-gin-admin/src/models"
-	"github.com/olongfen/gorm-gin-admin/src/pkg/setting"
+	"github.com/olongfen/gorm-gin-admin/src/setting"
 	"github.com/olongfen/gorm-gin-admin/src/utils"
 	"golang.org/x/crypto/bcrypt"
 	"time"
 )
 
-var(
+var (
 	logServe = log.NewLogFile(log.ParamLog{
-		Path:       setting.Setting.LogDir+"/service",
-		Stdout:     setting.Setting.IsProduct,
-		P:          setting.Setting.LogPatent,
+		Path:   setting.Settings.FilePath.LogDir + "/service",
+		Stdout: setting.DevEnv,
+		P:      setting.Settings.FilePath.LogPatent,
 	})
 )
 
@@ -28,7 +28,7 @@ func UserLogin(f *utils.LoginForm, isAdmin bool) (token string, err error) {
 		data = &models.UserBase{}
 		s    = new(session.Session)
 	)
-	if setting.Setting.IsProduct {
+	if setting.DevEnv {
 		verify := captcha.VerifyString(f.CaptchaId, f.Digits)
 		if !verify {
 			err = utils.ErrCaptchaVerifyFail
@@ -58,7 +58,7 @@ func UserLogin(f *utils.LoginForm, isAdmin bool) (token string, err error) {
 	s.ExpireTime = n.Add(session.SessionExpMaxSecure).Unix()
 	s.Level = session.SessionLevelSecure
 	s.ID = int64(data.ID)
-	s.Username= data.Username
+	s.Username = data.Username
 	if !isAdmin {
 		if token, err = models.UserKey.SessionEncode(s); err != nil {
 			return

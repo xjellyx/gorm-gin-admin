@@ -6,11 +6,11 @@ import (
 	"github.com/olongfen/contrib/log"
 	"github.com/olongfen/contrib/session"
 	"github.com/olongfen/gorm-gin-admin/src/pkg/codes"
-	"github.com/olongfen/gorm-gin-admin/src/pkg/setting"
+	"github.com/olongfen/gorm-gin-admin/src/setting"
 )
 
 var (
-	logCtl = log.NewLogFile(log.ParamLog{Path: "./log/log_ctrl", Stdout: setting.Setting.IsProduct, P: setting.Setting.LogPatent})
+	logCtl = log.NewLogFile(log.ParamLog{Path: "./log/log_ctrl", Stdout: setting.DevEnv, P: setting.Settings.FilePath.LogPatent})
 )
 
 // GetSession 获取会话信息

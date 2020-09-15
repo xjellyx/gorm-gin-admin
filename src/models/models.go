@@ -2,12 +2,14 @@ package models
 
 import (
 	"fmt"
+	"os"
+	"strings"
 	"time"
 
 	"github.com/olongfen/contrib/log"
 	"github.com/olongfen/contrib/session"
 	"github.com/olongfen/gorm-gin-admin/src/pkg/adapter"
-	"github.com/olongfen/gorm-gin-admin/src/pkg/setting"
+	"github.com/olongfen/gorm-gin-admin/src/setting"
 	"github.com/sirupsen/logrus"
 	"gorm.io/driver/postgres"
 	"gorm.io/gorm"
@@ -29,36 +31,40 @@ var (
 	//Captcha
 )
 
-// InitModel 初始化模型
-func InitModel() {
+// init 初始化模型
+func init() {
 	var (
 		err error
 	)
-	logModel = log.NewLogFile(log.ParamLog{Path: setting.Setting.LogDir + "/" + "model", Stdout: setting.Setting.Stdout, P: setting.Setting.LogPatent})
-	dataSourceName := fmt.Sprintf("%s://%s:%s@%s:%s/%s?sslmode=disable", setting.Setting.Db.Driver, setting.Setting.Db.Username,
-		setting.Setting.Db.Password, setting.Setting.Db.Host, setting.Setting.Db.Port, setting.Setting.Db.DatabaseName)
+	initKey()
+	logModel = log.NewLogFile(log.ParamLog{Path: setting.Settings.FilePath.LogDir + "/" + "model", Stdout: strings.
+		Contains(os.Getenv("ENVIRONMENT"), "dev"), P: setting.Settings.FilePath.LogPatent})
+	dataSourceName := fmt.Sprintf("%s://%s:%s@%s:%s/%s?sslmode=disable", setting.Settings.DB.Driver, setting.Settings.DB.Username,
+		setting.Settings.DB.Password, setting.Settings.DB.Host, setting.Settings.DB.Port, setting.Settings.DB.DatabaseName)
 	if DB, err = gorm.Open(postgres.Open(dataSourceName), nil); err != nil {
 		logrus.Fatal(err)
 	}
-	DB = DB.Debug()
-	// 初始化密钥对
-	if err = UserKey.SetRSA(setting.Setting.AdminKeyDir, setting.Setting.AdminPubDir); err != nil {
-		logrus.Fatal(err)
+	if setting.DevEnv {
+		DB = DB.Debug()
 	}
-	if err = AdminKey.SetRSA(setting.Setting.UserKeyDir, setting.Setting.UserPubDir); err != nil {
-		logrus.Fatal(err)
-	}
-	err = DB.AutoMigrate(&UserBase{}, &UserCard{}, &APIGroup{}, &Menu{},&Role{})
+	err = DB.AutoMigrate(&UserBase{}, &UserCard{}, &APIGroup{}, &Menu{}, &Role{}, &BehaviorRecord{})
 	if err != nil {
 		panic(err)
 	}
 	if Adapter, err = adapter.NewAdapterByDB(DB); err != nil {
 		panic(err)
 	}
+	// 初始化密钥对
+	if err = UserKey.SetRSA(setting.Settings.FilePath.AdminKeyDir, setting.Settings.FilePath.AdminPubDir); err != nil {
+		logrus.Fatal(err)
+	}
+	if err = AdminKey.SetRSA(setting.Settings.FilePath.UserKeyDir, setting.Settings.FilePath.UserPubDir); err != nil {
+		logrus.Fatal(err)
+	}
 
 }
 
-func init() {
+func initKey() {
 	UserKey = session.NewKey("RS256")
 	AdminKey = session.NewKey("RS256")
 	UserKey.SetHookSessionCheck(func(sess *session.Session) error {

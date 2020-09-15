@@ -11,7 +11,7 @@ type Menu struct {
 	Model
 	Name      string   `json:"name" gorm:"type:varchar(36)"`
 	ParentId  uint     `json:"parentId"`
-	Path      string   `json:"path" gorm:"type:varchar(24)"`
+	Path      string   `json:"path" gorm:"type:varchar(36)"`
 	Component string   `json:"component" gorm:"type:varchar(36)"`
 	Sort      int      `json:"sort"`
 	Hidden    bool     `json:"hidden"`
@@ -59,6 +59,7 @@ func (m *Menu) Get(id int, options ...*gorm.DB) (err error) {
 	}
 	if err = DB.Model(m).Where("parent_id = ?", m.ID).Find(&m.Children).Error; err != nil && err != gorm.ErrRecordNotFound {
 		logModel.Errorln(err)
+		logModel.Warnln(m.Children)
 		err = utils.ErrGetDataFailed
 		return err
 	} else {

@@ -2,14 +2,14 @@ package gredis
 
 import (
 	"github.com/go-redis/redis"
-	"github.com/olongfen/gorm-gin-admin/src/pkg/setting"
+	"github.com/olongfen/gorm-gin-admin/src/setting"
 	"github.com/sirupsen/logrus"
 )
 
 var redisClient *redis.Client
 
-// InitRedisInstance Initialize the Redis instance
-func InitRedisInstance() {
+// init Initialize the Redis instance
+func init() {
 	var (
 		err error
 	)
@@ -28,8 +28,8 @@ func GetRedisClient() (ret *redis.Client, err error) {
 
 	// 重新连接
 	redisClient = redis.NewClient(&redis.Options{
-		Addr:     setting.Setting.RDB.Host + ":" + setting.Setting.RDB.Port,
-		Password: setting.Setting.RDB.Password,
+		Addr:     setting.Settings.RDB.Host + ":" + setting.Settings.RDB.Port,
+		Password: setting.Settings.RDB.Password,
 	})
 	// 报错直接恐慌
 	if err = redisClient.Ping().Err(); err != nil {

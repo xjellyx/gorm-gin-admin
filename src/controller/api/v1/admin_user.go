@@ -1,6 +1,7 @@
 package v1
 
 import (
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/olongfen/contrib/session"
 	"github.com/olongfen/gorm-gin-admin/src/models"
@@ -166,20 +167,22 @@ func EditUser(c *gin.Context) {
 	defer func() {
 		if err != nil {
 			app.NewGinResponse(c).Fail(code, err.Error()).Response()
-		}else {
+		} else {
+			_ = models.NewActionRecord(s, c, fmt.Sprintf(`edit  user %s`, form.Uid)).Insert()
 			app.NewGinResponse(c).Success(nil).Response()
 		}
 	}()
 	if s, code, err = GetSessionAndBindingForm(form, c); err != nil {
 		return
 	}
-	if s.UID==form.Uid{
+	if s.UID == form.Uid {
 		err = utils.ErrActionNotAllow.SetMeta("")
 		return
 	}
 	if _, err = service.EditUserByRole(s.UID, form); err != nil {
 		return
 	}
+
 }
 
 // @tags 管理员
@@ -204,6 +207,7 @@ func DeleteUser(c *gin.Context) {
 		if err != nil {
 			app.NewGinResponse(c).Fail(code, err.Error()).Response()
 		} else {
+			_ = models.NewActionRecord(s, c, fmt.Sprintf(`remove  user %s`, uid)).Insert()
 			app.NewGinResponse(c).Success(nil).Response()
 		}
 	}()
@@ -227,7 +231,7 @@ func DeleteUser(c *gin.Context) {
 // @Success 200  {object} app.Response
 // @Failure 500  {object} app.Response
 // @router  /api/v1/admin/getUserKV [get]
-func GetUserKV(c *gin.Context)  {
+func GetUserKV(c *gin.Context) {
 	app.NewGinResponse(c).Success(service.GetUserKV()).Response()
 }
 
@@ -240,12 +244,12 @@ func GetUserKV(c *gin.Context)  {
 // @Success 200  {object} app.Response
 // @Failure 500  {object} app.Response
 // @router  /api/v1/admin/addUser [post]
-func AddUser(c *gin.Context)  {
+func AddUser(c *gin.Context) {
 	var (
 		form = new(utils.AdminAddUserForm)
 		data *models.UserBase
 		code = codes.CodeProcessingFailed
-		s *session.Session
+		s    *session.Session
 		err  error
 	)
 
@@ -253,13 +257,14 @@ func AddUser(c *gin.Context)  {
 		if err != nil {
 			app.NewGinResponse(c).Fail(code, err.Error()).Response()
 		} else {
+			_ = models.NewActionRecord(s, c, fmt.Sprintf(`add  user `)).Insert()
 			app.NewGinResponse(c).Success(data).Response()
 		}
 	}()
-	if s,code,err = GetSessionAndBindingForm(form,c);err!=nil{
+	if s, code, err = GetSessionAndBindingForm(form, c); err != nil {
 		return
 	}
-	if data,err = service.AdminAddUser(s.UID,form);err!=nil{
+	if data, err = service.AdminAddUser(s.UID, form); err != nil {
 		return
 	}
 

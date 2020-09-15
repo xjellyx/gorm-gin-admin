@@ -3,12 +3,12 @@ package main
 import (
 	"crypto/tls"
 	"fmt"
-	"github.com/gin-gonic/gin"
 	_ "github.com/olongfen/gorm-gin-admin/docs"
-	"github.com/olongfen/gorm-gin-admin/src/models"
-	"github.com/olongfen/gorm-gin-admin/src/pkg/gredis"
-	"github.com/olongfen/gorm-gin-admin/src/pkg/setting"
+	_ "github.com/olongfen/gorm-gin-admin/src/models"
+	_ "github.com/olongfen/gorm-gin-admin/src/pkg/gredis"
 	"github.com/olongfen/gorm-gin-admin/src/router"
+	_ "github.com/olongfen/gorm-gin-admin/src/router"
+	"github.com/olongfen/gorm-gin-admin/src/setting"
 	"github.com/sirupsen/logrus"
 	"net/http"
 	"os"
@@ -18,34 +18,19 @@ import (
 	"time"
 )
 
-var (
-	engine *gin.Engine
-)
-
-func init() {
-	// 初始化配置文件
-	setting.InitConfig()
-	// 初始化模型
-	models.InitModel()
-	// 初始化redis
-	gredis.InitRedisInstance()
-	// 初始化路由
-	engine = router.InitRouter()
-}
-
 func main() {
 
 	go func() {
 		// 开启服务
 		s := &http.Server{
-			Addr:           setting.Setting.ServerAddr + ":" + setting.Setting.ServerPort,
-			Handler:        engine,
+			Addr:           setting.Settings.Serve.ServerAddr + ":" + setting.Settings.Serve.ServerPort,
+			Handler:        router.Engine,
 			ReadTimeout:    60 * time.Second,
 			WriteTimeout:   60 * time.Second,
 			MaxHeaderBytes: 1 << 20, // 10M
 		}
 		logrus.Println("server listen on: ", s.Addr)
-		if setting.Setting.IsTLS { // 开启tls
+		if setting.Settings.Serve.IsTLS { // 开启tls
 			TLSConfig := &tls.Config{
 				MinVersion:               tls.VersionTLS11,
 				CurvePreferences:         []tls.CurveID{tls.CurveP521, tls.CurveP384, tls.CurveP256},
@@ -63,7 +48,7 @@ func main() {
 			s.TLSConfig = TLSConfig
 			s.TLSNextProto = TLSProto
 
-			if err := s.ListenAndServeTLS(setting.Setting.TLS.Cert, setting.Setting.TLS.Key); err != nil {
+			if err := s.ListenAndServeTLS(setting.Settings.Serve.TLS.Cert, setting.Settings.Serve.TLS.Key); err != nil {
 				logrus.Fatal(err)
 			}
 		} else {

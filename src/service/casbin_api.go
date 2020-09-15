@@ -3,23 +3,24 @@ package service
 import (
 	"github.com/casbin/casbin/v2"
 	"github.com/olongfen/gorm-gin-admin/src/models"
-	"github.com/olongfen/gorm-gin-admin/src/pkg/setting"
+	"github.com/olongfen/gorm-gin-admin/src/setting"
 	"github.com/olongfen/gorm-gin-admin/src/utils"
+	"strings"
 )
 
 // AddRoleAPI 增加角色api权限
-func AddRoleAPI(uid string,f *utils.FormRoleAPIPerm) (ret []struct{
+func AddRoleAPI(uid string, f *utils.FormRoleAPIPerm) (ret []struct {
 	Method string `json:"method"`
-	Path string `json:"path"`
+	Path   string `json:"path"`
 }, err error) {
 	var (
-		e    *casbin.Enforcer
-		role = new(models.Role)
+		e          *casbin.Enforcer
+		role       = new(models.Role)
 		dataCasbin = new(models.RoleAPI)
-		user = new(models.UserBase)
+		user       = new(models.UserBase)
 	)
 
-	if e, err = casbin.NewEnforcer(setting.Setting.RBACModelDir, models.Adapter); err != nil {
+	if e, err = casbin.NewEnforcer(setting.Settings.FilePath.RBACModelDir, models.Adapter); err != nil {
 		return
 	}
 	if err = user.GetByUId(uid); err != nil {
@@ -30,18 +31,18 @@ func AddRoleAPI(uid string,f *utils.FormRoleAPIPerm) (ret []struct{
 		return
 	}
 	// 不能修改等级比自己大的
-	if user.Role.GetLevelMust() <= role.GetLevelMust() && user.Role.GetLevelMust()<setting.Setting.MaxRoleLevel {
+	if user.Role.GetLevelMust() <= role.GetLevelMust() && user.Role.GetLevelMust() < setting.Settings.Project.MaxRoleLevel {
 		err = utils.ErrActionNotAllow
 		return
 	}
 	for _, v := range f.Groups {
 		dataGroup := new(models.APIGroup)
-		if err = dataGroup.GetBPathAndMethod(v.Path,v.Method); err != nil {
-			logServe.Infoln(err,"path: ",dataGroup.Path,"method:",dataGroup.Method)
+		if err = dataGroup.GetBPathAndMethod(v.Path, strings.ToLower(v.Method)); err != nil {
+			logServe.Infoln(err, "path: ", dataGroup.Path, "method:", dataGroup.Method)
 			continue
 		}
-		if err  = dataCasbin.GetByPathAndMethodAndRole(dataGroup.Path,dataGroup.Method,role.Role);err==nil{
-			logServe.Infoln( utils.ErrRoleAPIExist,"path: ",dataGroup.Path,"method:",dataGroup.Method)
+		if err = dataCasbin.GetByPathAndMethodAndRole(dataGroup.Path, dataGroup.Method, role.Role); err == nil {
+			logServe.Infoln(utils.ErrRoleAPIExist, "path: ", dataGroup.Path, "method:", dataGroup.Method)
 			continue
 		}
 		if _, err = e.AddPolicy(f.Role, dataGroup.Path, dataGroup.Method); err != nil {
@@ -55,19 +56,19 @@ func AddRoleAPI(uid string,f *utils.FormRoleAPIPerm) (ret []struct{
 }
 
 // AddRoleGroup
-func AddRoleGroup(uid string,f *utils.FormRoleAPIPerm)  {
+func AddRoleGroup(uid string, f *utils.FormRoleAPIPerm) {
 
 }
 
 // RemoveRoleAPI 删除
-func RemoveRoleAPI(uid string,f *utils.FormRoleAPIPerm) ( err error) {
+func RemoveRoleAPI(uid string, f *utils.FormRoleAPIPerm) (err error) {
 	var (
 		e    *casbin.Enforcer
 		user = new(models.UserBase)
-		role =  new(models.Role)
+		role = new(models.Role)
 	)
 
-	if e, err = casbin.NewEnforcer(setting.Setting.RBACModelDir, models.Adapter); err != nil {
+	if e, err = casbin.NewEnforcer(setting.Settings.FilePath.RBACModelDir, models.Adapter); err != nil {
 		return
 	}
 	if err = user.GetByUId(uid); err != nil {
@@ -76,13 +77,13 @@ func RemoveRoleAPI(uid string,f *utils.FormRoleAPIPerm) ( err error) {
 	if err = role.GetByRole(f.Role); err != nil {
 		return
 	}
-	if user.Role.GetLevelMust() <= role.GetLevelMust() && user.Role.GetLevelMust()<setting.Setting.MaxRoleLevel  {
+	if user.Role.GetLevelMust() <= role.GetLevelMust() && user.Role.GetLevelMust() < setting.Settings.Project.MaxRoleLevel {
 		err = utils.ErrActionNotAllow
 		return
 	}
 	for _, v := range f.Groups {
 		dataGroup := new(models.APIGroup)
-		if err = dataGroup.GetBPathAndMethod(v.Path,v.Method); err != nil {
+		if err = dataGroup.GetBPathAndMethod(v.Path, v.Method); err != nil {
 			continue
 		}
 		if _, err = e.RemovePolicy(f.Role, dataGroup.Path, dataGroup.Method); err != nil {
