@@ -64,7 +64,7 @@ func main() {
 EXIT:
 	for {
 		sig := <-sc
-		fmt.Println("获取到信号[%s]", sig.String())
+		fmt.Printf("signal[%s]\n", sig.String())
 		switch sig {
 		case syscall.SIGQUIT, syscall.SIGTERM, syscall.SIGINT:
 			atomic.StoreInt32(&state, 0)
@@ -75,7 +75,7 @@ EXIT:
 		}
 	}
 
-	fmt.Println("服务退出")
+	fmt.Println("exit")
 	time.Sleep(time.Second)
 	os.Exit(int(atomic.LoadInt32(&state)))
 }
