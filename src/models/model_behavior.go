@@ -67,3 +67,10 @@ func GetBehaviorRecordList(q *query.Query) (ret []*BehaviorRecord, err error) {
 	}
 	return
 }
+
+func BehaviorCount() (ret int64, err error) {
+	if err = DB.Model(&BehaviorRecord{}).Where("id > 0").Count(&ret).Error; err != nil {
+		return
+	}
+	return
+}

@@ -8,4 +8,5 @@ import (
 func apiBehavior(apiAdmin *gin.RouterGroup) {
 	apiAdmin.DELETE("removeBehaviors", v1.RemoveBehaviors)
 	apiAdmin.GET("getBehaviorList", v1.GetBehaviorList)
+	apiAdmin.GET("behaviorCount", v1.BehaviorCount)
 }

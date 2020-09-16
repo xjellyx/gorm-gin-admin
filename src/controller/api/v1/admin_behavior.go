@@ -73,3 +73,28 @@ func RemoveBehaviors(c *gin.Context) {
 	_ = models.NewActionRecord(s, c, fmt.Sprintf(`remove  behavior record  %v `, form.Ids)).Insert()
 	app.NewGinResponse(c).Success(nil).Response()
 }
+
+// @tags
+// @Summary
+// @Description
+// @Accept json
+// @Produce json
+// @Success 200  {object} app.Response
+// @Failure 500  {object} app.Response
+// @router /api/v1/admin/behaviorCount  [get]
+func BehaviorCount(c *gin.Context) {
+	var (
+		err   error
+		code  = codes.CodeProcessingFailed
+		count int64
+	)
+	defer func() {
+		if err != nil {
+			app.NewGinResponse(c).Fail(code, err.Error()).Response()
+		}
+	}()
+	if count, err = models.BehaviorCount(); err != nil {
+		return
+	}
+	app.NewGinResponse(c).Success(count).Response()
+}
