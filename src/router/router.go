@@ -3,6 +3,7 @@ package router
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"github.com/olongfen/contrib/log"
 	v1 "github.com/olongfen/gorm-gin-admin/src/controller/api/v1"
 	"github.com/olongfen/gorm-gin-admin/src/middleware"
 	"github.com/olongfen/gorm-gin-admin/src/setting"
@@ -49,6 +50,7 @@ func init() {
 		adminRouterAPI(api)
 
 	}
+	log.Infoln("router init success !")
 }
 
 func userRouterAPI(r *gin.RouterGroup) {
@@ -69,6 +71,7 @@ func adminRouterAPI(r *gin.RouterGroup) {
 	apiRouterAPI(apiAdmin)
 	menuRouterAPI(apiAdmin)
 	roleRouterAPI(apiAdmin)
+	apiBehavior(apiAdmin)
 	// apiAdmin.GET("/profile", auth.RequiresPermissions([]string{"profile:admin"}), api.GetUserProfile)
 
 }

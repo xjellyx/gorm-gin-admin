@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"bytes"
 	"github.com/gin-gonic/gin"
 	"github.com/olongfen/contrib/session"
 	"github.com/olongfen/gorm-gin-admin/src/models"
@@ -58,7 +59,7 @@ func CheckUserAuth(isAdmin bool) gin.HandlerFunc {
 		}
 
 		// 不是同一个ip地址
-		if !setting.DevEnv {
+		if setting.Settings.Project.LoginRestriction {
 			var (
 				ip string
 			)
@@ -68,6 +69,16 @@ func CheckUserAuth(isAdmin bool) gin.HandlerFunc {
 			} else if ip != c.ClientIP() {
 				app.NewGinResponse(c).Fail(codes.CodeIPAddressInvalid, utils.ErrIPAddressInvalid.Error()).Response()
 				return
+			}
+			// 不同token验证
+			if t, _err := models.RDB.Get(s.UID).Result(); _err != nil {
+				app.NewGinResponse(c).Fail(codes.CodeProcessingFailed, _err.Error()).Response()
+				return
+			} else {
+				if !bytes.Equal([]byte(t), []byte(tokenStr)) {
+					app.NewGinResponse(c).Fail(codes.CodeTokenInvalid, "token invalid").Response()
+					return
+				}
 			}
 		}
 		c.Set("sessionTag", s)

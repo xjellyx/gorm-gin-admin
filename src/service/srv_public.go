@@ -2,6 +2,7 @@ package service
 
 import (
 	"github.com/dchest/captcha"
+	"github.com/go-redis/redis"
 	"github.com/olongfen/contrib/log"
 	"github.com/olongfen/contrib/session"
 	"github.com/olongfen/gorm-gin-admin/src/models"
@@ -27,6 +28,7 @@ func UserLogin(f *utils.LoginForm, isAdmin bool) (token string, err error) {
 	var (
 		data = &models.UserBase{}
 		s    = new(session.Session)
+		rds  *redis.Client
 	)
 	if !setting.DevEnv {
 		verify := captcha.VerifyString(f.CaptchaId, f.Digits)
@@ -56,7 +58,7 @@ func UserLogin(f *utils.LoginForm, isAdmin bool) (token string, err error) {
 
 	n := time.Now()
 	s.Content["createTime"] = n.Unix()
-	s.ExpireTime = n.Add(session.SessionExpMaxSecure).Unix()
+	s.ExpireTime = n.Add(session.ExpMaxSecure).Unix()
 	s.Content["level"] = session.SessionLevelSecure
 	s.Content["id"] = int64(data.ID)
 	s.Content["username"] = data.Username
@@ -69,6 +71,10 @@ func UserLogin(f *utils.LoginForm, isAdmin bool) (token string, err error) {
 			return
 		}
 	}
+	if rds, err = models.GetRDB(); err != nil {
+		return
+	}
+	rds.Set(data.Uid, token, session.ExpMaxNormal)
 	if err = data.UpdateOne(s.UID, "status", models.UserStatusLogin); err != nil {
 		return
 	}

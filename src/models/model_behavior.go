@@ -48,6 +48,17 @@ func (e *BehaviorRecord) Get(dbs ...*gorm.DB) (err error) {
 	return
 }
 
+func DeleteBehaviorList(id []int64, dbs ...*gorm.DB) (err error) {
+	return getDB(dbs...).Delete(&BehaviorRecord{}, "id in ?", id).Error
+}
+
+func GetBehaviorListByIDs(ids []int64, dbs ...*gorm.DB) (ret []*BehaviorRecord, err error) {
+	if err = getDB(dbs...).Model(&BehaviorRecord{}).Where("id in ?", ids).Find(&ret).Error; err != nil {
+		return
+	}
+	return
+}
+
 func GetBehaviorRecordList(q *query.Query) (ret []*BehaviorRecord, err error) {
 	if err = DB.Model(&BehaviorRecord{}).Where(q.Cond, q.Values...).Offset(q.PageNum).Limit(q.PageSize).Order("id asc").Find(&ret).Error; err != nil {
 		logModel.Errorln(err)

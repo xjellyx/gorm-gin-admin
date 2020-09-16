@@ -9,10 +9,6 @@ type Query struct {
 	Total    int64
 }
 
-const (
-	DEFAULT_LIMIT = 50
-)
-
 // NewQuery
 func NewQuery(pageNum int, pageSize int) *Query {
 	if pageNum == 0 {

@@ -64,7 +64,8 @@ type FilePath struct {
 }
 
 type Project struct {
-	MaxRoleLevel int
+	MaxRoleLevel     int
+	LoginRestriction bool // 登录限制
 }
 
 var (
@@ -93,9 +94,6 @@ func init() {
 	}
 	viper.SetConfigFile(configFile)
 	viper.AddConfigPath(".")
-	if err = viper.ReadInConfig(); err != nil {
-		log.Warnln(err)
-	}
 	// database
 	viper.SetDefault("db", Database{
 		Host:         "0.0.0.0",
@@ -143,14 +141,15 @@ func init() {
 	if err = viper.WriteConfig(); err != nil {
 		log.Warnln(err)
 	}
+	_ = viper.ReadInConfig()
+	if err = viper.Unmarshal(Settings); err != nil {
+		log.Fatal(err)
+	}
 	viper.OnConfigChange(func(e fsnotify.Event) {
 		log.Printf("Config file:%s Op:%s\n", e.Name, e.Op)
 		if err = viper.Unmarshal(Settings); err != nil {
 			log.Fatal(err)
 		}
 	})
-	if err = viper.Unmarshal(Settings); err != nil {
-		log.Fatal(err)
-	}
-
+	log.Infoln("setting init success !")
 }

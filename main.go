@@ -5,7 +5,6 @@ import (
 	"fmt"
 	_ "github.com/olongfen/gorm-gin-admin/docs"
 	_ "github.com/olongfen/gorm-gin-admin/src/models"
-	_ "github.com/olongfen/gorm-gin-admin/src/pkg/gredis"
 	"github.com/olongfen/gorm-gin-admin/src/router"
 	_ "github.com/olongfen/gorm-gin-admin/src/router"
 	"github.com/olongfen/gorm-gin-admin/src/setting"

@@ -65,7 +65,7 @@ func (m *Menu) Get(id int, options ...*gorm.DB) (err error) {
 	} else {
 		err = nil
 	}
-	GetChildren(m.Children)
+	_ = GetChildren(m.Children)
 
 	return
 }
@@ -77,7 +77,7 @@ func GetChildren(Children []*Menu) (err error) {
 			continue
 		}
 		if len(v.Children) > 0 {
-			GetChildren(v.Children)
+			_ = GetChildren(v.Children)
 		}
 	}
 	err = nil
@@ -100,5 +100,8 @@ func GetMenuList(options ...*gorm.DB) (ret []*Menu, err error) {
 		err = utils.ErrGetDataFailed
 		return
 	}
+	logModel.Warnln(getDB(options...).DB())
+	d, _ := getDB(options...).DB()
+	logModel.Warnln(d.Ping())
 	return
 }

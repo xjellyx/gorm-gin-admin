@@ -2,8 +2,6 @@ package models
 
 import (
 	"fmt"
-	"os"
-	"strings"
 	"time"
 
 	"github.com/olongfen/contrib/log"
@@ -37,8 +35,7 @@ func init() {
 		err error
 	)
 	initKey()
-	logModel = log.NewLogFile(log.ParamLog{Path: setting.Settings.FilePath.LogDir + "/" + "model", Stdout: strings.
-		Contains(os.Getenv("ENVIRONMENT"), "dev"), P: setting.Settings.FilePath.LogPatent})
+	logModel = log.NewLogFile(log.ParamLog{Path: setting.Settings.FilePath.LogDir + "/" + "model", Stdout: setting.DevEnv, P: setting.Settings.FilePath.LogPatent})
 	dataSourceName := fmt.Sprintf("%s://%s:%s@%s:%s/%s?sslmode=disable", setting.Settings.DB.Driver, setting.Settings.DB.Username,
 		setting.Settings.DB.Password, setting.Settings.DB.Host, setting.Settings.DB.Port, setting.Settings.DB.DatabaseName)
 	if DB, err = gorm.Open(postgres.Open(dataSourceName), nil); err != nil {
@@ -62,6 +59,7 @@ func init() {
 		logrus.Fatal(err)
 	}
 
+	logrus.Infoln("database init success !")
 }
 
 func initKey() {
