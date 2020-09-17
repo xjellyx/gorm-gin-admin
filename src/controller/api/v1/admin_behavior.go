@@ -47,7 +47,7 @@ func GetBehaviorList(c *gin.Context) {
 // @Description
 // @Accept json
 // @Produce json
-// @Param ids [int64] param true "id list"
+// @Param {} utils.BehaviorRemoveForm body true "id list"
 // @Success 200  {object} app.Response
 // @Failure 500  {object} app.Response
 // @router /api/v1/admin/removeBehaviors  [delete]

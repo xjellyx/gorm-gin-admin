@@ -322,6 +322,8 @@ github.com/olongfen/contrib v0.0.0-20200915090526-cb1a02a44053 h1:BWgq7rJmA5uakA
 github.com/olongfen/contrib v0.0.0-20200915090526-cb1a02a44053/go.mod h1:UYTh2wisCjvJh73khhEeOyhOzZYIRisaCNawK/r656E=
 github.com/olongfen/contrib v0.0.0-20200916020620-d4cb00a9a2dd h1:0MU8vV95vPhvoH/0W9kYVxqIBnVOTMRmkBMcjWuSP8Y=
 github.com/olongfen/contrib v0.0.0-20200916020620-d4cb00a9a2dd/go.mod h1:UYTh2wisCjvJh73khhEeOyhOzZYIRisaCNawK/r656E=
+github.com/olongfen/contrib v0.0.0-20200917012721-ef82063b14e7 h1:BnjM/Jj3qpG1qHX4VaPnhMFLBCaGVGl0yXGvam0H3uc=
+github.com/olongfen/contrib v0.0.0-20200917012721-ef82063b14e7/go.mod h1:UYTh2wisCjvJh73khhEeOyhOzZYIRisaCNawK/r656E=
 github.com/olongfen/gen-id v0.0.0-20200205020411-aa724763f90c h1:r9VG8nW5b3afBI3sXqPWwd9+P8jDq0U5AQ5oILU2IbM=
 github.com/olongfen/gen-id v0.0.0-20200205020411-aa724763f90c/go.mod h1:C/CUI5OzvtkRtITIOzDw8UkiVcpBamaYlSP7kLq/yoU=
 github.com/olongfen/gen-id v1.0.2-0.20200205020411-aa724763f90c h1:tn1x4gRakTpnY97zuliQ81pHqclQXolnpPar02LWE4Q=

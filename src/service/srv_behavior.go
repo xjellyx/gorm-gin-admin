@@ -48,5 +48,8 @@ func RemoveBehavior(uid string, ids []int64) (err error) {
 		m[v.Uid] = true
 		delIds = append(delIds, int64(v.ID))
 	}
+	if len(delIds) == 0 {
+		return
+	}
 	return models.DeleteBehaviorList(delIds)
 }

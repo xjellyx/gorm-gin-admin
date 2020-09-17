@@ -6,6 +6,7 @@ import (
 	"github.com/olongfen/gorm-gin-admin/src/pkg/query"
 	"github.com/olongfen/gorm-gin-admin/src/utils"
 	"gorm.io/gorm"
+	"strings"
 )
 
 type BehaviorRecord struct {
@@ -23,7 +24,7 @@ func NewActionRecord(s *session.Session, c *gin.Context, action string) *Behavio
 		Uid:      s.UID,
 		Username: s.Content["username"].(string),
 		Behavior: action,
-		Method:   c.Request.Method,
+		Method:   strings.ToLower(c.Request.Method),
 		Path:     c.Request.URL.Path,
 		IP:       c.Request.RemoteAddr,
 	}

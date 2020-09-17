@@ -83,7 +83,7 @@ func (u *UserBase) UpdateOne(uid string, column string, val interface{}, options
 
 // GetById 通过id获取数据
 func (u *UserBase) GetById(id int64) (err error) {
-	if err = DB.Model(u).Preload("Role").Find(u, "id = ?", id).Error; err != nil {
+	if err = DB.Model(u).Preload("Role").First(u, "id = ?", id).Error; err != nil {
 		logModel.Errorln(err)
 		err = utils.ErrGetDataFailed
 		return
@@ -103,7 +103,7 @@ func (u *UserBase) Delete(uid string, options ...*gorm.DB) (err error) {
 
 // GetByUId 通过id获取数据
 func (u *UserBase) GetByUId(uid string) (err error) {
-	if err = DB.Model(u).Where("uid = ?", uid).Preload("Role").Find(u).Error; err != nil {
+	if err = DB.Where("uid = ?", uid).Preload("Role").First(u).Error; err != nil {
 		logModel.Errorln(err)
 		err = utils.ErrGetDataFailed
 		return
@@ -113,7 +113,7 @@ func (u *UserBase) GetByUId(uid string) (err error) {
 
 // GetByUsername 通过username获取用户信息
 func (u *UserBase) GetByUsername(username string) (err error) {
-	if err = DB.Model(u).Preload("Role").Find(u, "username = ?", username).Error; err != nil {
+	if err = DB.Model(u).Preload("Role").First(u, "username = ?", username).Error; err != nil {
 		logModel.Errorln(err)
 		err = utils.ErrGetDataFailed
 		return

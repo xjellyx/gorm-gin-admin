@@ -47,12 +47,16 @@ func UpdateRole(uid string, f *utils.FormUpdateRole) (err error) {
 	if err = user.GetByUId(uid); err != nil {
 		return
 	}
+
+	data.ID = uint(f.Id)
+	if err = data.Get(); err != nil {
+		return
+	}
 	if data.GetLevelMust() >= user.Role.GetLevelMust() && user.Role.GetLevelMust() < setting.Settings.Project.MaxRoleLevel {
 		err = utils.ErrActionNotAllow
 		return
 	}
 
-	data.ID = uint(f.Id)
 	return data.Update(map[string]interface{}{"role": f.Role, "level": f.Level})
 }
 

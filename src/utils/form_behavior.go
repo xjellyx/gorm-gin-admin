@@ -13,7 +13,7 @@ type BehaviorQueryForm struct {
 
 func (f *BehaviorQueryForm) ToMap() (ret map[string]interface{}) {
 	data := make(map[string]interface{})
-	if len(f.Method) != 0 {
+	if len(f.Username) != 0 {
 		data["username"] = f.Username
 	}
 	if len(f.Method) != 0 {
