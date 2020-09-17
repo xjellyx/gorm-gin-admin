@@ -151,7 +151,7 @@ func GetRoleList(c *gin.Context) {
 // @Produce json
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
-// @Path /api/v1/admin/getRoleLevel [get]
+// @Router /api/v1/admin/getRoleLevel [get]
 func GetRoleLevel(c *gin.Context) {
 	var (
 		err  error

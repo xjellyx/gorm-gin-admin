@@ -99,7 +99,7 @@ then you try again can be running.
 - Database: `PostgreSQL` ，using `gorm2.0` to implement data manipulation.
 - Cache: using `Redis` to implement the recording of the JWT token of the currently active user and implement the multi-login restriction.
 - API: using Swagger of Gin to auto generate APIs docs。
-- Config: using `gopkg.in/yaml.v2` to implement `yaml` config file。
+- Config: using `github.com/spf13/viper` to implement `yaml` config file。
 - Log: using `github.com/sirupsen/logrus` record logs。
 
 ## 3. Features

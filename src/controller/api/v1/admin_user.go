@@ -127,7 +127,6 @@ func UserTotal(c *gin.Context) {
 		err  error
 		code = codes.CodeProcessingFailed
 		data int64
-		s    *session.Session
 	)
 	defer func() {
 		if err != nil {
@@ -135,11 +134,11 @@ func UserTotal(c *gin.Context) {
 		}
 	}()
 
-	if s, code, err = GetSession(c); err != nil {
+	if _, code, err = GetSession(c); err != nil {
 		return
 	}
 
-	if data, err = service.GetUserCount(s.UID); err != nil {
+	if data, err = service.GetUserCount(); err != nil {
 		return
 	}
 	app.NewGinResponse(c).Success(data).Response()

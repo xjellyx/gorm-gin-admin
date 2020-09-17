@@ -1,7 +1,6 @@
 package service
 
 import (
-	"fmt"
 	genid "github.com/olongfen/gen-id"
 	"github.com/olongfen/gorm-gin-admin/src/models"
 	"github.com/olongfen/gorm-gin-admin/src/pkg/query"
@@ -230,12 +229,8 @@ func GetUserList(uid string, form *utils.FormUserList) (ret []*models.UserBase, 
 	return models.GetUserList(q)
 }
 
-func GetUserCount(uid string) (ret int64, err error) {
-	data := new(models.UserBase)
-	if err = data.GetByUId(uid); err != nil {
-		return
-	}
-	return models.GetUserTotal(fmt.Sprintf(`role< %v`, data.Role))
+func GetUserCount() (ret int64, err error) {
+	return models.GetUserTotal()
 }
 
 func DeleteUser(uid string, delUid string) (err error) {

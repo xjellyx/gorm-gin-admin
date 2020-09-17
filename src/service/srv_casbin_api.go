@@ -37,7 +37,7 @@ func AddRoleAPI(uid string, f *utils.FormRoleAPIPerm) (ret []struct {
 	}
 	for _, v := range f.Groups {
 		dataGroup := new(models.APIGroup)
-		if err = dataGroup.GetBPathAndMethod(v.Path, strings.ToLower(v.Method)); err != nil {
+		if err = dataGroup.GetPathAndMethod(v.Path, strings.ToLower(v.Method)); err != nil {
 			logServe.Infoln(err, "path: ", dataGroup.Path, "method:", dataGroup.Method)
 			continue
 		}
@@ -83,7 +83,8 @@ func RemoveRoleAPI(uid string, f *utils.FormRoleAPIPerm) (err error) {
 	}
 	for _, v := range f.Groups {
 		dataGroup := new(models.APIGroup)
-		if err = dataGroup.GetBPathAndMethod(v.Path, v.Method); err != nil {
+		if err = dataGroup.GetPathAndMethod(v.Path, v.Method); err != nil {
+			logServe.Errorln("path: ", v.Path, "method:", v.Method)
 			continue
 		}
 		if _, err = e.RemovePolicy(f.Role, dataGroup.Path, dataGroup.Method); err != nil {
@@ -91,6 +92,7 @@ func RemoveRoleAPI(uid string, f *utils.FormRoleAPIPerm) (err error) {
 		}
 
 	}
+	err = nil
 	return
 }
 

@@ -64,7 +64,7 @@ func (a *APIGroup) Get(id int64) (err error) {
 	return
 }
 
-func (a *APIGroup) GetBPathAndMethod(path, method string) (err error) {
+func (a *APIGroup) GetPathAndMethod(path, method string) (err error) {
 	if err = DB.First(a, "path = ? and method= ?", path, method).Error; err != nil {
 		logModel.Errorln(err)
 		err = utils.ErrGetDataFailed

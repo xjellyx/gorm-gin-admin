@@ -51,6 +51,27 @@ definitions:
         description: api路径
         type: string
     type: object
+  utils.BehaviorQueryForm:
+    properties:
+      createdAt:
+        type: integer
+      method:
+        description: 请求方式
+        type: string
+      page:
+        type: integer
+      pageSize:
+        type: integer
+      username:
+        type: string
+    type: object
+  utils.BehaviorRemoveForm:
+    properties:
+      ids:
+        items:
+          type: integer
+        type: array
+    type: object
   utils.FormAPIGroupAdd:
     properties:
       apiGroup:
@@ -418,6 +439,23 @@ paths:
       summary: 添加用户
       tags:
       - 管理员
+  /api/v1/admin/behaviorCount:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - ""
   /api/v1/admin/delMenu:
     delete:
       consumes:
@@ -606,6 +644,23 @@ paths:
       consumes:
       - application/json
       description: 获取操作记录
+      parameters:
+      - in: query
+        name: createdAt
+        type: integer
+      - description: 请求方式
+        in: query
+        name: method
+        type: string
+      - in: query
+        name: page
+        type: integer
+      - in: query
+        name: pageSize
+        type: integer
+      - in: query
+        name: username
+        type: string
       produces:
       - application/json
       responses:
@@ -662,6 +717,50 @@ paths:
           schema:
             $ref: '#/definitions/app.Response'
       summary: 获取菜单
+      tags:
+      - 管理员
+  /api/v1/admin/getRoleApiList:
+    get:
+      consumes:
+      - application/json
+      description: 获取用户权限
+      parameters:
+      - description: 角色名称
+        in: query
+        name: role
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 获取用户权限
+      tags:
+      - 管理员
+  /api/v1/admin/getRoleLevel:
+    get:
+      consumes:
+      - application/json
+      description: 获取角色等级列表
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      summary: 获取角色等级列表
       tags:
       - 管理员
   /api/v1/admin/getRoleList:
@@ -802,6 +901,30 @@ paths:
       summary: 删除api
       tags:
       - 管理员
+  /api/v1/admin/removeBehaviors:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: id list
+        in: body
+        name: '{}'
+        required: true
+        schema:
+          $ref: '#/definitions/utils.BehaviorRemoveForm'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/app.Response'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/app.Response'
+      tags:
+      - ""
   /api/v1/admin/removeRole:
     delete:
       consumes:

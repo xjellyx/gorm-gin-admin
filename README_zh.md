@@ -98,7 +98,7 @@
 - 数据库：采用`PostgreSQL`，使用`gorm2.0版本`实现对数据库的基本操作,
 - 缓存：准备开发使用`Redis`实现记录当前活跃用户的`jwt`令牌并实现多点登录限制。
 - API文档：使用`Swagger`构建自动化文档。
-- 配置文件：使用`gopkg.in/yaml.v2`实现`yaml`格式的配置文件。
+- 配置文件：使用`github.com/spf13/viper`实现`yaml`格式的配置文件。
 - 日志：使用`github.com/sirupsen/logrus`实现日志记录。
 
 ## 3. 主要功能

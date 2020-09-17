@@ -102,7 +102,7 @@ func RemoveRolePermAPI(c *gin.Context) {
 // @Param role query string true "角色名称"
 // @Success 200 {object} app.Response
 // @Failure 500 {object} app.Response
-// @Path /api/v1/admin/getRoleApiList [get]
+// @Router /api/v1/admin/getRoleApiList [get]
 func GetRoleApiList(c *gin.Context) {
 	var (
 		err  error

@@ -16,7 +16,7 @@ import (
 // @Description 获取操作记录
 // @Accept json
 // @Produce json
-// @Param {} utils.BehaviorQueryForm query true "請求form"
+// @Param {object} query utils.BehaviorQueryForm  true "請求form"
 // @Success 200  {object}  app.Response
 // @Failure 500  {object}  app.Response
 // @router /api/v1/admin/getBehaviorList  [get]
@@ -47,7 +47,7 @@ func GetBehaviorList(c *gin.Context) {
 // @Description
 // @Accept json
 // @Produce json
-// @Param {} utils.BehaviorRemoveForm body true "id list"
+// @Param {}  body utils.BehaviorRemoveForm  true "id list"
 // @Success 200  {object} app.Response
 // @Failure 500  {object} app.Response
 // @router /api/v1/admin/removeBehaviors  [delete]

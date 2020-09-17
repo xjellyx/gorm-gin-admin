@@ -143,9 +143,9 @@ func GetUserList(q *query.Query) (ret []*UserBase, err error) {
 }
 
 // GetUserTotal 获取总数
-func GetUserTotal(cond interface{}) (ret int64, err error) {
+func GetUserTotal() (ret int64, err error) {
 	var count int64
-	if err = DB.Model(&UserBase{}).Where(cond).Count(&count).Error; err != nil {
+	if err = DB.Model(&UserBase{}).Where("id >0").Count(&count).Error; err != nil {
 		logModel.Errorln(err)
 		err = utils.ErrGetDataFailed
 		return 0, err
