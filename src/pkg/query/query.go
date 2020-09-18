@@ -14,15 +14,20 @@ func NewQuery(pageNum int, pageSize int) *Query {
 	if pageNum == 0 {
 		pageNum = 1
 	}
+	switch {
+	case pageSize > 100:
+		pageSize = 100
+	case pageSize <= 0:
+		pageSize = 10
+	}
 	q := &Query{
 		PageNum:  pageNum,
 		PageSize: pageSize,
 		Total:    0,
 	}
 
-	if pageNum > 0 {
-		q.PageNum = (q.PageNum - 1) * q.PageSize
-	}
+	q.PageNum = (q.PageNum - 1) * q.PageSize
+
 	return q
 }
 
