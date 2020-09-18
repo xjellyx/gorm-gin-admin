@@ -127,9 +127,9 @@ func UserLogout(uid string) (err error) {
 	if err = data.GetByUId(uid); err != nil {
 		return err
 	}
-	if data.Status != models.UserStatusLogin {
-		err = utils.ErrActionNotAllow
-		return
-	}
+	//if data.Status != models.UserStatusLogin {
+	//	err = utils.ErrActionNotAllow
+	//	return
+	//}
 	return data.UpdateOne(uid, "status", models.UserStatusLogout)
 }
