@@ -34,7 +34,7 @@ package rpc
 //	val.IsAdmin = u.IsAdmin
 //	val.Email = u.Email
 //	val.TimeData = new(pb.TimeData)
-//	val.TimeData.CreatedAt, _ = ptypes.TimestampProto(u.CreatedAt)
+//	val.TimeData.StartTime, _ = ptypes.TimestampProto(u.StartTime)
 //	val.TimeData.UpdatedAt, _ = ptypes.TimestampProto(u.UpdatedAt)
 //	for _, v := range u.BankCards {
 //		_b := new(pb.BankCard)

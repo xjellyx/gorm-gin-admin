@@ -87,8 +87,8 @@ when project is running.
 
 ### 1.2.4 Run Service
 ``` 
-    if you don't have config file which name project.config.yaml. you shuold run  project first auto generate config file,
-then you try again can be running.
+    if you don't have config file . you shuold run  project first auto generate config file,
+then you edit config file and run again can be running.
     command: go run main.go
 ```
 
