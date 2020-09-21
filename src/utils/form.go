@@ -1,6 +1,10 @@
 package utils
 
-import "golang.org/x/crypto/bcrypt"
+import (
+	"github.com/olongfen/gorm-gin-admin/src/setting"
+	"golang.org/x/crypto/bcrypt"
+	"strings"
+)
 
 // FormRegister
 type FormRegister struct {
@@ -48,15 +52,15 @@ func (f *LoginForm) Valid() (err error) {
 
 // FormEditUser
 type FormEditUser struct {
-	Uid      string  `json:"uid" form:"uid" binding:"required"`
-	Nickname *string `json:"nickname" form:"nickname"`
-	// Username *string `json:"username" form:"username"`
+	Uid       string  `json:"uid" form:"uid" binding:"required"`
+	Nickname  *string `json:"nickname" form:"nickname"`
+	Username  *string `json:"username" form:"username"`
 	Password  *string `json:"password" form:"password"`
 	Email     *string `json:"email" form:"email"`
 	Phone     *string `json:"phone" form:"phone"`
 	Sign      *string `json:"sign" form:"sign"`
 	RoleRefer *int    `json:"roleRefer" form:"roleRefer"`
-	Status    *string `json:"status" form:"status"`
+	Status    *int    `json:"status" form:"status"`
 }
 
 func (f *FormEditUser) Valid() (ret map[string]interface{}, err error) {
@@ -65,30 +69,28 @@ func (f *FormEditUser) Valid() (ret map[string]interface{}, err error) {
 		return
 	}
 	ret = map[string]interface{}{}
-	if f.Password != nil && len(*f.Password) == 0 {
-		err = ErrFormParamInvalid
-		return
-	} else if f.Password != nil {
+	if f.Username != nil && len(*f.Username) != 0 {
+		if len(strings.TrimSpace(*f.Username)) < setting.Settings.Project.MaxUsernameLen {
+			err = ErrParamInvalid.SetMeta("username")
+			return
+		}
+		ret["username"] = *f.Username
+	}
+	if f.Password != nil && len(*f.Password) != 0 {
 		var d []byte
 		if d, err = bcrypt.GenerateFromPassword([]byte(*f.Password), bcrypt.DefaultCost); err != nil {
 			return
 		}
 		ret["login_pwd"] = string(d)
 	}
-	if f.Phone != nil && len(*f.Phone) == 0 {
-		err = ErrFormParamInvalid
-		return
-	} else if f.Phone != nil && len(*f.Phone) != 0 {
+	if f.Phone != nil && len(*f.Phone) != 0 {
 		if len(RegPhoneNum.FindString(*f.Phone)) == 0 {
 			err = ErrPhoneInvalid
 			return
 		}
 		ret["phone"] = *f.Phone
 	}
-	if f.Email != nil && len(*f.Email) == 0 {
-		err = ErrFormParamInvalid
-		return
-	} else if f.Email != nil && len(*f.Email) != 0 {
+	if f.Email != nil && len(*f.Email) != 0 {
 		if len(RegEmail.FindString(*f.Email)) == 0 {
 			err = ErrEmailInvalid
 			return
@@ -101,10 +103,7 @@ func (f *FormEditUser) Valid() (ret map[string]interface{}, err error) {
 	//} else if f.Username != nil {
 	//	ret["username"] = *f.Username
 	//}
-	if f.Nickname != nil && len(*f.Nickname) == 0 {
-		err = ErrFormParamInvalid
-		return
-	} else if f.Nickname != nil {
+	if f.Nickname != nil {
 		ret["nickname"] = *f.Nickname
 	}
 	if f.RoleRefer != nil {
@@ -253,11 +252,10 @@ type AddUserForm struct {
 
 // AdminAddUserForm
 type AdminAddUserForm struct {
-	Username string `form:"username" binding:"required"`
-	Password string `form:"password" binding:"required"`
-	RoleRefer int `json:"roleRefer" binding:"required"`
+	Username  string `form:"username" binding:"required"`
+	Password  string `form:"password" binding:"required"`
+	RoleRefer int    `json:"roleRefer" binding:"required"`
 }
-
 
 // FormUserList
 type FormUserList struct {
@@ -271,22 +269,22 @@ type FormUserList struct {
 
 // FormRole add
 type FormRole struct {
-	Role string `json:"role" form:"role" binding:"required"`           // 角色名称
+	Role  string `json:"role" form:"role" binding:"required"` // 角色名称
 	Level string `json:"level" form:"level" binding:"required"`
 }
 
 // FormUpdateRole 更新
 type FormUpdateRole struct {
-	Id  int `json:"id" form:"uid" binding:"required" `
-	Role string `json:"role" form:"role" binding:"required"`           // 角色名称
+	Id    int    `json:"id" form:"uid" binding:"required" `
+	Role  string `json:"role" form:"role" binding:"required"` // 角色名称
 	Level string `json:"level" form:"level" binding:"required"`
 }
 
 // FormRoleAPIPerm 添加角色api权限
 type FormRoleAPIPerm struct {
-	Role   string  `json:"role" form:"role" binding:"required"`           // 角色名称
-	Groups []struct{
+	Role   string `json:"role" form:"role" binding:"required"` // 角色名称
+	Groups []struct {
 		Method string `json:"method"`
-		Path string `json:"path"`
+		Path   string `json:"path"`
 	} `json:"groups" form:"groups" binding:"required"` // api id
 }

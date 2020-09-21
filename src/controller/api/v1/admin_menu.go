@@ -8,6 +8,7 @@ import (
 	"github.com/olongfen/gorm-gin-admin/src/pkg/app"
 	"github.com/olongfen/gorm-gin-admin/src/pkg/codes"
 	"github.com/olongfen/gorm-gin-admin/src/service"
+	"github.com/olongfen/gorm-gin-admin/src/setting"
 	"github.com/olongfen/gorm-gin-admin/src/utils"
 	"strconv"
 )
@@ -40,6 +41,11 @@ func AddMenu(c *gin.Context) {
 		return
 	}
 	if err = role.GetByUId(s.UID); err != nil {
+		return
+	}
+	// only max level can do
+	if role.Role.GetLevelMust() < setting.Settings.Project.MaxRoleLevel {
+		err = utils.ErrActionNotAllow
 		return
 	}
 	if data, err = service.AddMenu(form); err != nil {
@@ -129,6 +135,7 @@ func DelMenu(c *gin.Context) {
 		err  error
 		code = codes.CodeProcessingFailed
 		s    *session.Session
+		role = &models.UserBase{}
 	)
 	id := c.Query("id")
 	defer func() {
@@ -143,6 +150,14 @@ func DelMenu(c *gin.Context) {
 		return
 	}
 
+	if err = role.GetByUId(s.UID); err != nil {
+		return
+	}
+	// only max level can do
+	if role.Role.GetLevelMust() < setting.Settings.Project.MaxRoleLevel {
+		err = utils.ErrActionNotAllow
+		return
+	}
 	if _id, err = strconv.Atoi(id); err != nil {
 		code = codes.CodeParamInvalid
 		err = utils.ErrParamInvalid
@@ -170,6 +185,7 @@ func EditMenu(c *gin.Context) {
 		data *models.Menu
 		form = new(utils.FormUpdateMenu)
 		s    *session.Session
+		role = new(models.UserBase)
 	)
 
 	defer func() {
@@ -183,7 +199,14 @@ func EditMenu(c *gin.Context) {
 	if s, code, err = GetSessionAndBindingForm(form, c); err != nil {
 		return
 	}
-
+	if err = role.GetByUId(s.UID); err != nil {
+		return
+	}
+	// only max level can do
+	if role.Role.GetLevelMust() < setting.Settings.Project.MaxRoleLevel {
+		err = utils.ErrActionNotAllow
+		return
+	}
 	if data, err = service.UpdateMenu(form); err != nil {
 		return
 	}

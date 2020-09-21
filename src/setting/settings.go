@@ -64,8 +64,9 @@ type FilePath struct {
 }
 
 type Project struct {
-	MaxRoleLevel     int
-	LoginRestriction bool // 登录限制
+	MaxRoleLevel     int  `json:"maxRoleLevel"`
+	MaxUsernameLen   int  `json:"maxUsernameLen"`
+	LoginRestriction bool `json:"loginRestriction"` // 登录限制
 }
 
 var (
@@ -137,7 +138,10 @@ func init() {
 	})
 	viper.WatchConfig()
 	// project
-	viper.SetDefault("project", Project{MaxRoleLevel: 9})
+	viper.SetDefault("project", Project{
+		MaxRoleLevel:   9,
+		MaxUsernameLen: 5,
+	})
 	if err = viper.WriteConfig(); err != nil {
 		log.Warnln(err)
 	}

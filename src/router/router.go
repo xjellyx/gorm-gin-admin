@@ -72,6 +72,7 @@ func adminRouterAPI(r *gin.RouterGroup) {
 	menuRouterAPI(apiAdmin)
 	roleRouterAPI(apiAdmin)
 	apiBehavior(apiAdmin)
+	roleRouterSettings(apiAdmin)
 	// apiAdmin.GET("/profile", auth.RequiresPermissions([]string{"profile:admin"}), api.GetUserProfile)
 
 }

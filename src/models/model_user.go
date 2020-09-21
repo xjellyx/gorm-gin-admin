@@ -85,7 +85,7 @@ func (u *UserBase) UpdateOne(uid string, column string, val interface{}, options
 func (u *UserBase) GetById(id int64) (err error) {
 	if err = DB.Model(u).Preload("Role").First(u, "id = ?", id).Error; err != nil {
 		logModel.Errorln(err)
-		err = utils.ErrGetDataFailed
+		err = utils.ErrGetDataFailed.SetMeta("user dose't exist!")
 		return
 	}
 	return
@@ -105,7 +105,7 @@ func (u *UserBase) Delete(uid string, options ...*gorm.DB) (err error) {
 func (u *UserBase) GetByUId(uid string) (err error) {
 	if err = DB.Where("uid = ?", uid).Preload("Role").First(u).Error; err != nil {
 		logModel.Errorln(err)
-		err = utils.ErrGetDataFailed
+		err = utils.ErrGetDataFailed.SetMeta("user dose't exist!")
 		return
 	}
 	return
@@ -115,7 +115,7 @@ func (u *UserBase) GetByUId(uid string) (err error) {
 func (u *UserBase) GetByUsername(username string) (err error) {
 	if err = DB.Model(u).Preload("Role").First(u, "username = ?", username).Error; err != nil {
 		logModel.Errorln(err)
-		err = utils.ErrGetDataFailed
+		err = utils.ErrGetDataFailed.SetMeta("user dose't exist!")
 		return
 	}
 	return
@@ -125,7 +125,7 @@ func (u *UserBase) GetByUsername(username string) (err error) {
 func (u *UserBase) GetByPhone(phone string) (err error) {
 	if err = DB.Model(u).Preload("Role").Find(u, "phone = ?", phone).Error; err != nil {
 		logModel.Errorln(err)
-		err = utils.ErrGetDataFailed
+		err = utils.ErrGetDataFailed.SetMeta("user dose't exist!")
 		return
 	}
 	return
