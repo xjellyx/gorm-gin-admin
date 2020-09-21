@@ -86,14 +86,18 @@ func DelAPIGroup(id int64) (err error) {
 }
 
 // GetAPIGroupList
-func GetAPIGroupList(f *utils.ApiListForm) (ret []*models.APIGroup, err error) {
-	q, _err := query.NewQuery(f.Page, f.PageSize).ValidCond(f.ToMap())
-	if _err != nil {
-		err = _err
-		return
+func GetAPIGroupList(f *utils.ApiListForm, isAll bool) (ret []*models.APIGroup, err error) {
+	if !isAll {
+		q, _err := query.NewQuery(f.Page, f.PageSize).ValidCond(f.ToMap())
+		if _err != nil {
+			err = _err
+			return
+		}
+		if len(q.Cond) == 0 && q.PageNum == 0 && q.PageSize == 0 {
+			q = nil
+		}
+		return models.GetAPIGroupList(q)
+	} else {
+		return models.GetAPIGroupList(nil)
 	}
-	if len(q.Cond) == 0 && q.PageNum == 0 && q.PageSize == 0 {
-		q = nil
-	}
-	return models.GetAPIGroupList(q)
 }

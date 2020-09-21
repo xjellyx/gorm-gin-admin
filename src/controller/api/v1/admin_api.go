@@ -13,8 +13,8 @@ import (
 )
 
 // @tags 管理员
-// @Title 获取全部api
-// @Summary 获取全部api
+// @Title 分页获取api
+// @Summary 分页获取api
 // @Description 获取全部api
 // @Param {} body utils.ApiListForm true "获取api列表"
 // @Accept json
@@ -37,7 +37,36 @@ func GetAPIGroupList(c *gin.Context) {
 	if _, code, err = GetSessionAndBindingForm(form, c); err != nil {
 		return
 	}
-	if ret, err = service.GetAPIGroupList(form); err != nil {
+	if ret, err = service.GetAPIGroupList(form, false); err != nil {
+		return
+	}
+	app.NewGinResponse(c).Success(ret).Response()
+}
+
+// @tags 管理员
+// @Title 获取全部api
+// @Summary 获取全部api
+// @Description 获取全部api
+// @Accept json
+// @Produce json
+// @Success 200 {object} app.Response
+// @Failure 500 {object} app.Response
+// @Router  /api/v1/admin/getAllApiGroupAll [get]
+func GetAPIGroupListAll(c *gin.Context) {
+	var (
+		err  error
+		code = codes.CodeProcessingFailed
+		ret  []*models.APIGroup
+	)
+	defer func() {
+		if err != nil {
+			app.NewGinResponse(c).Fail(code, err.Error()).Response()
+		}
+	}()
+	if _, code, err = GetSession(c); err != nil {
+		return
+	}
+	if ret, err = service.GetAPIGroupList(nil, true); err != nil {
 		return
 	}
 	app.NewGinResponse(c).Success(ret).Response()
