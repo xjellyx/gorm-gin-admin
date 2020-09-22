@@ -9,13 +9,13 @@ import (
 	"github.com/spf13/viper"
 )
 
-// @tags
-// @Summary
-// @Description
+// @tags 管理员
+// @Summary　获取系统配置
+// @Description 获取系统配置
 // @Accept json
 // @Produce json
-// @Success 200  {object} app.NewGinResponse
-// @Failure 500  {object} app.NewGinResponse
+// @Success 200  {object} app.Response
+// @Failure 500  {object} app.Response
 // @router /api/v1/admin/getSettings  [get]
 func GetSettings(ctx *gin.Context) {
 

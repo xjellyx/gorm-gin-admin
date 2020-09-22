@@ -539,7 +539,7 @@ var doc = `{
                 "tags": [
                     "管理员"
                 ],
-                "summary": "获取全部api",
+                "summary": "分页获取api",
                 "parameters": [
                     {
                         "description": "获取api列表",
@@ -551,6 +551,35 @@ var doc = `{
                         }
                     }
                 ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/admin/getAllApiGroupAll": {
+            "get": {
+                "description": "获取全部api",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "管理员"
+                ],
+                "summary": "获取全部api",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -582,8 +611,8 @@ var doc = `{
                 "summary": "获取操作记录",
                 "parameters": [
                     {
-                        "type": "integer",
-                        "name": "createdAt",
+                        "type": "string",
+                        "name": "endTime",
                         "in": "query"
                     },
                     {
@@ -600,6 +629,11 @@ var doc = `{
                     {
                         "type": "integer",
                         "name": "pageSize",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "name": "startTime",
                         "in": "query"
                     },
                     {
@@ -771,6 +805,35 @@ var doc = `{
                     "管理员"
                 ],
                 "summary": "获取角色列表",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "$ref": "#/definitions/app.Response"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/admin/getSettings": {
+            "get": {
+                "description": "获取系统配置",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "管理员"
+                ],
+                "summary": "获取系统配置",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1684,8 +1747,8 @@ var doc = `{
         "utils.BehaviorQueryForm": {
             "type": "object",
             "properties": {
-                "createdAt": {
-                    "type": "integer"
+                "endTime": {
+                    "type": "string"
                 },
                 "method": {
                     "description": "请求方式",
@@ -1696,6 +1759,9 @@ var doc = `{
                 },
                 "pageSize": {
                     "type": "integer"
+                },
+                "startTime": {
+                    "type": "string"
                 },
                 "username": {
                     "type": "string"
@@ -1815,7 +1881,6 @@ var doc = `{
                     "type": "string"
                 },
                 "password": {
-                    "description": "Username *string ` + "`" + `json:\"username\" form:\"username\"` + "`" + `",
                     "type": "string"
                 },
                 "phone": {
@@ -1828,9 +1893,12 @@ var doc = `{
                     "type": "string"
                 },
                 "status": {
-                    "type": "string"
+                    "type": "integer"
                 },
                 "uid": {
+                    "type": "string"
+                },
+                "username": {
                     "type": "string"
                 }
             }
