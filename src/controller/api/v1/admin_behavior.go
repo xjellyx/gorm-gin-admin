@@ -42,9 +42,9 @@ func GetBehaviorList(c *gin.Context) {
 	app.NewGinResponse(c).Success(ret).Response()
 }
 
-// @tags
-// @Summary
-// @Description
+// @tags 管理员
+// @Summary　删除操作记录
+// @Description　删除操作记录
 // @Accept json
 // @Produce json
 // @Param {}  body utils.BehaviorRemoveForm  true "id list"
@@ -74,9 +74,9 @@ func RemoveBehaviors(c *gin.Context) {
 	app.NewGinResponse(c).Success(nil).Response()
 }
 
-// @tags
-// @Summary
-// @Description
+// @tags　管理员
+// @Summary　获取操作总数
+// @Description　获取操作总数
 // @Accept json
 // @Produce json
 // @Success 200  {object} app.Response

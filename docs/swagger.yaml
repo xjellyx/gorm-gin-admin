@@ -446,6 +446,7 @@ paths:
     get:
       consumes:
       - application/json
+      description: 获取操作总数
       produces:
       - application/json
       responses:
@@ -457,8 +458,9 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/app.Response'
+      summary: 获取操作总数
       tags:
-      - ""
+      - 管理员
   /api/v1/admin/delMenu:
     delete:
       consumes:
@@ -949,6 +951,7 @@ paths:
     delete:
       consumes:
       - application/json
+      description: 删除操作记录
       parameters:
       - description: id list
         in: body
@@ -967,8 +970,9 @@ paths:
           description: Internal Server Error
           schema:
             $ref: '#/definitions/app.Response'
+      summary: 删除操作记录
       tags:
-      - ""
+      - 管理员
   /api/v1/admin/removeRole:
     delete:
       consumes:

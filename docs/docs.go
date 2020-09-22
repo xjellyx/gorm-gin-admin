@@ -261,6 +261,7 @@ var doc = `{
         },
         "/api/v1/admin/behaviorCount": {
             "get": {
+                "description": "获取操作总数",
                 "consumes": [
                     "application/json"
                 ],
@@ -268,8 +269,9 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    ""
+                    "管理员"
                 ],
+                "summary": "获取操作总数",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -1035,6 +1037,7 @@ var doc = `{
         },
         "/api/v1/admin/removeBehaviors": {
             "delete": {
+                "description": "删除操作记录",
                 "consumes": [
                     "application/json"
                 ],
@@ -1042,8 +1045,9 @@ var doc = `{
                     "application/json"
                 ],
                 "tags": [
-                    ""
+                    "管理员"
                 ],
+                "summary": "删除操作记录",
                 "parameters": [
                     {
                         "description": "id list",
