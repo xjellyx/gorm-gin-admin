@@ -37,11 +37,11 @@ func CasbinHandler() gin.HandlerFunc {
 		//	return
 		//}
 		if ok, err := e.Enforce(sub, obj, act); err != nil {
-			app.NewGinResponse(c).Fail(403, "casbnin check failed").SetStatus(403).Response()
+			app.NewGinResponse(c).Fail(401, "casbnin check failed").SetStatus(403).Response()
 			c.Abort()
 			return
 		} else if !ok && !setting.DevEnv && d.Role.GetLevelMust() < setting.Settings.Project.MaxRoleLevel {
-			app.NewGinResponse(c).Fail(403, "illegal permission").SetStatus(403).Response()
+			app.NewGinResponse(c).Fail(401, "illegal permission").SetStatus(403).Response()
 			c.Abort()
 			return
 		}
